@@ -1,66 +1,108 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
+import { cartDetail } from 'components/mocks/cartDetail'
 
 const initialState = {
-  cart: {},
+  cart: cartDetail,
   billingInfo: {
-    billing_first_name: "",
-    billing_last_name: "",
-    billing_company: "",
-    billing_country: "VN",
-    billing_address_1: "",
-    billing_postcode: "",
-    billing_city: "",
-    billing_phone: "",
-    billing_email: "",
-    account_username: "",
-    account_password: "",
-    shipping_first_name: "",
-    shipping_last_name: "",
-    shipping_company: "",
-    shipping_country: "VN",
-    shipping_address_1: "",
-    shipping_postcode: "",
-    shipping_city: "",
-    order_comments: "",
-    payment_method: "bacs",
+    billing_first_name: '',
+    billing_last_name: '',
+    billing_company: '',
+    billing_country: 'VN',
+    billing_address_1: '',
+    billing_postcode: '',
+    billing_city: '',
+    billing_phone: '',
+    billing_email: '',
+    account_username: '',
+    account_password: '',
+    shipping_first_name: '',
+    shipping_last_name: '',
+    shipping_company: '',
+    shipping_country: 'VN',
+    shipping_address_1: '',
+    shipping_postcode: '',
+    shipping_city: '',
+    order_comments: '',
+    payment_method: 'bacs',
   },
-  SO: -1,
-};
+  totalPrice: 0,
+}
 
 const CheckoutSlice = createSlice({
-  name: "checkout",
+  name: 'checkout',
   initialState,
   reducers: {
-    resetState: (state) => (state = initialState),
-    addCart: (state, action) => {
-      if (state.cart[action.payload.id]) {
-        state.cart[action.payload.id].quantity += 1;
-      } else {
-        state.cart[action.payload.id] = {
-          id: action.payload.id,
-          images: action.payload.images,
-          name: action.payload.name,
-          price: action.payload.price,
-          quantity: 1,
-        };
+    resetCheckout: (state) => {
+      state = initialState
+    },
+    addItemById: (state, action) => {
+      state.cart[action.payload.id] = {
+        id: action.payload.id,
+        images: action.payload.images,
+        name: action.payload.name,
+        price: action.payload.price,
+        quantity: action.payload.quantity,
+      }
+      state.totalPrice += action.payload.price * action.payload.quantity
+    },
+    incQuantityById: (state, action) => {
+      // action.payload = id
+      if (state.cart[action.payload]) {
+        state.cart[action.payload].quantity += 1
+        state.totalPrice += state.cart[action.payload].price
       }
     },
-    updateCartById: (state, action) => {
-      state.cart[action.payload.id] = { ...action.payload };
+    decQuantityById: (state, action) => {
+      // action.payload = id
+      if (state.cart[action.payload]) {
+        state.cart[action.payload].quantity -= 1
+        state.totalPrice -= state.cart[action.payload].price
+      }
     },
-    removeCartById: (state, action) => {
-      delete state.cart[action.payload];
+    updateQuantityById: (state, action) => {
+      // action.payload = { id, quantity}
+      if (state.cart[action.payload]) {
+        const itemId = action.payload.id
+        state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
+        state.cart[itemId].quantity = action.payload.quantity
+        state.totalPrice += state.cart[itemId].price * state.cart[itemId].quantity
+      }
+    },
+    removeItemById: (state, action) => {
+      // action.payload = id
+      if (state.cart[action.payload]) {
+        state.totalPrice -= state.cart[action.payload].price * state.cart[action.payload].quantity
+        delete state.cart[action.payload]
+      }
     },
     updateBillingInfo: (state, action) => {
-      state.billingInfo = action.payload;
-    },
-    updatePromoCode: (state, action) => {
-      state.billingInfo.promo_code = action.payload;
-    },
-    updateSO: (state, action) => {
-      state["SO"] = action.payload;
+      state.billingInfo = action.payload
     },
   },
-});
+})
 
-export default CheckoutSlice;
+export const addItemById = (item) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.addItemById(item))
+}
+
+export const incQuantityById = (itemId) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.incQuantityById(itemId))
+}
+
+export const decQuantityById = (itemId) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.decQuantityById(itemId))
+}
+
+export const updateQuantityById = (item) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.updateQuantityById(item))
+}
+
+export const removeItemById = (itemId) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.removeItemById(itemId))
+}
+
+export const updateBillingInfo = (billing) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.updateBillingInfo(billing))
+}
+
+export default CheckoutSlice
