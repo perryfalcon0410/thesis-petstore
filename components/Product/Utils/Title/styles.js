@@ -2,9 +2,9 @@ import css from 'styled-jsx/css'
 
 export default css`
   .title-page {
-    background-image: url(/images/Product/Shop_3Columns-title.jpg);
-    background-position: center center;
-    background-size: cover;
+    background-image: url(/banner.png);
+    background-position: center right;
+    background-repeat: no-repeat;
   }
 
   .container {

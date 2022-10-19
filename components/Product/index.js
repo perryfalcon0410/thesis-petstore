@@ -3,10 +3,12 @@ import ProductSingle from './ProductSingle'
 import ProductList from './ProductList'
 import Title from 'components/Product/Utils/Title'
 import { PRODUCT_TYPE } from 'utils/constant'
+import NavBar from 'components/NavBar'
 
 const Product = ({ productType, productSingleData }) => {
   return (
     <div className="product-wrapper">
+      <NavBar />
       <Title
         productType={productType}
         productName={productType === PRODUCT_TYPE.SINGLE ? productSingleData.name : ''}

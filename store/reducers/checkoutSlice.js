@@ -15,17 +15,10 @@ const initialState = {
     billing_email: '',
     account_username: '',
     account_password: '',
-    shipping_first_name: '',
-    shipping_last_name: '',
-    shipping_company: '',
-    shipping_country: 'VN',
-    shipping_address_1: '',
-    shipping_postcode: '',
-    shipping_city: '',
     order_comments: '',
     payment_method: 'bacs',
   },
-  totalPrice: 0,
+  totalPrice: 205000,
 }
 
 const CheckoutSlice = createSlice({
@@ -47,22 +40,24 @@ const CheckoutSlice = createSlice({
     },
     incQuantityById: (state, action) => {
       // action.payload = id
-      if (state.cart[action.payload]) {
-        state.cart[action.payload].quantity += 1
-        state.totalPrice += state.cart[action.payload].price
+      const itemId = action.payload
+      if (state.cart[itemId]) {
+        state.cart[itemId].quantity += 1
+        state.totalPrice += state.cart[itemId].price
       }
     },
     decQuantityById: (state, action) => {
       // action.payload = id
-      if (state.cart[action.payload]) {
-        state.cart[action.payload].quantity -= 1
-        state.totalPrice -= state.cart[action.payload].price
+      const itemId = action.payload
+      if (state.cart[itemId]) {
+        state.cart[itemId].quantity -= 1
+        state.totalPrice -= state.cart[itemId].price
       }
     },
     updateQuantityById: (state, action) => {
       // action.payload = { id, quantity}
-      if (state.cart[action.payload]) {
-        const itemId = action.payload.id
+      const itemId = action.payload.id
+      if (state.cart[itemId]) {
         state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
         state.cart[itemId].quantity = action.payload.quantity
         state.totalPrice += state.cart[itemId].price * state.cart[itemId].quantity
@@ -70,9 +65,10 @@ const CheckoutSlice = createSlice({
     },
     removeItemById: (state, action) => {
       // action.payload = id
-      if (state.cart[action.payload]) {
-        state.totalPrice -= state.cart[action.payload].price * state.cart[action.payload].quantity
-        delete state.cart[action.payload]
+      const itemId = action.payload
+      if (state.cart[itemId]) {
+        state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
+        delete state.cart[itemId]
       }
     },
     updateBillingInfo: (state, action) => {
