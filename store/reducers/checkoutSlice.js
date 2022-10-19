@@ -28,13 +28,17 @@ const CheckoutSlice = createSlice({
     resetCheckout: (state) => {
       state = initialState
     },
-    addItemById: (state, action) => {
-      state.cart[action.payload.id] = {
-        id: action.payload.id,
-        images: action.payload.images,
-        name: action.payload.name,
-        price: action.payload.price,
-        quantity: action.payload.quantity,
+    addItem: (state, action) => {
+      if (state.cart[action.payload.id]) {
+        state.cart[action.payload.id].quantity += action.payload.quantity
+      } else {
+        state.cart[action.payload.id] = {
+          id: action.payload.id,
+          images: action.payload.images,
+          name: action.payload.name,
+          price: action.payload.price,
+          quantity: action.payload.quantity,
+        }
       }
       state.totalPrice += action.payload.price * action.payload.quantity
     },
@@ -77,8 +81,8 @@ const CheckoutSlice = createSlice({
   },
 })
 
-export const addItemById = (item) => async (dispatch, getState) => {
-  dispatch(CheckoutSlice.actions.addItemById(item))
+export const addItem = (item) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.addItem(item))
 }
 
 export const incQuantityById = (itemId) => async (dispatch, getState) => {

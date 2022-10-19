@@ -8,10 +8,13 @@ import ProductInformation from 'components/Product/Utils/ProductInformation'
 import Link from 'next/link'
 import { MIN_DESKTOP_WIDTH, MODEL_WIDTH_ABOVE_DESKTOP, MODEL_WIDTH_BELOW_DESKTOP } from 'utils/constant'
 import { formatVNprice } from 'utils/function'
+import { useDispatch } from 'react-redux'
+import { addItem } from 'store/reducers/checkoutSlice'
 
 const ProductSingle = ({ isModel, productSingleData }) => {
   const [dynamicWidth, setDynamicWidth] = useState()
   const [productQuantity, setProductQuantity] = useState(1)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleWindowChange = () => {
@@ -99,7 +102,7 @@ const ProductSingle = ({ isModel, productSingleData }) => {
                 <div
                   className="btn-group"
                   onClick={() => {
-                    console.log('Add to Cart')
+                    dispatch(addItem({ ...productSingleData, quantity: productQuantity }))
                   }}
                 >
                   <a href="#" className="btn add-to-cart">

@@ -1,53 +1,53 @@
-import styles from "./styles";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { IMAGE_QUALITY } from "utils/constant";
+import styles from './styles'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { IMAGE_QUALITY } from 'utils/constant'
 
 const Slider = ({ DynamicWidth, sliderData }) => {
   const [translation, setTranslation] = useState({
-    bigImage: { transform: "translate3d(0px, 0px, 0px)" },
-    smallImage: { transform: "translate3d(0px, 0px, 0px)" },
-  });
+    bigImage: { transform: 'translate3d(0px, 0px, 0px)' },
+    smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
+  })
 
   const moveToSlide = (index) => {
     setTranslation({
       bigImage: {
         transform: `translate3d(${index * -DynamicWidth}px, 0px, 0px)`,
       },
-      smallImage: { transform: "translate3d(0px, 0px, 0px)" },
-    });
-  };
+      smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
+    })
+  }
 
   useEffect(() => {
-    const sliders = document.querySelectorAll(".slides");
+    const sliders = document.querySelectorAll('.slides')
     Array.from(sliders).map((slider, index) => {
       if (index % 2 != 0) {
-        const sliderSmallImage = Array.from(slider.children);
+        const sliderSmallImage = Array.from(slider.children)
         sliderSmallImage.map((slide, idx) => {
-          slide.addEventListener("click", () => {
-            return moveToSlide(idx);
-          });
-        });
+          slide.addEventListener('click', () => {
+            return moveToSlide(idx)
+          })
+        })
       }
-    });
+    })
 
     return () => {
       setTranslation({
-        bigImage: { transform: "translate3d(0px, 0px, 0px)" },
-        smallImage: { transform: "translate3d(0px, 0px, 0px)" },
-      });
+        bigImage: { transform: 'translate3d(0px, 0px, 0px)' },
+        smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
+      })
       Array.from(sliders).map((slider, index) => {
         if (index % 2 != 0) {
-          const sliderSmallImage = Array.from(slider.children);
+          const sliderSmallImage = Array.from(slider.children)
           sliderSmallImage.map((slide, idx) => {
-            slide.removeEventListener("click", () => {
-              return moveToSlide(idx);
-            });
-          });
+            slide.removeEventListener('click', () => {
+              return moveToSlide(idx)
+            })
+          })
         }
-      });
-    };
-  }, [DynamicWidth, sliderData]);
+      })
+    }
+  }, [DynamicWidth, sliderData])
 
   return (
     <>
@@ -57,26 +57,22 @@ const Slider = ({ DynamicWidth, sliderData }) => {
             {sliderData.images.length !== 0 ? (
               sliderData.images.map((image, index) => {
                 return (
-                  <li
-                    className="big-image"
-                    style={{ width: `${DynamicWidth}px` }}
-                    key={index}
-                  >
+                  <li className="big-image" style={{ width: `${DynamicWidth}px` }} key={index}>
                     <Image
                       src={image.storageUrl}
                       alt="Hình ảnh sản phẩm to"
                       width={IMAGE_QUALITY.HIGH}
                       height={IMAGE_QUALITY.HIGH}
                       placeholder="blur"
-                      blurDataURL="/products/food-dog-2.jpg"
+                      blurDataURL="/products/big-product-1.jpg"
                     />
                   </li>
-                );
+                )
               })
             ) : (
               <li className="big-image" style={{ width: `${DynamicWidth}px` }}>
                 <Image
-                  src="/products/food-dog-2.jpg"
+                  src="/products/big-product-1.jpg"
                   alt="Hình ảnh sản phẩm to"
                   width={IMAGE_QUALITY.HIGH}
                   height={IMAGE_QUALITY.HIGH}
@@ -100,15 +96,15 @@ const Slider = ({ DynamicWidth, sliderData }) => {
                       width={IMAGE_QUALITY.LOW}
                       height={IMAGE_QUALITY.LOW}
                       placeholder="blur"
-                      blurDataURL="/products/food-dog-2.jpg"
+                      blurDataURL="/products/big-product-1.jpg"
                     />
                   </li>
-                );
+                )
               })
             ) : (
               <li className="small-image">
                 <Image
-                  src="/products/food-dog-2.jpg"
+                  src="/products/big-product-1.jpg"
                   alt="Hình ảnh sản phẩm nhỏ"
                   width={IMAGE_QUALITY.LOW}
                   height={IMAGE_QUALITY.LOW}
@@ -121,7 +117,7 @@ const Slider = ({ DynamicWidth, sliderData }) => {
       </div>
       <style jsx>{styles}</style>
     </>
-  );
-};
+  )
+}
 
-export default Slider;
+export default Slider

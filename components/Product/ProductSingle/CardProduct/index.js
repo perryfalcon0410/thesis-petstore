@@ -24,7 +24,7 @@ const CardProduct = ({ productSingleData }) => {
                 <div className="post-image">
                   <Image
                     src={product.images.length !== 0 ? product.images[0].storageUrl : '/images/no-image.png'}
-                    alt="Hình ảnh sản phẩm"
+                    alt={product.name}
                     width={IMAGE_QUALITY.MED}
                     height={IMAGE_QUALITY.MED}
                   />
