@@ -9,7 +9,7 @@ export const consoleLog = (value, name = '') => {
 
 export const getDateCreated = (timestamp) => {
   const date = new Date(timestamp)
-  return `Ngày ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+  return `Date ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
 export const formatVNprice = (price) => {
