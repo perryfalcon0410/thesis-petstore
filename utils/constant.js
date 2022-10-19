@@ -13,18 +13,9 @@ export const IMAGE_QUALITY = {
 export const FOCUS_WITH_MOBILE = 330
 export const FOCUS_WITH_DESKTOP = 510
 export const WIDTH_ABOVE_MOBILE = 500
-export const TEMP_SALE_PRICE = '299.000đ'
 export const MODEL_WIDTH_ABOVE_DESKTOP = 540
 export const MODEL_WIDTH_BELOW_DESKTOP = 450
-export const BLOG_TYPE = {
-  SINGLE: 1,
-  LIST: 2,
-}
 export const PRODUCT_TYPE = {
-  SINGLE: 1,
-  LIST: 2,
-}
-export const SERVICE_TYPE = {
   SINGLE: 1,
   LIST: 2,
 }
