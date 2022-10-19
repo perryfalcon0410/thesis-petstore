@@ -1,8 +1,8 @@
-import css from "styled-jsx/css";
+import css from 'styled-jsx/css'
 
 export default css`
   .material-icons-outlined {
-    font-family: "Material Icons";
+    font-family: 'Material Icons';
   }
 
   a {
@@ -21,14 +21,15 @@ export default css`
       margin-top: 90px;
 
       p {
-        font-family: "Raleway", sans-serif;
+        font-family: 'Raleway', sans-serif;
         font-size: 15px;
         margin-bottom: 1rem;
         line-height: 1.5;
       }
 
       .product_detail {
-        padding: 30px 0;
+        padding-top: 20px;
+        padding-bottom: 10px;
 
         &.row {
           display: flex;
@@ -50,7 +51,7 @@ export default css`
             margin-bottom: 40px;
 
             h2 {
-              font-family: "Raleway", sans-serif;
+              font-family: 'Raleway', sans-serif;
               font-size: 32px;
               font-weight: 600;
               margin: 0;
@@ -78,7 +79,7 @@ export default css`
 
               div span,
               p span {
-                font-family: "Raleway", sans-serif;
+                font-family: 'Raleway', sans-serif;
                 font-size: 15px;
                 font-weight: bold;
                 margin-bottom: 1rem;
@@ -167,4 +168,4 @@ export default css`
       }
     }
   }
-`;
+`

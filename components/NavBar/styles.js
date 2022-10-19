@@ -20,7 +20,7 @@ export default css`
       padding: 20px 0;
 
       .image-logo {
-        height: 60px;
+        height: 40px;
         img {
           height: 100%;
         }
