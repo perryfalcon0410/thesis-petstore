@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-      "baseUrl": "./"
+    "baseUrl": "./",
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin"
+      }
+    ]
   },
   "exclude": ["node_modules"]
 }
