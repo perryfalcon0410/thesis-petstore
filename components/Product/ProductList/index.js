@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import ProductCategory from './ProductCategory'
 import FilterPrice from './ProductCategory/PriceFilter'
 import Products from './Products'
 import styles from './styles'
 
 const ProductList = () => {
+  useEffect(() => {}, [])
   return (
     <section className="elementor-section">
       <div className="background-overlay" />

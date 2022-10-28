@@ -26,23 +26,41 @@ export default css`
             margin-left: 0.5em;
             margin-right: 0.5em;
 
+            #min-price,
+            #max-price {
+              appearance: none;
+              width: 100%;
+              outline: none;
+              position: absolute;
+              margin: auto;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              background-color: transparent;
+              pointer-events: none;
+
+              &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 1em;
+                width: 1em;
+                background-color: #1e73be;
+                cursor: pointer;
+                border-radius: 1em;
+                pointer-events: auto;
+                margin-top: -1px;
+              }
+
+              /* &:active::-webkit-slider-thumb { */
+              /*   background-color: #fff; */
+              /*   border: 1px solid #3264fe; */
+              /* } */
+            }
+
             .price-ui-slider {
               position: absolute;
               top: 0;
               background-color: #1e73be;
               height: 100%;
-            }
-            & > span {
-              position: absolute;
-              z-index: 2;
-              width: 1em;
-              height: 1em;
-              background-color: #1e73be;
-              border-radius: 1em;
-              cursor: pointer;
-              outline: 0;
-              top: -0.4em;
-              margin-left: -0.5em;
             }
           }
 

@@ -11,9 +11,15 @@ export default css`
     display: block;
     z-index: 100;
     background-color: #fff;
+    border-top: none;
+
+    &.move-top {
+      top: -182px;
+      border-bottom: 0;
+      border-top: 1px solid #aaa;
+    }
 
     &.select-dropdown-below {
-      border-top: none;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
