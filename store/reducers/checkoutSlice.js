@@ -4,21 +4,21 @@ import { cartDetail } from 'components/mocks/cartDetail'
 const initialState = {
   cart: cartDetail,
   billingInfo: {
-    billing_first_name: '',
-    billing_last_name: '',
-    billing_company: '',
-    billing_country: 'VN',
-    billing_address_1: '',
-    billing_postcode: '',
-    billing_city: '',
-    billing_phone: '',
-    billing_email: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    company: '',
+    region: '',
+    district: '',
+    ward: '',
+    address: '',
     account_username: '',
     account_password: '',
-    order_comments: '',
-    payment_method: 'bacs',
+    orderComment: '',
+    paymentMethod: 'paypal',
   },
-  totalPrice: 205000,
+  totalPrice: 8.26,
 }
 
 const CheckoutSlice = createSlice({

@@ -47,7 +47,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
                     </td>
                     <td className="product-name">{cart.name}</td>
                     <td className="product-price">
-                      <span>{formatVNprice(cart.price)}₫</span>
+                      <span>{formatVNprice(cart.price)}$</span>
                     </td>
                     <td className="product-quantity">
                       <div>
@@ -81,7 +81,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
                       </div>
                     </td>
                     <td className="product-subtotal">
-                      <span>{formatVNprice(cart.price * cart.quantity)}₫</span>
+                      <span>{formatVNprice(cart.price * cart.quantity)}$</span>
                     </td>
                   </tr>
                 )
@@ -101,7 +101,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
           <div className="title">Cart infomation</div>
           <div className="inner-row">
             <p className="subtotal">Temporary price</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{formatVNprice(totalCost)}$</p>
           </div>
           <div className="inner-row">
             <p className="shipping">Delivery</p>
@@ -112,7 +112,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
           </div>
           <div className="inner-row">
             <p className="total">Total</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{formatVNprice(totalCost)}$</p>
           </div>
           <div className="continue" onClick={() => setStepIdx(1)}>
             Make a payment

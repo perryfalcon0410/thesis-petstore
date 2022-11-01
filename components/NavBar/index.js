@@ -74,7 +74,7 @@ const NavBar = () => {
                         </Link>
                         <p className="cart-quantity">
                           {cart.quantity} &#215; <span className="cart-price">{formatVNprice(cart.price)}</span>
-                          <span className="unit-price">₫</span>
+                          <span className="unit-price">$</span>
                         </p>
                       </div>
                       <span
@@ -91,7 +91,7 @@ const NavBar = () => {
                 <p className="total">Subtotal:</p>
                 <p className="cart-total">
                   <span className="cart-price">{formatVNprice(totalCost)}</span>
-                  <span className="unit-price">₫</span>
+                  <span className="unit-price">$</span>
                 </p>
               </div>
               <div className="row">

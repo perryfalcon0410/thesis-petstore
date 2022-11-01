@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^7.8.1",
     "@reduxjs/toolkit": "^1.7.1",
     "@styled-jsx/plugin-sass": "^4.0.1",
     "classnames": "^2.3.2",
@@ -18,9 +19,9 @@
     "react-dom": "17.0.2",
     "react-icons": "^4.4.0",
     "react-redux": "^7.2.6",
+    "react-slick": "^0.29.0",
     "sass": "^1.42.1",
     "styled-jsx": "^4.0.1",
-    "react-slick": "^0.29.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

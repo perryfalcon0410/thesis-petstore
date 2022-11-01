@@ -1,52 +1,38 @@
 import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import { LIST_REGION } from 'utils/constant'
 import { useDispatch } from 'react-redux'
 import { updateBillingInfo } from 'store/reducers/checkoutSlice'
 import { consoleLog, formatVNprice } from 'utils/function'
+import PaymentSection from '../../PaymentSection'
 
 const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail }) => {
   const dispatch = useDispatch()
 
   const BILLING_SCHEMA = Yup.object({
-    billing_first_name: Yup.string().required('It is a required field.'),
-    billing_last_name: Yup.string().required('It is a required field.'),
-    billing_company: Yup.string(),
-    billing_country: Yup.string().required('It is a required field.'),
-    billing_address_1: Yup.string().required('It is a required field.'),
-    billing_postcode: Yup.string(),
-    billing_city: Yup.string().required('It is a required field.'),
-    billing_phone: Yup.string().required('It is a required field.'),
-    billing_email: Yup.string().required('It is a required field.'),
-    showAccount: Yup.boolean(),
-    account_username: Yup.string().when('showAccount', {
-      is: true,
-      then: Yup.string().required('It is a required field.'),
-      otherwise: Yup.string(),
-    }),
-    account_password: Yup.string().when('showAccount', {
-      is: true,
-      then: Yup.string().required('It is a required field.'),
-      otherwise: Yup.string(),
-    }),
-    order_comments: Yup.string(),
-    payment_method: Yup.string().required(),
+    firstName: Yup.string().required('It is a required field.'),
+    lastName: Yup.string().required('It is a required field.'),
+    phone: Yup.string().required('It is a required field.'),
+    email: Yup.string().required('It is a required field.'),
+    company: Yup.string(),
+    region: Yup.string().required('It is a required field.'),
+    district: Yup.string().required('It is a required field'),
+    ward: Yup.string(),
+    address: Yup.string().required('It is a required field'),
+    orderComment: Yup.string(),
+    paymentMethod: Yup.string().required(),
   })
 
   return (
     <div>
       <Formik
         validationSchema={BILLING_SCHEMA}
-        initialValues={{
-          ...customerBillingDetail,
-          showAccount: false,
-        }}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        initialValues={customerBillingDetail}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
           try {
             dispatch(updateBillingInfo(values))
-            const checkoutData = { cart: cartList, billingInfo: values }
-            consoleLog(checkoutData)
+            const checkoutData = { cart: cartList, bill: values }
+            consoleLog(checkoutData, 'Checkout: ')
             setSubmitting(false)
             resetForm()
             setStepIdx(2)
@@ -55,7 +41,17 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
           }
         }}
       >
-        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+          submitForm,
+        }) => (
           <form
             name="checkout"
             className="checkout woocommerce-checkout"
@@ -70,278 +66,211 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                       <h3>Billing Information</h3>
                       <div className="woocommerce-billing-fields__field-wrapper">
                         <p className={'form-row form-row-first validate-required'}>
-                          <label htmlFor={'billing_first_name'}>
+                          <label htmlFor={'firstName'}>
                             {'First name'}{' '}
-                            <abbr className="required" title="bắt buộc">
+                            <abbr className="required" title="required">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
                               type={'text'}
-                              name={'billing_first_name'}
+                              name={'firstName'}
                               className="input-text"
                               autoComplete={'given-name'}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.billing_first_name}
+                              value={values.firstName}
+                              placeholder={'Enter first name'}
                             />
                           </span>
                         </p>
                         <p className={'form-row form-row-last validate-required'}>
-                          <label htmlFor={'billing_last_name'}>
+                          <label htmlFor={'lastName'}>
                             {'Last name'}{' '}
-                            <abbr className="required" title="bắt buộc">
+                            <abbr className="required" title="required">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
                               type={'text'}
-                              name={'billing_last_name'}
+                              name={'lastName'}
                               className="input-text"
                               autoComplete={'family-name'}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.billing_last_name}
+                              value={values.lastName}
+                              placeholder={'Enter last name'}
                             />
                           </span>
                         </p>
-                        {touched.billing_first_name && errors.billing_first_name ? (
-                          <p className="error-message">{errors.billing_first_name}</p>
+                        {touched.firstName && errors.firstName ? (
+                          <p className="error-message">{errors.firstName}</p>
                         ) : null}
-                        {touched.billing_last_name && errors.billing_last_name ? (
-                          <p className="error-message">{errors.billing_last_name}</p>
-                        ) : null}
-                        <p className={'form-row form-row-wide'}>
-                          <label htmlFor={'billing_company'}>{'Company name'}</label>
-                          <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'billing_company'}
-                              className="input-text"
-                              autoComplete={'organization'}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.billing_company}
-                            />
-                          </span>
-                        </p>
-                        <p className="form-row form-row-wide address-field update_totals_on_change validate-required">
-                          <label htmlFor="billing_country">
-                            {'Country/Region'}{' '}
-                            <abbr className="required" title="bắt buộc">
-                              *
-                            </abbr>
-                          </label>
-                          <span className="woocommerce-input-wrapper">
-                            <select
-                              name="billing_country"
-                              className="country_to_state country_select"
-                              autoComplete="country"
-                              data-placeholder="Choose Country/Region"
-                              aria-hidden="true"
-                              tabIndex="-1"
-                              value={values.billing_country}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            >
-                              {LIST_REGION.map((region, index) => {
-                                return (
-                                  <option value={region.key} key={index}>
-                                    {region.value}
-                                  </option>
-                                )
-                              })}
-                            </select>
-                          </span>
-                        </p>
-                        <p className={'form-row address-field validate-required form-row-first'}>
-                          <label htmlFor={'billing_address_1'}>
-                            {'Address'}{' '}
-                            <abbr className="required" title="bắt buộc">
-                              *
-                            </abbr>
-                          </label>
-                          <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'billing_address_1'}
-                              className="input-text"
-                              autoComplete={'address-line1'}
-                              placeholder={'Address'}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.billing_address_1}
-                            />
-                          </span>
-                        </p>
-                        {touched.billing_address_1 && errors.billing_address_1 ? (
-                          <p className="error-message">{errors.billing_address_1}</p>
-                        ) : null}
-                        <p className={'form-row address-field validate-postcode form-row-wide'}>
-                          <label htmlFor={'billing_postcode'}>
-                            {'Postcode'}
-                            <span className="optional">(optional)</span>
-                          </label>
-                          <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'billing_postcode'}
-                              className="input-text"
-                              autoComplete={'postal-code'}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.billing_postcode}
-                            />
-                          </span>
-                        </p>
-                        <p className={'form-row address-field validate-required form-row-wide'}>
-                          <label htmlFor={'billing_city'}>
-                            {'Province/City'}{' '}
-                            <abbr className="required" title="bắt buộc">
-                              *
-                            </abbr>
-                          </label>
-                          <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'billing_city'}
-                              className="input-text"
-                              autoComplete={'address-level2'}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.billing_city}
-                            />
-                          </span>
-                        </p>
-                        {touched.billing_city && errors.billing_city ? (
-                          <p className="error-message">{errors.billing_city}</p>
+                        {touched.lastName && errors.lastName ? (
+                          <p className="error-message">{errors.lastName}</p>
                         ) : null}
                         <p className={'form-row form-row-wide validate-required validate-phone'}>
-                          <label htmlFor={'billing_phone'}>
-                            {'Phone'}{' '}
-                            <abbr className="required" title="bắt buộc">
+                          <label htmlFor={'phone'}>
+                            {'Phone number'}{' '}
+                            <abbr className="required" title="required">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
                               type={'tel'}
-                              name={'billing_phone'}
+                              name={'phone'}
                               className="input-text"
                               autoComplete={'tel'}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.billing_phone}
+                              value={values.phone}
+                              placeholder={'Enter phone number'}
                             />
                           </span>
                         </p>
-                        {touched.billing_phone && errors.billing_phone ? (
-                          <p className="error-message">{errors.billing_phone}</p>
-                        ) : null}
+                        {touched.phone && errors.phone ? <p className="error-message">{errors.phone}</p> : null}
                         <p className={'form-row form-row-wide validate-required validate-email'}>
-                          <label htmlFor={'billing_email'}>
+                          <label htmlFor={'email'}>
                             {'Email'}{' '}
-                            <abbr className="required" title="bắt buộc">
+                            <abbr className="required" title="required">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
                               type={'email'}
-                              name={'billing_email'}
+                              name={'email'}
                               className="input-text"
                               autoComplete={'email'}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.billing_email}
+                              value={values.email}
+                              placeholder={'Enter email'}
                             />
                           </span>
                         </p>
-                        {touched.billing_email && errors.billing_email ? (
-                          <p className="error-message">{errors.billing_email}</p>
+                        {touched.email && errors.email ? <p className="error-message">{errors.email}</p> : null}
+                        <p className={'form-row form-row-wide'}>
+                          <label htmlFor={'company'}>
+                            {'Company'} <span className="optional">(optional)</span>
+                          </label>
+                          <span className="woocommerce-input-wrapper">
+                            <input
+                              type={'text'}
+                              name={'company'}
+                              className="input-text"
+                              autoComplete={'organization'}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.company}
+                              placeholder={'Enter company'}
+                            />
+                          </span>
+                        </p>
+                        <p className={'form-row form-row-wide validate-required validate-region'}>
+                          <label htmlFor={'region'}>
+                            {'Province/City'}{' '}
+                            <abbr className="required" title="required">
+                              *
+                            </abbr>
+                          </label>
+                          <span className="woocommerce-input-wrapper">
+                            <input
+                              type={'text'}
+                              name={'region'}
+                              className="input-text"
+                              autoComplete={'address-level1'}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.region}
+                              placeholder={'Enter province or city'}
+                            />
+                          </span>
+                        </p>
+                        {touched.region && errors.region ? <p className="error-message">{errors.region}</p> : null}
+                        <p className={'form-row form-row-wide validate-required validate-district'}>
+                          <label htmlFor={'district'}>
+                            {'District'}{' '}
+                            <abbr className="required" title="required">
+                              *
+                            </abbr>
+                          </label>
+                          <span className="woocommerce-input-wrapper">
+                            <input
+                              type={'text'}
+                              name={'district'}
+                              className="input-text"
+                              autoComplete={'address-level2'}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.district}
+                              placeholder={'Enter district'}
+                            />
+                          </span>
+                        </p>
+                        {touched.district && errors.district ? (
+                          <p className="error-message">{errors.district}</p>
                         ) : null}
+                        <p className={'form-row form-row-wide validate-required validate-ward'}>
+                          <label htmlFor={'ward'}>
+                            {'Ward'} <span className="optional">(optional)</span>
+                          </label>
+                          <span className="woocommerce-input-wrapper">
+                            <input
+                              type={'text'}
+                              name={'ward'}
+                              className="input-text"
+                              autoComplete={'address-level3'}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.ward}
+                              placeholder={'Enter ward'}
+                            />
+                          </span>
+                        </p>
+                        <p className={'form-row form-row-wide validate-required validate-address'}>
+                          <label htmlFor={'address'}>
+                            {'Address'}{' '}
+                            <abbr className="required" title="required">
+                              *
+                            </abbr>
+                          </label>
+                          <span className="woocommerce-input-wrapper">
+                            <textarea
+                              type={'text'}
+                              name={'address'}
+                              className="input-text"
+                              placeholder={'Enter address'}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.address}
+                              autoComplete={'address-level4'}
+                            />
+                          </span>
+                        </p>
+                        {touched.address && errors.address ? <p className="error-message">{errors.address}</p> : null}
                       </div>
-                    </div>
-                    <div className="woocommerce-account-fields">
-                      <p className="form-row form-row-wide create-account woocommerce-validated">
-                        <label className="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
-                          <input
-                            className="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox"
-                            type="checkbox"
-                            name="createaccount"
-                            value="1"
-                            checked={values.showAccount}
-                            onChange={() => {
-                              setFieldValue('showAccount', !values.showAccount, false)
-                            }}
-                          />
-                          <span>Create a new account ?</span>
-                        </label>
-                      </p>
-                      {values.showAccount ? (
-                        <div className="create-account">
-                          <p className="form-row validate-required">
-                            <label htmlFor="account_username">
-                              {'Username'}
-                              <abbr className="required" title="bắt buộc">
-                                *
-                              </abbr>
-                            </label>
-                            <span className="woocommerce-input-wrapper">
-                              <input
-                                type="text"
-                                className="input-text"
-                                name="account_username"
-                                placeholder="Username"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.account_username}
-                              />
-                            </span>
-                          </p>
-                          <p className="form-row validate-required woocommerce-invalid woocommerce-invalid-required-field">
-                            <label htmlFor="account_password">
-                              {'Password'}
-                              <abbr className="required" title="bắt buộc">
-                                *
-                              </abbr>
-                            </label>
-                            <span className="woocommerce-input-wrapper password-input">
-                              <input
-                                type="password"
-                                className="input-text"
-                                name="account_password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.account_password}
-                              />
-                              <span className="show-password-input" />
-                            </span>
-                          </p>
-                          <div className="clear" />
-                        </div>
-                      ) : null}
                     </div>
                   </div>
                   <div className="clear">
                     <div className="woocommerce-additional-fields">
                       <div className="woocommerce-additional-fields__field-wrapper">
                         <p className="form-row notes">
-                          <label htmlFor="order_comments">
+                          <label htmlFor="orderComment">
                             {'Comments'} <span className="optional">(optional)</span>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <textarea
-                              name="order_comments"
+                              name="orderComment"
                               className="input-text"
                               placeholder="
-                              Order notes, for example, more detailed delivery times or locations."
+                              Enter order note"
                               rows="2"
                               cols="5"
-                              value={values.order_comments}
+                              value={values.orderComment}
                               onChange={handleChange}
                               onBlur={handleBlur}
                             />
@@ -381,7 +310,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                                 <td className="product-total">
                                   <span className="woocommerce-Price-amount amount">
                                     <bdi>{formatVNprice(cart.price * cart.quantity)}</bdi>
-                                    <span className="woocommerce-Price-currencySymbol">₫</span>
+                                    <span className="woocommerce-Price-currencySymbol">$</span>
                                   </span>
                                 </td>
                               </tr>
@@ -395,7 +324,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                               <span className="woocommerce-Price-amount amount">
                                 <bdi>
                                   {formatVNprice(totalCost)}
-                                  <span className="woocommerce-Price-currencySymbol">₫</span>
+                                  <span className="woocommerce-Price-currencySymbol">$</span>
                                 </bdi>
                               </span>
                             </td>
@@ -425,7 +354,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                                 <span className="woocommerce-Price-amount amount">
                                   <bdi>
                                     {formatVNprice(totalCost)}
-                                    <span className="woocommerce-Price-currencySymbol">₫</span>
+                                    <span className="woocommerce-Price-currencySymbol">$</span>
                                   </bdi>
                                 </span>
                               </strong>
@@ -440,20 +369,15 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                               id="payment_method_bacs"
                               type="radio"
                               className="input-radio"
-                              name="payment_method"
-                              value="bacs"
-                              checked={values.payment_method === 'bacs'}
-                              onChange={() => {
-                                setFieldValue('payment_method', 'bacs', false)
-                              }}
+                              name="paymentMethod"
+                              value="paypal"
+                              checked={values.paymentMethod === 'paypal'}
+                              onChange={() => setFieldValue('paymentMethod', 'paypal', false)}
                             />
-                            <label htmlFor="payment_method_bacs">Banking</label>
-                            {values.payment_method === 'bacs' ? (
+                            <label htmlFor="payment_method_bacs">PayPal</label>
+                            {values.paymentMethod === 'paypal' ? (
                               <div className="payment_box payment_method_bacs">
-                                <p>
-                                  Make payments to our bank account instantly. Please use your Order ID in the Billing
-                                  Contents section. Orders will be shipped after payment has been made.
-                                </p>
+                                <p>Make payments via PayPal. Orders will be shipped after payment has been made.</p>
                               </div>
                             ) : null}
                           </li>
@@ -462,35 +386,36 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                               id="payment_method_cod"
                               type="radio"
                               className="input-radio"
-                              name="payment_method"
+                              name="paymentMethod"
                               value="cod"
-                              checked={values.payment_method === 'cod'}
-                              onChange={() => {
-                                setFieldValue('payment_method', 'cod', false)
-                              }}
+                              checked={values.paymentMethod === 'cod'}
+                              onChange={() => setFieldValue('paymentMethod', 'cod', false)}
                             />
                             <label htmlFor="payment_method_cod">Cash on delivery</label>
-                            {values.payment_method === 'cod' ? (
+                            {values.paymentMethod === 'cod' ? (
                               <div className="payment_box payment_method_cod">
-                                <p>Cash on delivery</p>
+                                <p>Pay the deliverer or shipper using cash or card.</p>
                               </div>
                             ) : null}
                           </li>
                         </ul>
                         <div className="form-row place-order">
                           <div className="woocommerce-terms-and-conditions-wrapper" />
-                          <button
-                            type="submit"
-                            className="button alt"
-                            name="woocommerce_checkout_place_order"
-                            disabled={isSubmitting}
-                            style={{ cursor: !isSubmitting ? 'pointer' : 'default' }}
-                            onClick={() => consoleLog('click')}
-                          >
-                            <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div>
-                            <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span>
-                            Book
-                          </button>
+                          {values.paymentMethod === 'paypal' ? (
+                            <PaymentSection disabled={isSubmitting} totalCost={totalCost} submitForm={submitForm} />
+                          ) : (
+                            <button
+                              type="submit"
+                              className="button alt"
+                              name="woocommerce_checkout_place_order"
+                              disabled={isSubmitting}
+                              style={{ cursor: !isSubmitting ? 'pointer' : 'default', borderRadius: '5px' }}
+                            >
+                              <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div>
+                              <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span>
+                              Book
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -10,6 +10,7 @@ export const IMAGE_QUALITY = {
   HIGH: 720,
   HD: 1080,
 }
+
 export const FOCUS_WITH_MOBILE = 330
 export const FOCUS_WITH_DESKTOP = 510
 export const WIDTH_ABOVE_MOBILE = 500

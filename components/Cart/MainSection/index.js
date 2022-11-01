@@ -6,8 +6,7 @@ import OrderCompleteSection from './OrderCompleteSection'
 import Link from 'next/link'
 
 const MainSection = ({ stepIdx, cartSlice, setStepIdx }) => {
-  const steps = ['Shopping cart', 'Checkout details', 'Order complete']
-
+  const steps = ['ShoppingCart', 'CheckoutDetail', 'OrderComplete']
   const cartList = Object.values(cartSlice.cart)
   const customerBillingDetail = cartSlice.billingInfo
   const totalCost = cartSlice.totalPrice

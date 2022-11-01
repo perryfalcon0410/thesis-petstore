@@ -2,32 +2,25 @@ export const productDetail = {
   id: 'R3Q1omLegqHi8XOPJD7F',
   name: 'PEDIGREE Pouch Beef for dogs with PEDIGREE Pouch Beef',
   productCode: 'PEDIGREE2',
-  price: 25000,
+  price: 1.01,
   productSku: '0601-1',
   description:
-    "<p>PEDIGREE Pouch Beef Pate for Dogs includes ingredients such as chicken, beef liver, carrot, gravy, wheat gluten, beef plasma, fiber, soy, Amino Acids, Vitamins, and sugar, colorant.</p><p>The product provides your dog with the nutrition he needs. Selected from the freshest cuts of meat providing the right amount of vitamins, minerals and fatty acids for your dog's growth. Pate Pedigree beef for dogs is well simmered, to give your little dog the best taste.</p>",
-  shortDescription:
-    '<p>Pate for dogs with PEDIGREE Pouch Beef with stimulating flavor for anorexic dogs, can be mixed with rice, dried seeds to create a smell for food. In addition, in case there is no available pet food, it can be used to feed the dog directly.</p>',
+    '<ul><li>Sản xuất tại Việt Nam.</li><li>Vật liệu thân thiện với chó mèo.<ul><li>1</li><li>2</li></ul></li><li>Tiện dụng, giúp cung cấp đủ nước cho chó mèo mọi lúc mọi nơi.</li></ul>',
+  shortDescription: '',
   additionInfos:
     '<ul><li>The product is also considered a nutritional supplement for pets</li><li>Provides maximum nutrition to help keep your pet healthy</li><li>At the same time, stimulate appetite. Give your dog an appetite. Suitable for even the most anorexic dogs</li><li>Enhance immunity</li><li>Promotes tooth development</li><li>Improve digestion</li><li>Promotes bone growth</li><li>Promotes stronger, smoother skin and coat</li></ul>',
   images: [
     {
-      status: 'ACTIVE',
       id: '8V1efBqb5PRLfOwkOZRT',
       storageUrl: '/products/big-product-1.jpg',
-      dateCreated: 1638977762317,
     },
     {
-      status: 'ACTIVE',
       id: 'X5KTmJ1hZaMHVO1IQ5sa',
       storageUrl: '/products/big-product-2.jpg',
-      dateCreated: 1638977762318,
     },
     {
-      status: 'ACTIVE',
       id: 'AgO8T9MQGoRUJC3dKldC',
       storageUrl: '/products/big-product-3.jpg',
-      dateCreated: 1638977762319,
     },
   ],
   categories: [
@@ -49,7 +42,7 @@ export const productDetail = {
           storageUrl: '/products/related-product-1.jpg',
         },
       ],
-      price: 35000,
+      price: 1.41,
       categories: [
         {
           id: 'aASCxshW40mARWjMvCA2',
@@ -69,7 +62,7 @@ export const productDetail = {
           storageUrl: '/products/related-product-2.jpg',
         },
       ],
-      price: 40000,
+      price: 1.61,
       categories: [
         {
           id: 'aASCxshW40mARWjMvCA2',
@@ -89,7 +82,7 @@ export const productDetail = {
           storageUrl: '/products/related-product-3.jpg',
         },
       ],
-      price: 50000,
+      price: 2.01,
       categories: [
         {
           id: 'aASCxshW40mARWjMvCA2',
@@ -113,7 +106,7 @@ export const productDetail = {
           storageUrl: '/products/related-product-4-2.jpg',
         },
       ],
-      price: 85000,
+      price: 3.43,
       categories: [
         {
           id: 'aASCxshW40mARWjMvCA2',
