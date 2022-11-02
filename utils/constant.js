@@ -19,6 +19,19 @@ export const PRODUCT_TYPE = {
   SINGLE: 1,
   LIST: 2,
 }
+export const ORDER_TYPE = {
+  SINGLE: 1,
+  LIST: 2,
+}
+export const ORDER_STATUS = {
+  ALL: -1,
+  PENDING: 0,
+  CONFIRMED: 1,
+  DELIVERING: 2,
+  FINISHED: 3,
+  CANCELLED: 4,
+}
+export const LIMIT_PRODUCT_ORDER_LIST = 2
 export const POPUP_STATE_CLOSE = -1
 
 export const LIST_REGION = [

@@ -44,6 +44,11 @@ const NavBar = () => {
             </Link>
           </div>
           <div className="menu-items">
+            <Link href="/order-management" passHref>
+              <div className={classNames('title', { isChosen: router.asPath === '/order-management' })}>Your order</div>
+            </Link>
+          </div>
+          <div className="menu-items">
             <div className="title">About us</div>
           </div>
         </div>
