@@ -8,7 +8,7 @@ import Link from 'next/link'
 const MainSection = ({ stepIdx, cartSlice, setStepIdx }) => {
   const steps = ['ShoppingCart', 'CheckoutDetail', 'OrderComplete']
   const cartList = Object.values(cartSlice.cart)
-  const customerBillingDetail = cartSlice.billingInfo
+  const customerBillingDetail = cartSlice.bill
   const totalCost = cartSlice.totalPrice
   const SOnum = 1
 

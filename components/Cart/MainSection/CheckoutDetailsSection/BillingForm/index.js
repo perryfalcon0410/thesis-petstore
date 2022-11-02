@@ -1,13 +1,15 @@
+import { useState } from 'react'
 import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
-import { updateBillingInfo } from 'store/reducers/checkoutSlice'
+import { updateBill } from 'store/reducers/checkoutSlice'
 import { consoleLog, formatVNprice } from 'utils/function'
 import PaymentSection from '../../PaymentSection'
 
 const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail }) => {
   const dispatch = useDispatch()
+  const [paymentInfo, setPaymentInfo] = useState('')
 
   const BILLING_SCHEMA = Yup.object({
     firstName: Yup.string().required('It is a required field.'),
@@ -30,8 +32,11 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
         initialValues={customerBillingDetail}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           try {
-            dispatch(updateBillingInfo(values))
+            dispatch(updateBill(values))
             const checkoutData = { cart: cartList, bill: values }
+            if (paymentInfo) {
+              checkoutData.payment = paymentInfo
+            }
             consoleLog(checkoutData, 'Checkout: ')
             setSubmitting(false)
             resetForm()
@@ -402,7 +407,12 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         <div className="form-row place-order">
                           <div className="woocommerce-terms-and-conditions-wrapper" />
                           {values.paymentMethod === 'paypal' ? (
-                            <PaymentSection disabled={isSubmitting} totalCost={totalCost} submitForm={submitForm} />
+                            <PaymentSection
+                              disabled={isSubmitting}
+                              totalCost={totalCost}
+                              setPaymentInfo={setPaymentInfo}
+                              submitForm={submitForm}
+                            />
                           ) : (
                             <button
                               type="submit"
