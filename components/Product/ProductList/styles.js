@@ -12,9 +12,6 @@ export default css`
     .elementor-container {
       max-width: 1200px;
       display: flex;
-      margin-right: auto;
-      margin-left: auto;
-      position: relative;
 
       .elementor-row {
         display: flex;
