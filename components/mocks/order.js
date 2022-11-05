@@ -3,6 +3,11 @@ export const orderListMock = [
     id: '1',
     userId: '123',
     totalCost: 205000,
+    delivery: {
+      id: 'asodiuo23jo1iu',
+      fee: 100000,
+      destination: '123/10 Đào Duy Hưng, Quận xxx',
+    },
     products: [
       {
         id: 'TLyP98kwIcd0crLRAiiD',
@@ -65,6 +70,11 @@ export const orderListMock = [
     id: '2',
     userId: '123',
     totalCost: 205000,
+    delivery: {
+      id: 'asodiuo23jo1iu',
+      fee: 0,
+      destination: '123/10 Đào Duy Hưng, Quận xxx',
+    },
     products: [
       {
         id: 'TLyP98kwIcd0crLRAiiD',
@@ -127,6 +137,11 @@ export const orderListMock = [
     id: '3',
     userId: '123',
     totalCost: 205000,
+    delivery: {
+      id: 'asodiuo23jo1iu',
+      fee: 0,
+      destination: '123/10 Đào Duy Hưng, Quận xxx',
+    },
     products: [
       {
         id: 'TLyP98kwIcd0crLRAiiD',
@@ -189,6 +204,11 @@ export const orderListMock = [
     id: '4',
     userId: '123',
     totalCost: 205000,
+    delivery: {
+      id: 'asodiuo23jo1iu',
+      fee: 100000,
+      destination: '123/10 Đào Duy Hưng, Quận xxx',
+    },
     products: [
       {
         id: 'TLyP98kwIcd0crLRAiiD',
@@ -251,6 +271,11 @@ export const orderListMock = [
     id: '5',
     userId: '123',
     totalCost: 205000,
+    delivery: {
+      id: 'asodiuo23jo1iu',
+      fee: 0,
+      destination: '123/10 Đào Duy Hưng, Quận xxx',
+    },
     products: [
       {
         id: 'TLyP98kwIcd0crLRAiiD',
