@@ -3,6 +3,8 @@ import css from 'styled-jsx/css'
 export default css`
   .wrapper {
     padding: 40px 64px;
+    max-width: 1200px;
+    margin: auto;
 
     .nav-container {
       width: 100%;

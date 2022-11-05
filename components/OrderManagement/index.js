@@ -5,23 +5,21 @@ import OrderDetail from './OrderDetail'
 import OrderList from './OrderList'
 import styles from './styles'
 import Title from './Title'
+import { useSelector } from 'react-redux'
 
 const OrderManagement = ({ orderType, orderList, orderDetail }) => {
-  const userSlice = {
-    userId: 1,
-    email: 'test@gmail.com',
-    password: '123456',
-  }
-  console.log(orderDetail)
+  const userSlice = useSelector((state) => {
+    return state.user
+  })
 
   return (
     <div className="wrapper">
       <NavBar />
       <Title orderType={orderType} orderId={orderType === ORDER_TYPE.SINGLE ? orderDetail.id : ''} />
-      {userSlice === null || userSlice === undefined ? (
+      {userSlice.id === null || userSlice.id === undefined ? (
         <div className="container">
           <p>You have not login yet!</p>
-          <Link href="#">
+          <Link href="/sign-in">
             <a>Click here to login!</a>
           </Link>
         </div>

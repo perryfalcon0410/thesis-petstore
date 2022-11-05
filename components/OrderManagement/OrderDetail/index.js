@@ -72,13 +72,15 @@ const OrderDetail = ({ orderDetail }) => {
           <div className="inner-row">
             <p className="shipping">Delivery</p>
             <div>
-              <p className="method">Free delivery</p>
-              <p className="destination">Shipping options will be updated during checkout.</p>
+              <p className="method">
+                {orderDetail.delivery.fee === 0 ? 'Free' : formatVNprice(orderDetail.delivery.fee) + '₫'}
+              </p>
+              <p className="destination">{orderDetail.delivery.destination}</p>
             </div>
           </div>
           <div className="inner-row">
             <p className="total">Total</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{formatVNprice(totalCost + orderDetail.delivery.fee)}₫</p>
           </div>
         </div>
       </div>
