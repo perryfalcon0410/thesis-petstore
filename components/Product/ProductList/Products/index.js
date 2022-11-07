@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import styles from './styles'
 const Products = () => {
   return (
@@ -26,9 +27,11 @@ const Products = () => {
                   </div>
                   <div className="product-detail">
                     <span className="product-category">Product treatment</span>
-                    <a href="" className="product-link">
-                      <h2>Alkin Mitecyn 50ml – Spray for treating dermatitis, fungus, scabies for dogs and cats</h2>
-                    </a>
+                    <Link href="/products/1" passHref>
+                      <a className="product-link">
+                        <h2>Alkin Mitecyn 50ml – Spray for treating dermatitis, fungus, scabies for dogs and cats</h2>
+                      </a>
+                    </Link>
                     <span className="price">
                       14.00 <span>$</span>{' '}
                     </span>
