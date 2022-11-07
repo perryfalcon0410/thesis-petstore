@@ -9,7 +9,7 @@ const CustomSelect = () => {
     const navbarContainer = document.querySelector('.navbar-container')
     const productWrapperHeight = productWrapper.offsetHeight
     const navbarContainerHeight = navbarContainer.offsetHeight
-    productWrapper.onscroll = () => {
+    const handleScroll = () => {
       const bottomPos = selectResultsOption.getBoundingClientRect().bottom
       const topPos = selectResultsOption.getBoundingClientRect().top
       if (selectDropdown.classList.contains('move-top')) {
@@ -22,8 +22,9 @@ const CustomSelect = () => {
         }
       }
     }
+    productWrapper.addEventListener('scroll', handleScroll)
     return () => {
-      productWrapper.removeEventListener('scroll')
+      productWrapper.removeEventListener('scroll', handleScroll)
     }
   }, [])
   return (
