@@ -62,7 +62,7 @@ const OrderList = ({ orderList }) => {
             <div className="card" key={order.id}>
               <div className="top">
                 <div className="status">
-                  <DeliveryIcon width={20} height={20} stroke="white" fill={color} />
+                  <DeliveryIcon width={20} height={20} stroke={color} fill={'white'} />
                   <p style={{ color: color }}>Delivery success</p>
                   <div className="column-divider"></div>
                   <p style={{ color: '#DD583B' }}>DELIVERED</p>
