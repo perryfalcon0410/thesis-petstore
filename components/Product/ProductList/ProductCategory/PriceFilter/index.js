@@ -76,8 +76,8 @@ const FilterPrice = () => {
               </button>
 
               <div className="price-label">
-                Price
-                <span className="from" ref={sliderOneVal}></span>-<span className="to" ref={sliderTwoVal}></span>
+                {'Price: '}
+                <span className="from" ref={sliderOneVal}></span>{' - '}<span className="to" ref={sliderTwoVal}></span>
               </div>
             </div>
           </div>
