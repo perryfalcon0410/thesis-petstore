@@ -5,9 +5,9 @@ export default css`
   .elementor-column {
     display: flex;
     width: 100%;
-    min-width: 140%;
-    max-width: 140%;
-    height: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+
     .elementor-column-wrapper {
       width: 100%;
       padding: 20px;
@@ -26,6 +26,7 @@ export default css`
           .select-order {
             width: 250px;
             padding: 8px;
+            margin-right: 10px;
             color: #666;
             background: #fafafa;
             border-radius: 50px;

@@ -5,25 +5,22 @@ import styles from './styles'
 
 const ProductList = () => {
   return (
-    <section className="elementor-section">
-      <div className="background-overlay" />
-      <div className="elementor-container">
-        <div className="elementor-row">
-          <div className="elementor-row-left">
-            <div className="elementor-column-wrap">
-              <div className="elementor-widget-wrap">
-                <FilterPrice />
-                <ProductCategory />
-              </div>
+    <div className="elementor-container">
+      <div className="elementor-row">
+        <div className="elementor-row-left">
+          <div className="elementor-column-wrap">
+            <div className="elementor-widget-wrap">
+              <FilterPrice />
+              <ProductCategory />
             </div>
           </div>
-          <div className="elementor-row-right">
-            <Products />
-          </div>
+        </div>
+        <div className="elementor-row-right">
+          <Products />
         </div>
       </div>
       <style jsx>{styles}</style>
-    </section>
+    </div>
   )
 }
 

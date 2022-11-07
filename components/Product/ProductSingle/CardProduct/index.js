@@ -62,11 +62,11 @@ const CardProduct = ({ productSingleData }) => {
                 </p>
                 <p className="price">
                   {isSale ? (
-                    <span className="off">{formatVNprice(product.price)}đ</span>
+                    <span className="off">{formatVNprice(product.price)}$</span>
                   ) : (
-                    `${formatVNprice(product.price)}đ`
+                    `${formatVNprice(product.price)}$`
                   )}
-                  {isSale ? <span>{formatVNprice(salePrice)}đ</span> : null}
+                  {isSale ? <span>{formatVNprice(salePrice)}$</span> : null}
                 </p>
               </div>
             </div>

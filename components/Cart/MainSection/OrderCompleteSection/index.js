@@ -4,8 +4,6 @@ import { consoleLog, formatVNprice } from 'utils/function'
 import styles from './styles'
 
 const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
-  consoleLog(cartList, 'cartList')
-
   const today = new Date()
 
   return (
@@ -26,13 +24,13 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
                   </Link>
                   &#215; {cart.quantity}
                 </div>
-                <p className="price">{formatVNprice(cart.price * cart.quantity)}₫</p>
+                <p className="price">{formatVNprice(cart.price * cart.quantity)}$</p>
               </div>
             )
           })}
           <div className="row-cell">
             <p className="sub-total">Subtotal</p>
-            <p className="sub-price">{formatVNprice(totalCost)}₫</p>
+            <p className="sub-price">{formatVNprice(totalCost)}$</p>
           </div>
           <div className="row-cell">
             <p className="shipping">Shipping</p>
@@ -44,7 +42,7 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
           </div>
           <div className="row-cell">
             <p className="total">Total</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{formatVNprice(totalCost)}$</p>
           </div>
         </div>
         <div className="col-large-5">
@@ -61,7 +59,7 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
                 </span>
               </li>
               <li>
-                Total: <span className="price">{formatVNprice(totalCost)}₫</span>
+                Total: <span className="price">{formatVNprice(totalCost)}$</span>
               </li>
               <li>
                 Payment method: <span className="payment-method">Banking</span>

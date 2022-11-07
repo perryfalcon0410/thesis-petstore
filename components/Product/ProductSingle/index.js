@@ -41,7 +41,7 @@ const ProductSingle = ({ isModel, productSingleData }) => {
             </div>
             <div className="col-md-6 content-product">
               <h2>
-                {productSingleData.name} | {formatVNprice(productSingleData.price)}đ
+                {productSingleData.name} | {formatVNprice(productSingleData.price)}$
               </h2>
               <div className="star-review">
                 {[0, 1, 2, 3, 4].map((ele) => {
@@ -60,9 +60,7 @@ const ProductSingle = ({ isModel, productSingleData }) => {
                     __html: productSingleData.shortDescription,
                   }}
                 ></div>
-              ) : (
-                <p>Short description.</p>
-              )}
+              ) : null}
               <div className="infor-product">
                 <p>
                   <span>Sku: </span> {productSingleData.productSku}
