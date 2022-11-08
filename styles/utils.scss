@@ -1,0 +1,76 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+}
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+// Editor style
+.align-right div {
+  text-align: right;
+}
+.align-center div {
+  text-align: center;
+}
+.align-left div {
+  text-align: left;
+}
+.align-justify div {
+  text-align: justify;
+}
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: '\201C''\201D''\2018''\2019';
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+.img-align-default {
+  position: relative;
+  cursor: default;
+}
+.img-align-left {
+  position: relative;
+  cursor: default;
+  float: left;
+}
+.img-align-center {
+  position: relative;
+  cursor: default;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.img-align-left {
+  position: relative;
+  cursor: default;
+  float: right;
+}
