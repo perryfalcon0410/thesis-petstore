@@ -1,10 +1,30 @@
 import Link from 'next/link'
+import { Router, useRouter } from 'next/router'
 import React from 'react'
 import { consoleLog, formatVNprice } from 'utils/function'
 import styles from './styles'
 
 const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
   const today = new Date()
+
+  const router = useRouter()
+
+  const handleCheckout = async () => {
+    typeof window !== 'undefined'
+    // setPaymentMethod(1);
+    const response = await fetch('/api/stripe', {
+      method: "POST",
+      headers:{
+        'Content-type': "application/json",
+
+      },
+      body: JSON.stringify(cartList),
+    });
+    if(response.status == 500) return;
+    const data = await response.json();
+    // toast.loading("Redirecting ..."); 
+    router.push(data.url)
+  }
 
   return (
     <div className="wrapper">
@@ -66,6 +86,8 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
               </li>
             </ul>
           </div>
+          <button className='btn' onClick={handleCheckout}>Delivery</button>
+          <Link className='view-delivery' href="/delivery">View Delivery</Link>
         </div>
       </div>
       <style jsx>{styles}</style>
