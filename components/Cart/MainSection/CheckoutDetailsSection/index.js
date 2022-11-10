@@ -6,7 +6,7 @@ import BillingForm from './BillingForm'
 
 const CheckoutDetailsSection = ({ setStepIdx, cartList, totalCost, customerBillingDetail }) => {
   const [showLogin, setShowLogin] = useState(false)
-
+  console.log(cartList)
   return (
     <div className="cart-container container page-wrapper page-checkout">
       <div className="woocommerce">

@@ -3,6 +3,8 @@ import { Router, useRouter } from 'next/router'
 import React from 'react'
 import { consoleLog, formatVNprice } from 'utils/function'
 import styles from './styles'
+import { useEffect } from 'react'
+import PaymentSection from '../PaymentSection'
 
 const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
   const today = new Date()
@@ -24,6 +26,15 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
     const data = await response.json();
     // toast.loading("Redirecting ..."); 
     router.push(data.url)
+  }
+
+
+  useEffect = () => {
+    // if (document.getElementById('payment_method_bacs').checked == true){
+    //   console.log("Hello")
+    // }else{
+    //   console.log("Bye bye")
+    // }
   }
 
   return (
@@ -89,6 +100,77 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
               </li>
             </ul>
           </div>
+
+
+
+          <div id="payment" className="woocommerce-checkout-payment">
+            <ul style={{'list-style-type': 'none'}} className="wc_payment_methods payment_methods methods">
+              <li className="wc_payment_method payment_method_bacs">
+                <input
+                  id="payment_method_bacs"
+                  type="radio"
+                  className="input-radio"
+                  name="paymentMethod"
+                  value="paypal"
+                  // checked={values.paymentMethod === 'paypal'}
+                  // checked={false}
+                  // onChange={() => setFieldValue('paymentMethod', 'paypal', false)}
+                />
+                <label htmlFor="payment_method_bacs">PayPal</label>
+                {/* {values.paymentMethod === 'paypal' ? ( */}
+                  {/* <div className="payment_box payment_method_bacs" hidden>
+                    <p>Make payments via PayPal. Orders will be shipped after payment has been made.</p>
+                  </div> */}
+                {/* ) : null} */}
+              </li>
+              <li className="wc_payment_method payment_method_cod">
+                <input
+                  id="payment_method_cod"
+                  type="radio"
+                  className="input-radio"
+                  name="paymentMethod"
+                  value="cod"
+                  // checked={values.paymentMethod === 'cod'}
+                  // checked = {false}
+                  // onChange={() => setFieldValue('paymentMethod', 'cod', false)}
+                />
+                <label htmlFor="payment_method_cod">Cash on delivery</label>
+                {/* {values.paymentMethod === 'cod' ? ( */}
+                  {/* <div className="payment_box payment_method_cod">
+                    <p>Pay the deliverer or shipper using cash or card.</p>
+                  </div> */}
+                {/* ) : null} */}
+              </li>
+            </ul>
+            <div className="form-row place-order">
+              <div className="woocommerce-terms-and-conditions-wrapper" />
+              {/* {values.paymentMethod === 'paypal' ? ( */}
+                <PaymentSection
+                  // disabled={isSubmitting}
+                  totalCost={totalCost}
+                  // setPaymentInfo={setPaymentInfo}
+                  // submitForm={submitForm}
+                />
+              {/* ) : ( */}
+                <button
+                  type="submit"
+                  className="button alt"
+                  name="woocommerce_checkout_place_order"
+                  // disabled={isSubmitting}
+                  // style={{ cursor: !isSubmitting ? 'pointer' : 'default', borderRadius: '5px' }}
+                >
+                  {/* <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div> */}
+                  {/* <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span> */}
+                  Book
+                </button>
+              {/* )} */}
+
+            </div>
+          </div>
+
+
+
+
           <button className='btn' onClick={handleCheckout}>Delivery</button>
           <Link className='view-delivery' href="/delivery">View Delivery</Link>
         </div>
@@ -99,5 +181,42 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
 }
 
 export default OrderCompleteSection
+
+
+export async function getServerSideProps(cartList) {
+    
+    // const res = await axios.post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
+    // {
+    //   "from_district_id":1454,
+    //   "service_id":53320,
+    //   "service_type_id":null,
+    //   "to_district_id":1452,
+    //   "to_ward_code":"21012",
+    //   "height":50,
+    //   "length":20,
+    //   "weight":200,
+    //   "width":20,
+    //   "insurance_value":10000,
+    //   "coupon": null
+    // },
+    // {
+    //     headers: {
+    //         'Token': '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
+    //         'Content-Type': 'application/json'
+    //     }
+    // }).then((response)=>{
+    //     return response.data;
+    // });
+  
+    // if (!res) {
+    //   return {
+    //     notFound: true,
+    //   }
+    // }
+  
+    // return {
+    //   props: { res }, // will be passed to the page component as props
+    // }
+}
 
 

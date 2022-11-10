@@ -63,10 +63,13 @@ const steps = [
     'Delivered'
   ];
 
-
-const DeliveryPage = ({res, res2}) => {
-    console.log(res.data)
-    console.log(res2)
+let date = new Date();
+const DeliveryPage = ({res}) => {
+    // console.log(res.data)
+    // console.log(res2)
+    console.log(date)
+    console.log(res.data.leadtime)
+    console.log(res.data.pickup_time)
     // useEffect(() => {
     //     document.getElementById('stepper2').style.marginTop = '100px';
     //     document.getElementById('stepper2').style.marginBottom = '100px';
@@ -87,7 +90,7 @@ const DeliveryPage = ({res, res2}) => {
             <div className="deliveryImage" style={{'text-align': 'center'}}>
                 <img src="/images/scooter_1.gif" className="image" height="350px" />
             </div>
-            <Box sx={{ width: '100%', marginTop: '120px', marginBottom: '120px' }}>
+            <Box sx={{ width: '100%', marginTop: '100px', marginBottom: '100px' }}>
                 <Stepper id="hello" activeStep={res.data.status == 'ready_to_pick' ? 1 : 0} alternativeLabel>
                     {steps.map((label) => (
                     <Step key={label}>
@@ -129,11 +132,14 @@ const DeliveryPage = ({res, res2}) => {
                     </div>
                 </div>
             </div> */}
-            <hr/>
-            <h5>Pick Up Time: {res.data.pickup_time}</h5>
-            <h5>From place: {res.data.from_address}</h5>
-            <h5>To place: {res.data.to_address}</h5>
-            <h5 style={{'color': 'red'}}>Expected Arrival Time: {res2.data.leadtime}</h5>
+            <div style={{'margin-left': '710px', 'border': '1px solid black', 'width' : '500px'}}>
+                <ul>
+                    <li style={{'padding': '10px'}}>Pick up time: {res.data.pickup_time.toString().slice(0,10)} at {res.data.pickup_time.toString().slice(11,19)}</li>
+                    <li style={{'padding': '10px'}}>Departure: {res.data.from_address}</li>
+                    <li style={{'padding': '10px'}}>Destination: {res.data.to_address}</li>
+                    <li style={{'padding': '10px'}}>Expected arrival time: <span style={{'color': 'red'}}>{res.data.leadtime.toString().slice(0,10)} at {res.data.leadtime.toString().slice(11,19)}</span></li>
+                </ul>
+            </div>
         </div>
       );
 }
@@ -156,29 +162,29 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const res2 = await axios.post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime',{
-        "from_district_id": 1453,
-        "from_ward_code": "21105",
-        "to_district_id": 1452,
-        "to_ward_code": "21014",
-        "service_id": 53320
-    },
-    {
-        headers: {
-            'Token': '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
-            'Content-Type': 'application/json'
-        }
-    }).then((response)=>{
-        return response.data;
-    });
+    // const res2 = await axios.post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime',{
+    //     "from_district_id": 1453,
+    //     "from_ward_code": "21105",
+    //     "to_district_id": 1452,
+    //     "to_ward_code": "21014",
+    //     "service_id": 53320
+    // },
+    // {
+    //     headers: {
+    //         'Token': '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
+    //         'Content-Type': 'application/json'
+    //     }
+    // }).then((response)=>{
+    //     return response.data;
+    // });
   
-    if (!res || !res2) {
+    if (!res) {
       return {
         notFound: true,
       }
     }
   
     return {
-      props: { res, res2 }, // will be passed to the page component as props
+      props: { res }, // will be passed to the page component as props
     }
 }
