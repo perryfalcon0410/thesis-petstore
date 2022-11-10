@@ -20,11 +20,91 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
     company: Yup.string(),
     region: Yup.string().required('It is a required field.'),
     district: Yup.string().required('It is a required field'),
-    ward: Yup.string(),
+    ward: Yup.string().required('It is a required field'),
     address: Yup.string().required('It is a required field'),
     orderComment: Yup.string(),
     paymentMethod: Yup.string().required(),
   })
+
+  const createOrder = async (
+    to_name,
+    to_phone,
+    to_address,
+    to_ward_name,
+    to_district_name,
+    to_province_name,
+    cartList,
+  ) => {
+    const postData = {
+      payment_type_id: 2,
+      note: '',
+      from_name: 'PetStore',
+      from_phone: '0909999999',
+      from_address: '',
+      from_ward_name: '',
+      from_district_name: 'Quận 10',
+      from_province_name: 'TP Hồ Chí Minh',
+      required_note: 'KHONGCHOXEMHANG',
+      return_name: 'Petstore',
+      return_phone: '0909999999',
+      return_address: '',
+      return_ward_name: '',
+      return_district_name: 'Quận 10',
+      return_province_name: 'TP Hồ Chí Minh',
+      client_order_code: '',
+      to_name: to_name,
+      to_phone: to_phone,
+      to_address: to_address,
+      to_ward_name: to_ward_name,
+      to_district_name: to_district_name,
+      to_province_name: to_province_name,
+      cod_amount: 200000,
+      content: '',
+      weight: 200,
+      length: null,
+      width: null,
+      height: null,
+      pick_station_id: 1444,
+      deliver_station_id: null,
+      insurance_value: 1000000,
+      service_id: 0,
+      service_type_id: 2,
+      coupon: null,
+      pick_shift: null,
+      pickup_time: 1665272576,
+      items: cartList.map((cart) => {
+        return {
+          name: cart.name,
+          code: '',
+          quantity: cart.quantity,
+          price: Math.round(cart.price * 24.867),
+          length: null,
+          width: null,
+          height: null,
+          category: {
+            level1: 'Đồ dùng cho thú cưng',
+          },
+        }
+      }),
+    }
+
+    const res = await axios
+      .post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', postData, {
+        headers: {
+          'Content-Type': 'application/json',
+          ShopId: '120553',
+          Token: '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
+        },
+      })
+      .then((response) => {
+        return response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    console.log(res)
+  }
 
   return (
     <div>
@@ -222,7 +302,10 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         ) : null}
                         <p className={'form-row form-row-wide validate-required validate-ward'}>
                           <label htmlFor={'ward'}>
-                            {'Ward'} <span className="optional">(optional)</span>
+                            {'Ward'}{' '}
+                            <abbr className="required" title="required">
+                              *
+                            </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
@@ -237,6 +320,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                             />
                           </span>
                         </p>
+                        {touched.ward && errors.ward ? <p className="error-message">{errors.ward}</p> : null}
                         <p className={'form-row form-row-wide validate-required validate-address'}>
                           <label htmlFor={'address'}>
                             {'Address'}{' '}
@@ -345,7 +429,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                                       <ul className="shipping__list woocommerce-shipping-methods">
                                         <li className="shipping__list_item">
                                           <label className="shipping__list_label">
-                                            <img width="80px" src='/images/ghn.png' />
+                                            <img width="80px" src="/images/ghn.png" />
                                           </label>
                                         </li>
                                       </ul>
@@ -433,7 +517,17 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         
                       </div> */}
                       <button
-                        onClick={createOrder(values.name, values.phone, values.address, values.ward, values.district, values.region, cartList)}
+                        onClick={() => {
+                          createOrder(
+                            `${values.firstName} ${values.lastName}`,
+                            values.phone,
+                            values.address,
+                            values.ward,
+                            values.district,
+                            values.region,
+                            cartList,
+                          )
+                        }}
                         type="submit"
                         className="button alt"
                         name="woocommerce_checkout_place_order"
@@ -458,88 +552,3 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
 }
 
 export default BillingForm
-
-export async function createOrder(to_name, to_phone, to_address, to_ward_name, to_district_name, to_province_name, cartList) {
-  var tmpList = []; 
-  cartList.forEach((cart) => {
-    console.log(cart.name);
-    tmpList += {
-     "name": cart.name,
-     "code": "",
-     "quantity": cart.quantity,
-     "price": cart.price,
-     "length": null, 
-     "width": null,
-     "height": null,
-     "category": 
-     {
-         "level1": "Đồ dùng cho thú cưng"
-     }
-   };
-  });
-  
-  const res = await axios.post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create',
-  {
-    "payment_type_id": 2,
-    "note": "",
-    "from_name":"PetStore",
-    "from_phone":"0909999999",
-    "from_address":"",
-    "from_ward_name":"",
-    "from_district_name":"Quận 10",
-    "from_province_name":"TP Hồ Chí Minh",
-    "required_note": "KHONGCHOXEMHANG",
-    "return_name": "Petstore",
-    "return_phone": "0909999999",
-    "return_address": "",
-    "return_ward_name": "",
-    "return_district_name": "Quận 10",
-    "return_province_name":"TP Hồ Chí Minh",
-    "client_order_code": "",
-    "to_name": to_name,
-    "to_phone": to_phone,
-    "to_address": to_address,
-    "to_ward_name": to_ward_name,
-    "to_district_name": to_district_name,
-    "to_province_name": to_province_name,
-    "cod_amount": 200000,
-    "content": "",
-    "weight": 200,
-    "length": null,
-    "width": null,
-    "height": null,
-    "pick_station_id": 1444,
-    "deliver_station_id": null,
-    "insurance_value": 10000000,
-    "service_id": 0,
-    "service_type_id":2,
-    "coupon": null,
-    "pick_shift": null,
-    "pickup_time": 1665272576,
-    "items": []
-
-},
-{
-  headers: {
-      'Content-Type': 'application/json',
-      'ShopId': 120553,
-      'Token': '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7'
-  }
-}).then((response)=>{
-    return response.data;
-}).catch(error => {
-  console.log(error)
-});
-
-  if (!res) {
-    return {
-      notFound: true,
-    }
-  }
-
-  return {
-    props: { res }, // will be passed to the page component as props
-  }
-}
-
-
