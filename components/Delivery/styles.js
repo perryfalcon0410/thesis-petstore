@@ -12,5 +12,7 @@ export default css`
     width: 600px;
     height: 450px;
   }
-  
+  .imageDelivery{
+    text-align: center;
+  }
 `

@@ -2,7 +2,7 @@ import React from 'react'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { consoleLog } from 'utils/function'
 
-const PaymentSection = ({ submitForm, disabled, totalCost }) => {
+const PaymentSection = ({ submitForm, setPaymentInfo, disabled, totalCost }) => {
   const initialOptions = {
     'client-id': 'Af7FSeQMWm_VZujM5kJj6pfZoUI1yDrWrdHph_6CLwDphhUeOLzIGfZA5EfdksRrDZm7BC15Q-sWYBhL',
     currency: 'USD',
@@ -18,7 +18,6 @@ const PaymentSection = ({ submitForm, disabled, totalCost }) => {
           return actions.order.create({
             purchase_units: [
               {
-                description: 'Order payment',
                 amount: {
                   currency_code: 'USD',
                   value: totalCost,
@@ -32,7 +31,14 @@ const PaymentSection = ({ submitForm, disabled, totalCost }) => {
         }}
         onApprove={(data, actions) => {
           return actions.order.capture().then((details) => {
-            consoleLog(details, 'Payment: ')
+            setPaymentInfo({
+              externalId: details.id,
+              payerFistName: details.payer.name.given_name,
+              payerLastName: details.payer.name.surname,
+              currencyCode: details.purchase_units[0].amount.currency_code,
+              totalAmount: details.purchase_units[0].amount.value,
+              type: 'paypal',
+            })
             submitForm()
           })
         }}

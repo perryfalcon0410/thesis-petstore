@@ -8,11 +8,14 @@ import Image from 'next/image'
 import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
 import { removeItemById } from 'store/reducers/checkoutSlice'
+import { resetUser } from 'store/reducers/userSlice'
 
 const NavBar = () => {
   const router = useRouter()
 
   const CheckoutSlice = useSelector((state) => state.checkout)
+  const UserSlice = useSelector((state) => state.user)
+
   const cartList = Object.values(CheckoutSlice.cart)
   const totalCost = CheckoutSlice.totalPrice
   let totalQuantity = 0
@@ -20,7 +23,6 @@ const NavBar = () => {
     totalQuantity += cart.quantity
   })
 
-  const left = totalQuantity < 10 ? '5px' : totalQuantity < 100 ? '2px' : '0'
   const dispatch = useDispatch()
 
   if (!router.isReady) return null
@@ -51,9 +53,7 @@ const NavBar = () => {
         <div className="icons">
           <div className="shopping-bag">
             <img className="shopping-bag-icon" src="/images/icon-shopping-bag.png" alt="shopping" />
-            <div className="num-product" style={{ left: left }}>
-              {totalQuantity}
-            </div>
+            <div className="num-product">{totalQuantity}</div>
             <div className="cart-wrapper">
               <div className="tooltip-arrow"></div>
               <div className="cart-container">
@@ -101,12 +101,39 @@ const NavBar = () => {
               </div>
             </div>
           </div>
-          <div className="search">
-            <img src="/images/icon-search.png" alt="search" />
-          </div>
-          <div className="panel">
-            <span className="material-icons-outlined">reorder</span>
-          </div>
+          {UserSlice.id === null || UserSlice.id === undefined ? (
+            <Link href="/sign-in">
+              <a className="user-href">
+                <div className="user">
+                  <img className="user-icon" src="/images/Navbar/user.svg" alt="user" />
+                  <p>Login/Sign up</p>
+                </div>
+              </a>
+            </Link>
+          ) : (
+            <div className="user">
+              <img className="user-icon" src="/images/Navbar/user.svg" alt="user" />
+              <p>{UserSlice.firstName + ' ' + UserSlice.lastName}</p>
+              <div className="tooltip-arrow"></div>
+              <div className="user-menu">
+                <Link href="order-management">
+                  <a>
+                    <div className={classNames('title', { isChosen: router.asPath === '/order-management' })}>
+                      Your order
+                    </div>
+                  </a>
+                </Link>
+                <div
+                  className="sign-out"
+                  onClick={() => {
+                    dispatch(resetUser())
+                  }}
+                >
+                  Sign out
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <style jsx>{styles}</style>

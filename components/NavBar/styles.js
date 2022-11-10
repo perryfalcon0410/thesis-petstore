@@ -156,8 +156,10 @@ export default css`
       .icons {
         display: flex;
         gap: 25px;
+
         .shopping-bag {
           position: relative;
+          height: 22px;
 
           &:hover {
             .cart-wrapper {
@@ -172,15 +174,18 @@ export default css`
 
           .num-product {
             position: absolute;
-            top: 8.5px;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-25%) translateX(-55%);
             font-size: 10px;
+            line-height: 10px;
             cursor: pointer;
           }
 
           .cart-wrapper {
             position: absolute;
             background: white;
-            top: calc(100% + 10px);
+            top: calc(100% + 13.5px);
             right: -70px;
             padding: 20px;
             min-width: 300px;
@@ -188,7 +193,7 @@ export default css`
             border: 1px solid rgba(17, 17, 26, 0.1);
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.3s linear, visibility 0.3s linear;
+            transition: opacity 0.1s linear, visibility 0.1s linear;
 
             .tooltip-arrow {
               position: absolute;
@@ -320,11 +325,97 @@ export default css`
             }
           }
         }
-        .panel {
-          span {
-            font-family: 'Material Icons';
-            font-size: 22px;
-            font-weight: 300;
+
+        .user-href {
+          text-decoration: none;
+          color: #333;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        .user {
+          display: flex;
+          column-gap: 8px;
+          align-items: center;
+          position: relative;
+
+          img {
+            width: 24px;
+          }
+
+          &:hover {
+            .tooltip-arrow,
+            .user-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+            }
+          }
+
+          .tooltip-arrow {
+            visibility: hidden;
+            position: absolute;
+            top: 100%;
+            right: 30%;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-top: 1px solid rgba(17, 17, 26, 0.1);
+            border-left: 1px solid rgba(17, 17, 26, 0.1);
+            transform: rotate(45deg);
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.1s linear, visibility 0.1s linear;
+          }
+
+          .user-menu {
+            visibility: hidden;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            min-width: 200px;
+            padding: 16px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(17, 17, 26, 0.1);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.1s linear, visibility 0.1s linear;
+
+            a {
+              text-decoration: none;
+
+              div {
+                color: #707387;
+                font-weight: 700;
+                padding: 4px 8px;
+                font-size: 16px;
+                line-height: 20px;
+                border-radius: 4px;
+              }
+
+              &:hover {
+                div {
+                  background: #ffa6a8;
+                  color: white;
+                }
+              }
+            }
+
+            .sign-out {
+              color: #707387;
+              margin-top: 20px;
+              font-weight: 700;
+              padding: 4px 8px;
+              font-size: 16px;
+              line-height: 20px;
+              cursor: pointer;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
           }
         }
       }

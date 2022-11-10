@@ -1,13 +1,16 @@
+import { useState } from 'react'
+import axios from 'axios'
 import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
-import { updateBillingInfo } from 'store/reducers/checkoutSlice'
+import { updateBill } from 'store/reducers/checkoutSlice'
 import { consoleLog, formatVNprice } from 'utils/function'
 import PaymentSection from '../../PaymentSection'
 
 const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail }) => {
   const dispatch = useDispatch()
+  const [paymentInfo, setPaymentInfo] = useState('')
 
   const BILLING_SCHEMA = Yup.object({
     firstName: Yup.string().required('It is a required field.'),
@@ -30,8 +33,11 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
         initialValues={customerBillingDetail}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           try {
-            dispatch(updateBillingInfo(values))
+            dispatch(updateBill(values))
             const checkoutData = { cart: cartList, bill: values }
+            if (paymentInfo) {
+              checkoutData.payment = paymentInfo
+            }
             consoleLog(checkoutData, 'Checkout: ')
             setSubmitting(false)
             resetForm()
@@ -338,7 +344,9 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                                     <td data-title="Giao hàng">
                                       <ul className="shipping__list woocommerce-shipping-methods">
                                         <li className="shipping__list_item">
-                                          <label className="shipping__list_label">Free Delivery</label>
+                                          <label className="shipping__list_label">
+                                            <img width="80px" src='/images/ghn.png' />
+                                          </label>
                                         </li>
                                       </ul>
                                     </td>
@@ -362,7 +370,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                           </tr>
                         </tfoot>
                       </table>
-                      <div id="payment" className="woocommerce-checkout-payment">
+                      {/* <div id="payment" className="woocommerce-checkout-payment">
                         <ul className="wc_payment_methods payment_methods methods">
                           <li className="wc_payment_method payment_method_bacs">
                             <input
@@ -402,7 +410,12 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         <div className="form-row place-order">
                           <div className="woocommerce-terms-and-conditions-wrapper" />
                           {values.paymentMethod === 'paypal' ? (
-                            <PaymentSection disabled={isSubmitting} totalCost={totalCost} submitForm={submitForm} />
+                            <PaymentSection
+                              disabled={isSubmitting}
+                              totalCost={totalCost}
+                              setPaymentInfo={setPaymentInfo}
+                              submitForm={submitForm}
+                            />
                           ) : (
                             <button
                               type="submit"
@@ -417,7 +430,20 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                             </button>
                           )}
                         </div>
-                      </div>
+                        
+                      </div> */}
+                      <button
+                        onClick={createOrder(values.name, values.phone, values.address, values.ward, values.district, values.region, cartList)}
+                        type="submit"
+                        className="button alt"
+                        name="woocommerce_checkout_place_order"
+                        disabled={isSubmitting}
+                        style={{ cursor: !isSubmitting ? 'pointer' : 'default', borderRadius: '5px' }}
+                      >
+                        <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div>
+                        <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span>
+                        Book
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -432,3 +458,88 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
 }
 
 export default BillingForm
+
+export async function createOrder(to_name, to_phone, to_address, to_ward_name, to_district_name, to_province_name, cartList) {
+  var tmpList = []; 
+  cartList.forEach((cart) => {
+    console.log(cart.name);
+    tmpList += {
+     "name": cart.name,
+     "code": "",
+     "quantity": cart.quantity,
+     "price": cart.price,
+     "length": null, 
+     "width": null,
+     "height": null,
+     "category": 
+     {
+         "level1": "Đồ dùng cho thú cưng"
+     }
+   };
+  });
+  
+  const res = await axios.post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create',
+  {
+    "payment_type_id": 2,
+    "note": "",
+    "from_name":"PetStore",
+    "from_phone":"0909999999",
+    "from_address":"",
+    "from_ward_name":"",
+    "from_district_name":"Quận 10",
+    "from_province_name":"TP Hồ Chí Minh",
+    "required_note": "KHONGCHOXEMHANG",
+    "return_name": "Petstore",
+    "return_phone": "0909999999",
+    "return_address": "",
+    "return_ward_name": "",
+    "return_district_name": "Quận 10",
+    "return_province_name":"TP Hồ Chí Minh",
+    "client_order_code": "",
+    "to_name": to_name,
+    "to_phone": to_phone,
+    "to_address": to_address,
+    "to_ward_name": to_ward_name,
+    "to_district_name": to_district_name,
+    "to_province_name": to_province_name,
+    "cod_amount": 200000,
+    "content": "",
+    "weight": 200,
+    "length": null,
+    "width": null,
+    "height": null,
+    "pick_station_id": 1444,
+    "deliver_station_id": null,
+    "insurance_value": 10000000,
+    "service_id": 0,
+    "service_type_id":2,
+    "coupon": null,
+    "pick_shift": null,
+    "pickup_time": 1665272576,
+    "items": []
+
+},
+{
+  headers: {
+      'Content-Type': 'application/json',
+      'ShopId': 120553,
+      'Token': '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7'
+  }
+}).then((response)=>{
+    return response.data;
+}).catch(error => {
+  console.log(error)
+});
+
+  if (!res) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: { res }, // will be passed to the page component as props
+  }
+}
+
+

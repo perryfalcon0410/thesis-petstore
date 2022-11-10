@@ -54,7 +54,10 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
           </div>
           <div className="row-cell">
             <p className="shipping">Shipping</p>
-            <p className="method">Free delivery</p>
+            <p className="method">
+              <img width="50px" src='/images/ghn.png' />
+
+            </p>
           </div>
           <div className="row-cell">
             <p className="payment-method">Payment methods</p>
@@ -96,3 +99,5 @@ const OrderCompleteSection = ({ cartList, totalCost, SOnum }) => {
 }
 
 export default OrderCompleteSection
+
+

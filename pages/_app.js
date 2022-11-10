@@ -2,9 +2,11 @@
 import Head from 'next/head'
 import store from '../store'
 import { Provider } from 'react-redux'
+import { useEffect } from 'react'
 
 import 'styles/utils.scss'
 import 'styles/responsive.scss'
+import Link from 'next/link'
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -20,6 +22,7 @@ function MyApp({ Component, pageProps }) {
           href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600&family=Raleway:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap"
           rel="stylesheet"
         />
+        
       </Head>
       <Provider store={store}>
         <Component {...pageProps} />

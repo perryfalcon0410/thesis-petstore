@@ -1,12 +1,53 @@
 import axios from "axios";
+import { useEffect } from "react";
 
 export default function Delivery({res}){
-    console.log(res);
+    useEffect(() => {
+        const x = 1;
+        if (x == 1){
+            document.getElementById("hello").classList.add('text-white');
+            document.getElementById("hello").classList.add('bg-dark');
+        }
+    }, []);
 	return (
-		<div>
-			asdadasda
+		<div className="container">
+            <div height="800px" class="stepper" id="stepper2">
+                <div class="steps-container">
+                    <div className="steps">
+                        <div className="step" id="1">
+                            <div id="hello" className="step-title p-3">
+                                <span className="step-number">01</span>
+                                <div className="step-text">Confirmed</div>
+                            </div>
+                        </div>
+                        <div><img width='100px' src="/images/arrow.png"/></div>
+                        <div className="step" id="2">
+                            <div className="step-title p-3">
+                                <span className="step-number">02</span>
+                                <div className="step-text">Pick-up</div>
+                            </div>
+                        </div>
+                        <div><img width='100px' src="/images/arrow.png"/></div>
+                        <div className="step" id="3">
+                            <div className="step-title p-3">
+                                <span className="step-number">03</span>
+                                <div className="step-text">Delivering</div>
+                            </div>
+                        </div>
+                        <div><img width='100px' src="/images/arrow.png"/></div>
+                        <div className="step" id="4">
+                            <div className="step-title p-3">
+                                <span className="step-number">04</span>
+                                <div className="step-text">Delivered</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
 		</div>
 	);
+    
 }
 
 // export async function getServerSideProps(context) {

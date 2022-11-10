@@ -38,3 +38,4 @@ const CheckoutDetailsSection = ({ setStepIdx, cartList, totalCost, customerBilli
 }
 
 export default CheckoutDetailsSection
+

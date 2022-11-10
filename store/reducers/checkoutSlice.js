@@ -3,7 +3,7 @@ import { cartDetail } from 'components/mocks/cartDetail'
 
 const initialState = {
   cart: cartDetail,
-  billingInfo: {
+  bill: {
     firstName: '',
     lastName: '',
     phone: '',
@@ -75,8 +75,8 @@ const CheckoutSlice = createSlice({
         delete state.cart[itemId]
       }
     },
-    updateBillingInfo: (state, action) => {
-      state.billingInfo = action.payload
+    updateBill: (state, action) => {
+      state.bill = action.payload
     },
   },
 })
@@ -101,8 +101,8 @@ export const removeItemById = (itemId) => async (dispatch, getState) => {
   dispatch(CheckoutSlice.actions.removeItemById(itemId))
 }
 
-export const updateBillingInfo = (billing) => async (dispatch, getState) => {
-  dispatch(CheckoutSlice.actions.updateBillingInfo(billing))
+export const updateBill = (billing) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.updateBill(billing))
 }
 
 export default CheckoutSlice

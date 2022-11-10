@@ -1,14 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './styles'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
 import { decQuantityById, incQuantityById, updateQuantityById, removeItemById } from 'store/reducers/checkoutSlice'
+import { SignInForm, SignUpForm } from './form'
 
 const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
+  const userSlice = useSelector(state => state.user)
   const dispatch = useDispatch()
+
+  const [formState, setFormState] = useState(1)
+  const [openModal, setOpenModal] = useState(false)
+
+  const setSignIn = () => {
+    setFormState(1)
+  }
+
+  const setSignUp = () => {
+    setFormState(2)
+  }
+
+  const setResetPassword = () => {
+    setFormState(3)
+  }
+
+  const props = {
+    setSignIn,
+    setSignUp,
+    setResetPassword,
+    callback: () => {
+      setOpenModal(false)
+    }
+  }
 
   return (
     <div className="wrapper">
@@ -114,10 +140,21 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
             <p className="total">Total</p>
             <p className="price">{formatVNprice(totalCost)}$</p>
           </div>
-          <div className="continue" onClick={() => setStepIdx(1)}>
+          <div className="continue" onClick={() => {
+            if (userSlice.id !== null) {
+              setStepIdx(1)
+            }
+            setOpenModal(true)
+          }}>
             Make a payment
           </div>
         </div>
+      </div>
+      <div className='absolute-form' onClick={(e) => {
+        if (e.target.className.includes('absolute-form')) { setOpenModal(false) }
+      }} style={openModal ? { opacity: 1, visibility: 'visible' } : { opacity: 0, visibility: 'hidden' }}>
+        {formState === 1 && <SignInForm {...props} />}
+        {formState === 2 && <SignUpForm {...props} />}
       </div>
       <style jsx>{styles}</style>
     </div>

@@ -302,5 +302,133 @@ export default css`
         }
       }
     }
+
+    .absolute-form{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.5);
+      transition: all 0.3s;
+
+      .form-wrapper {
+        width: 350px;
+        padding: 20px;
+        margin: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 4px;
+        background: white;
+        border: 1px solid rgba(17, 17, 26, 0.1);
+
+        .icon-lg {
+          width: 128px;
+          margin: 0 auto;
+        }
+
+        .form-container {
+          margin-top: 40px;
+
+          .input {
+            margin-top: 20px;
+            position: relative;
+
+            &:first-child {
+              margin-top: 0;
+            }
+
+            .icon-sm {
+              width: 24px;
+              height: 24px;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              left: 8px;
+            }
+
+            input {
+              width: 100%;
+              outline: none !important;
+              padding: 8px 4px 8px 44px;
+              background: transparent;
+              border: 1px solid #333;
+              color: #333;
+              font-weight: 100;
+              font-size: 16px;
+              line-height: 24px;
+              border-radius: 2px;
+
+              &::placeholder {
+                color: #666;
+              }
+            }
+          }
+
+          .error {
+            color: red;
+            margin-top: 8px;
+          }
+
+          .reset-password {
+            margin-top: 8px;
+
+            a {
+              text-decoration: none;
+              color: #333;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+
+        .form-event {
+          margin-top: 40px;
+
+          .button {
+            width: 100%;
+            padding: 11px 15px;
+            color: #2148c0;
+            font-size: 16px;
+            lineheight: 20px;
+            font-weight: bold;
+            border: 1px solid white;
+            transition: all 0.3s;
+            border-radius: 2px;
+
+            cursor: pointer;
+
+            &:hover {
+              background: transparent;
+              border: 1px solid #333;
+              color: #333;
+            }
+
+            &:active {
+              transform: scale(0.95);
+            }
+          }
+
+          .sign-up, .sign-in {
+            margin-top: 16px;
+            color: #333;
+
+            span {
+              text-decoration: none;
+              color: #333;
+              cursor: pointer;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 `
