@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux'
 import { setUser } from 'store/reducers/userSlice'
 import { userMock } from 'components/mocks/userMock'
 import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
+import { COOKIE_EXPIRE_TIME } from 'utils/constant'
 
 function SignInForm({ formStyle }) {
   const dispatch = useDispatch()
@@ -46,6 +48,7 @@ function SignInForm({ formStyle }) {
         // Validate user
 
         // Set userSlice
+        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
         dispatch(setUser(userMock))
         router.push('/')
         setSubmitting(false)
