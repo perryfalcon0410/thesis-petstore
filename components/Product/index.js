@@ -15,7 +15,7 @@ const Product = ({ productType, productData }) => {
       ) : (
         <ProductList />
       )}
-      <style jsx>{styles}</style>
+      <style jsx>{styles}</style>      <style jsx>{styles}</style>
     </div>
   )
 }
