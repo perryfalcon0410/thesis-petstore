@@ -1,9 +1,15 @@
 import css from 'styled-jsx/css'
 export default css`
+  .wrapper {
+    width: 100%;
+    background: black;
+  }
+
   .container {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    background-color: black;
     color: white;
     padding: 20px 64px 40px 64px;
     color: white;
