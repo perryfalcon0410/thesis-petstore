@@ -63,6 +63,7 @@ export default css`
 
           .sub-total,
           .shipping,
+          .shipping-cost,
           .payment-method,
           .total {
             color: #777;
@@ -93,6 +94,13 @@ export default css`
             color: #7a9c59;
             margin-bottom: 16px;
             font-weight: bold;
+          }
+
+          .payment-title {
+            font-weight: bold;
+            font-family: 'Raleway', sans-serif;
+            color: #339900;
+            margin-bottom: 10px;
           }
 
           ul {

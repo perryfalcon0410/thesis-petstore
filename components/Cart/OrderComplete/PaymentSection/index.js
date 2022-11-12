@@ -1,18 +1,26 @@
-import React from 'react'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
-import { consoleLog } from 'utils/function'
 
-const PaymentSection = ({ submitForm, setPaymentInfo, disabled, totalCost }) => {
+const PaymentSection = ({ totalCost }) => {
   const initialOptions = {
     'client-id': 'Af7FSeQMWm_VZujM5kJj6pfZoUI1yDrWrdHph_6CLwDphhUeOLzIGfZA5EfdksRrDZm7BC15Q-sWYBhL',
     currency: 'USD',
     'disable-funding': 'card',
   }
 
+  const handleSubmitPayment = (details) => {
+    console.log({
+      externalId: details.id,
+      payerFistName: details.payer.name.given_name,
+      payerLastName: details.payer.name.surname,
+      currencyCode: details.purchase_units[0].amount.currency_code,
+      totalAmount: details.purchase_units[0].amount.value,
+      type: 'paypal',
+    })
+  }
+
   return (
     <PayPalScriptProvider options={initialOptions}>
       <PayPalButtons
-        disabled={disabled}
         style={{ layout: 'vertical' }}
         createOrder={(data, actions) => {
           return actions.order.create({
@@ -30,17 +38,7 @@ const PaymentSection = ({ submitForm, setPaymentInfo, disabled, totalCost }) => 
           })
         }}
         onApprove={(data, actions) => {
-          return actions.order.capture().then((details) => {
-            setPaymentInfo({
-              externalId: details.id,
-              payerFistName: details.payer.name.given_name,
-              payerLastName: details.payer.name.surname,
-              currencyCode: details.purchase_units[0].amount.currency_code,
-              totalAmount: details.purchase_units[0].amount.value,
-              type: 'paypal',
-            })
-            submitForm()
-          })
+          return actions.order.capture().then((details) => handleSubmitPayment(details))
         }}
         onError={(err) => {
           console.log(err)

@@ -13,10 +13,13 @@ const initialState = {
     district: '',
     ward: '',
     address: '',
-    account_username: '',
-    account_password: '',
     orderComment: '',
     paymentMethod: 'paypal',
+  },
+  shipping: {
+    orderCode: '',
+    totalFee: 0,
+    expectedDeliveryTime: '',
   },
   totalPrice: 8.26,
 }
@@ -59,7 +62,7 @@ const CheckoutSlice = createSlice({
       }
     },
     updateQuantityById: (state, action) => {
-      // action.payload = { id, quantity}
+      // action.payload = { id, quantity }
       const itemId = action.payload.id
       if (state.cart[itemId]) {
         state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
@@ -75,8 +78,11 @@ const CheckoutSlice = createSlice({
         delete state.cart[itemId]
       }
     },
-    updateBill: (state, action) => {
-      state.bill = action.payload
+    updateBillingAndShipping: (state, action) => {
+      // action.payload = { bill, shipping }
+      state.bill = action.payload.bill
+      state.shipping = action.payload.shipping
+      state.totalPrice = Number((state.totalPrice + action.payload.shipping.totalFee).toFixed(2))
     },
   },
 })
@@ -101,8 +107,8 @@ export const removeItemById = (itemId) => async (dispatch, getState) => {
   dispatch(CheckoutSlice.actions.removeItemById(itemId))
 }
 
-export const updateBill = (billing) => async (dispatch, getState) => {
-  dispatch(CheckoutSlice.actions.updateBill(billing))
+export const updateBillingAndShipping = (item) => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.updateBillingAndShipping(item))
 }
 
 export default CheckoutSlice

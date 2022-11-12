@@ -1,15 +1,16 @@
-import { useState } from 'react'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import axios from 'axios'
 import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { useDispatch } from 'react-redux'
-import { updateBill } from 'store/reducers/checkoutSlice'
-import { consoleLog, formatVNprice } from 'utils/function'
-import PaymentSection from '../../PaymentSection'
+import { updateBillingAndShipping } from 'store/reducers/checkoutSlice'
+import { formatVNprice } from 'utils/function'
 
-const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail }) => {
+const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
+  const router = useRouter()
   const dispatch = useDispatch()
-  const [paymentInfo, setPaymentInfo] = useState('')
 
   const BILLING_SCHEMA = Yup.object({
     firstName: Yup.string().required('It is a required field.'),
@@ -19,44 +20,123 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
     company: Yup.string(),
     region: Yup.string().required('It is a required field.'),
     district: Yup.string().required('It is a required field'),
-    ward: Yup.string(),
+    ward: Yup.string().required('It is a required field'),
     address: Yup.string().required('It is a required field'),
     orderComment: Yup.string(),
     paymentMethod: Yup.string().required(),
   })
+
+  const createDeliveryOrder = async (
+    to_name,
+    to_phone,
+    to_address,
+    to_ward_name,
+    to_district_name,
+    to_province_name,
+    cartList,
+  ) => {
+    const postData = {
+      payment_type_id: 2,
+      note: '',
+      from_name: 'PetStore',
+      from_phone: '0909999999',
+      from_address: '',
+      from_ward_name: '',
+      from_district_name: 'Quận 10',
+      from_province_name: 'TP Hồ Chí Minh',
+      required_note: 'KHONGCHOXEMHANG',
+      return_name: 'Petstore',
+      return_phone: '0909999999',
+      return_address: '',
+      return_ward_name: '',
+      return_district_name: 'Quận 10',
+      return_province_name: 'TP Hồ Chí Minh',
+      client_order_code: '',
+      to_name: to_name,
+      to_phone: to_phone,
+      to_address: to_address,
+      to_ward_name: to_ward_name,
+      to_district_name: to_district_name,
+      to_province_name: to_province_name,
+      cod_amount: 200000,
+      content: '',
+      weight: 200,
+      length: null,
+      width: null,
+      height: null,
+      pick_station_id: 1444,
+      deliver_station_id: null,
+      insurance_value: 1000000,
+      service_id: 0,
+      service_type_id: 2,
+      coupon: null,
+      pick_shift: null,
+      pickup_time: 1665272576,
+      items: cartList.map((cart) => {
+        return {
+          name: cart.name,
+          code: '',
+          quantity: cart.quantity,
+          price: Math.round(cart.price * 24.867),
+          length: null,
+          width: null,
+          height: null,
+          category: {
+            level1: 'Đồ dùng cho thú cưng',
+          },
+        }
+      }),
+    }
+    const res = await axios
+      .post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', postData, {
+        headers: {
+          'Content-Type': 'application/json',
+          ShopId: '120553',
+          Token: '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
+        },
+      })
+      .then((res) => res.data)
+      .catch((error) => console.log(error))
+    return res.data
+  }
 
   return (
     <div>
       <Formik
         validationSchema={BILLING_SCHEMA}
         initialValues={customerBillingDetail}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            dispatch(updateBill(values))
-            const checkoutData = { cart: cartList, bill: values }
-            if (paymentInfo) {
-              checkoutData.payment = paymentInfo
-            }
-            consoleLog(checkoutData, 'Checkout: ')
+            const deliveryOrder = await createDeliveryOrder(
+              `${values.firstName} ${values.lastName}`,
+              values.phone,
+              values.address,
+              values.ward,
+              values.district,
+              values.region,
+              cartList,
+            )
+            dispatch(
+              updateBillingAndShipping({
+                bill: values,
+                shipping: {
+                  orderCode: deliveryOrder.order_code,
+                  totalFee: Number((deliveryOrder.total_fee / 24815).toFixed(2)),
+                  expectedDeliveryTime: deliveryOrder.expected_delivery_time,
+                },
+              }),
+            )
+            const checkoutData = { cart: cartList, bill: values, shipping: deliveryOrder.order_code }
+            console.log('Checkout: ', checkoutData)
+            router.push('/checkout/order-complete')
             setSubmitting(false)
             resetForm()
-            setStepIdx(2)
           } catch (e) {
-            consoleLog(e)
+            console.log(e)
           }
         }}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          submitForm,
-        }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
           <form
             name="checkout"
             className="checkout woocommerce-checkout"
@@ -221,7 +301,10 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         ) : null}
                         <p className={'form-row form-row-wide validate-required validate-ward'}>
                           <label htmlFor={'ward'}>
-                            {'Ward'} <span className="optional">(optional)</span>
+                            {'Ward'}{' '}
+                            <abbr className="required" title="required">
+                              *
+                            </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
                             <input
@@ -236,6 +319,7 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                             />
                           </span>
                         </p>
+                        {touched.ward && errors.ward ? <p className="error-message">{errors.ward}</p> : null}
                         <p className={'form-row form-row-wide validate-required validate-address'}>
                           <label htmlFor={'address'}>
                             {'Address'}{' '}
@@ -343,7 +427,9 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                                     <td data-title="Giao hàng">
                                       <ul className="shipping__list woocommerce-shipping-methods">
                                         <li className="shipping__list_item">
-                                          <label className="shipping__list_label">Free Delivery</label>
+                                          <label className="shipping__list_label">
+                                            <Image width={100} height={70} alt="GHN" src="/images/ghn.png" />
+                                          </label>
                                         </li>
                                       </ul>
                                     </td>
@@ -406,26 +492,17 @@ const BillingForm = ({ cartList, setStepIdx, totalCost, customerBillingDetail })
                         </ul>
                         <div className="form-row place-order">
                           <div className="woocommerce-terms-and-conditions-wrapper" />
-                          {values.paymentMethod === 'paypal' ? (
-                            <PaymentSection
-                              disabled={isSubmitting}
-                              totalCost={totalCost}
-                              setPaymentInfo={setPaymentInfo}
-                              submitForm={submitForm}
-                            />
-                          ) : (
-                            <button
-                              type="submit"
-                              className="button alt"
-                              name="woocommerce_checkout_place_order"
-                              disabled={isSubmitting}
-                              style={{ cursor: !isSubmitting ? 'pointer' : 'default', borderRadius: '5px' }}
-                            >
-                              <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div>
-                              <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span>
-                              Book
-                            </button>
-                          )}
+                          <button
+                            type="submit"
+                            className="button alt"
+                            name="woocommerce_checkout_place_order"
+                            disabled={isSubmitting}
+                            style={{ cursor: !isSubmitting ? 'pointer' : 'default', borderRadius: '5px' }}
+                          >
+                            <div className={`layer-mask ${!isSubmitting ? 'hidden' : null}`}></div>
+                            <span className={`material-icons loop ${!isSubmitting ? 'hidden' : null}`}>loop</span>
+                            Book
+                          </button>
                         </div>
                       </div>
                     </div>

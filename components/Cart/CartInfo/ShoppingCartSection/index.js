@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,7 +9,8 @@ import { IMAGE_QUALITY } from 'utils/constant'
 import { decQuantityById, incQuantityById, updateQuantityById, removeItemById } from 'store/reducers/checkoutSlice'
 import { SignInForm, SignUpForm } from './form'
 
-const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
+const ShoppingCartSection = ({ cartList, totalCost }) => {
+  const router = useRouter()
   const userSlice = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
@@ -144,9 +146,11 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
             className="continue"
             onClick={() => {
               if (userSlice.id !== null) {
-                setStepIdx(1)
+                setOpenModal(false)
+                router.push('/checkout/customer-info')
+              } else {
+                setOpenModal(true)
               }
-              setOpenModal(true)
             }}
           >
             Make a payment

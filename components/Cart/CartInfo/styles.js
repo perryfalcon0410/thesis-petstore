@@ -8,7 +8,11 @@ export default css`
   a {
     font-family: 'Raleway', sans-serif;
   }
-
+  .cart-wrapper {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+  }
   .page-title {
     position: relative;
     min-height: 60px;

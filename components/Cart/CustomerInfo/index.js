@@ -1,19 +1,18 @@
-import React from 'react'
 import styles from './styles'
+import NavBar from 'components/NavBar'
 import CheckoutDetailsSection from './CheckoutDetailsSection'
-import ShoppingCartSection from './ShoppingCartSection'
-import OrderCompleteSection from './OrderCompleteSection'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-const MainSection = ({ stepIdx, cartSlice, setStepIdx }) => {
+const Cart = ({ cartSlice }) => {
   const steps = ['Shopping Cart', 'Checkout Detail', 'Order Complete']
+  const stepIdx = 1
   const cartList = Object.values(cartSlice.cart)
   const customerBillingDetail = cartSlice.bill
   const totalCost = cartSlice.totalPrice
-  const SOnum = 1
 
   return (
-    <main>
+    <div className="cart-wrapper">
+      <NavBar />
       <div className="page-title">
         <div className="container">
           {steps.map((step, index) => {
@@ -38,24 +37,15 @@ const MainSection = ({ stepIdx, cartSlice, setStepIdx }) => {
           </Link>
         </div>
       ) : (
-        <>
-          {stepIdx === 0 && <ShoppingCartSection cartList={cartList} setStepIdx={setStepIdx} totalCost={totalCost} />}
-          {stepIdx === 1 && (
-            <CheckoutDetailsSection
-              cartList={cartList}
-              setStepIdx={setStepIdx}
-              totalCost={totalCost}
-              customerBillingDetail={customerBillingDetail}
-            />
-          )}
-          {stepIdx === 2 && (
-            <OrderCompleteSection cartList={cartList} setStepIdx={setStepIdx} totalCost={totalCost} SOnum={SOnum} />
-          )}
-        </>
+        <CheckoutDetailsSection
+          cartList={cartList}
+          totalCost={totalCost}
+          customerBillingDetail={customerBillingDetail}
+        />
       )}
       <style jsx>{styles}</style>
-    </main>
+    </div>
   )
 }
 
-export default MainSection
+export default Cart
