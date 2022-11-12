@@ -15,7 +15,7 @@ export const orderListMock = [
         images: [
           {
             id: 'MeQvRv23baXXjgrhgKVu',
-            storageUrl: '/products/related-product-3.jpg',
+            url: '/products/related-product-3.jpg',
             dateCreated: 1638977762521,
           },
         ],
@@ -28,19 +28,19 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: '8V1efBqb5PRLfOwkOZRT',
-            storageUrl: '/products/big-product-1.jpg',
+            url: '/products/big-product-1.jpg',
             dateCreated: 1638977762317,
           },
           {
             status: 'ACTIVE',
             id: 'X5KTmJ1hZaMHVO1IQ5sa',
-            storageUrl: '/products/big-product-2.jpg',
+            url: '/products/big-product-2.jpg',
             dateCreated: 1638977762318,
           },
           {
             status: 'ACTIVE',
             id: 'AgO8T9MQGoRUJC3dKldC',
-            storageUrl: '/products/big-product-3.jpg',
+            url: '/products/big-product-3.jpg',
             dateCreated: 1638977762319,
           },
         ],
@@ -54,7 +54,7 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: 'Ehp1SSezdSNrEx93rCfC',
-            storageUrl: '/products/related-product-1.jpg',
+            url: '/products/related-product-1.jpg',
             dateCreated: 1638977762320,
           },
         ],
@@ -82,7 +82,7 @@ export const orderListMock = [
         images: [
           {
             id: 'MeQvRv23baXXjgrhgKVu',
-            storageUrl: '/products/related-product-3.jpg',
+            url: '/products/related-product-3.jpg',
             dateCreated: 1638977762521,
           },
         ],
@@ -95,19 +95,19 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: '8V1efBqb5PRLfOwkOZRT',
-            storageUrl: '/products/big-product-1.jpg',
+            url: '/products/big-product-1.jpg',
             dateCreated: 1638977762317,
           },
           {
             status: 'ACTIVE',
             id: 'X5KTmJ1hZaMHVO1IQ5sa',
-            storageUrl: '/products/big-product-2.jpg',
+            url: '/products/big-product-2.jpg',
             dateCreated: 1638977762318,
           },
           {
             status: 'ACTIVE',
             id: 'AgO8T9MQGoRUJC3dKldC',
-            storageUrl: '/products/big-product-3.jpg',
+            url: '/products/big-product-3.jpg',
             dateCreated: 1638977762319,
           },
         ],
@@ -121,7 +121,7 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: 'Ehp1SSezdSNrEx93rCfC',
-            storageUrl: '/products/related-product-1.jpg',
+            url: '/products/related-product-1.jpg',
             dateCreated: 1638977762320,
           },
         ],
@@ -149,7 +149,7 @@ export const orderListMock = [
         images: [
           {
             id: 'MeQvRv23baXXjgrhgKVu',
-            storageUrl: '/products/related-product-3.jpg',
+            url: '/products/related-product-3.jpg',
             dateCreated: 1638977762521,
           },
         ],
@@ -162,19 +162,19 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: '8V1efBqb5PRLfOwkOZRT',
-            storageUrl: '/products/big-product-1.jpg',
+            url: '/products/big-product-1.jpg',
             dateCreated: 1638977762317,
           },
           {
             status: 'ACTIVE',
             id: 'X5KTmJ1hZaMHVO1IQ5sa',
-            storageUrl: '/products/big-product-2.jpg',
+            url: '/products/big-product-2.jpg',
             dateCreated: 1638977762318,
           },
           {
             status: 'ACTIVE',
             id: 'AgO8T9MQGoRUJC3dKldC',
-            storageUrl: '/products/big-product-3.jpg',
+            url: '/products/big-product-3.jpg',
             dateCreated: 1638977762319,
           },
         ],
@@ -188,7 +188,7 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: 'Ehp1SSezdSNrEx93rCfC',
-            storageUrl: '/products/related-product-1.jpg',
+            url: '/products/related-product-1.jpg',
             dateCreated: 1638977762320,
           },
         ],
@@ -216,7 +216,7 @@ export const orderListMock = [
         images: [
           {
             id: 'MeQvRv23baXXjgrhgKVu',
-            storageUrl: '/products/related-product-3.jpg',
+            url: '/products/related-product-3.jpg',
             dateCreated: 1638977762521,
           },
         ],
@@ -229,19 +229,19 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: '8V1efBqb5PRLfOwkOZRT',
-            storageUrl: '/products/big-product-1.jpg',
+            url: '/products/big-product-1.jpg',
             dateCreated: 1638977762317,
           },
           {
             status: 'ACTIVE',
             id: 'X5KTmJ1hZaMHVO1IQ5sa',
-            storageUrl: '/products/big-product-2.jpg',
+            url: '/products/big-product-2.jpg',
             dateCreated: 1638977762318,
           },
           {
             status: 'ACTIVE',
             id: 'AgO8T9MQGoRUJC3dKldC',
-            storageUrl: '/products/big-product-3.jpg',
+            url: '/products/big-product-3.jpg',
             dateCreated: 1638977762319,
           },
         ],
@@ -255,7 +255,7 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: 'Ehp1SSezdSNrEx93rCfC',
-            storageUrl: '/products/related-product-1.jpg',
+            url: '/products/related-product-1.jpg',
             dateCreated: 1638977762320,
           },
         ],
@@ -283,7 +283,7 @@ export const orderListMock = [
         images: [
           {
             id: 'MeQvRv23baXXjgrhgKVu',
-            storageUrl: '/products/related-product-3.jpg',
+            url: '/products/related-product-3.jpg',
             dateCreated: 1638977762521,
           },
         ],
@@ -296,19 +296,19 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: '8V1efBqb5PRLfOwkOZRT',
-            storageUrl: '/products/big-product-1.jpg',
+            url: '/products/big-product-1.jpg',
             dateCreated: 1638977762317,
           },
           {
             status: 'ACTIVE',
             id: 'X5KTmJ1hZaMHVO1IQ5sa',
-            storageUrl: '/products/big-product-2.jpg',
+            url: '/products/big-product-2.jpg',
             dateCreated: 1638977762318,
           },
           {
             status: 'ACTIVE',
             id: 'AgO8T9MQGoRUJC3dKldC',
-            storageUrl: '/products/big-product-3.jpg',
+            url: '/products/big-product-3.jpg',
             dateCreated: 1638977762319,
           },
         ],
@@ -322,7 +322,7 @@ export const orderListMock = [
           {
             status: 'ACTIVE',
             id: 'Ehp1SSezdSNrEx93rCfC',
-            storageUrl: '/products/related-product-1.jpg',
+            url: '/products/related-product-1.jpg',
             dateCreated: 1638977762320,
           },
         ],

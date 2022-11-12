@@ -5,7 +5,7 @@ export const cartDetail = {
     images: [
       {
         id: 'MeQvRv23baXXjgrhgKVu',
-        storageUrl: '/products/related-product-3.jpg',
+        url: '/products/related-product-3.jpg',
       },
     ],
     price: 2.01,
@@ -16,15 +16,15 @@ export const cartDetail = {
     images: [
       {
         id: '8V1efBqb5PRLfOwkOZRT',
-        storageUrl: '/products/big-product-1.jpg',
+        url: '/products/big-product-1.jpg',
       },
       {
         id: 'X5KTmJ1hZaMHVO1IQ5sa',
-        storageUrl: '/products/big-product-2.jpg',
+        url: '/products/big-product-2.jpg',
       },
       {
         id: 'AgO8T9MQGoRUJC3dKldC',
-        storageUrl: '/products/big-product-3.jpg',
+        url: '/products/big-product-3.jpg',
       },
     ],
     name: 'PEDIGREE Pouch Beef for dogs with PEDIGREE Pouch Beef',
@@ -37,7 +37,7 @@ export const cartDetail = {
       {
         status: 'ACTIVE',
         id: 'Ehp1SSezdSNrEx93rCfC',
-        storageUrl: '/products/related-product-1.jpg',
+        url: '/products/related-product-1.jpg',
       },
     ],
     name: 'JERHIGH Chicken Vegetable Gravy Chicken and Vegetable Pate for dogs',
