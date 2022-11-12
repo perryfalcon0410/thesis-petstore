@@ -22,9 +22,7 @@
 import styles from './styles'
 import Image from 'next/image'
 
-
 const Products = (products) => {
-  console.log(products)
   return (
     <div className="elementor-column">
       <div className="elementor-column-wrapper">

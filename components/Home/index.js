@@ -7,22 +7,19 @@ import { MIN_DESKTOP_WIDTH, MODEL_WIDTH_ABOVE_DESKTOP, MODEL_WIDTH_BELOW_DESKTOP
 import { formatVNprice } from 'utils/function'
 
 import NavBar from 'components/NavBar'
-import Slider from './Slider'
 import FeaturedProduct from './FeaturedProduct'
 import BlogPost from './BlogPost'
 import Footer from './Footer'
+import HeaderBanner from './HeaderBanner'
 
-
-const Home = ({home}) => {
-  console.log(home)
+const Home = () => {
   return (
-    <div className='container'>
-      
+    <div className="container">
       <NavBar />
-      <Slider />
+      <HeaderBanner />
       <FeaturedProduct />
-      <BlogPost/>
-      <Footer/>
+      <BlogPost />
+      <Footer />
       <style jsx>{styles}</style>
     </div>
   )
