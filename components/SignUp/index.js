@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { setUser } from 'store/reducers/userSlice'
+import { COOKIE_EXPIRE_TIME } from 'utils/constant'
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -55,6 +56,7 @@ const SignUp = () => {
             // Register user
 
             // Set userSlice
+            Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
             dispatch(setUser(userMock))
             router.push('/')
             resetForm({ firstName: '', lastName: '', email: '', password: '' })

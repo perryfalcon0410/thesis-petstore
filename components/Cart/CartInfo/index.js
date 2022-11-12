@@ -1,6 +1,7 @@
 import styles from './styles'
 import NavBar from 'components/NavBar'
 import ShoppingCartSection from './ShoppingCartSection'
+import Footer from 'components/Utils/Footer'
 
 const Cart = ({ cartSlice }) => {
   const steps = ['Shopping Cart', 'Checkout Detail', 'Order Complete']
@@ -36,6 +37,7 @@ const Cart = ({ cartSlice }) => {
       ) : (
         <ShoppingCartSection cartList={cartList} totalCost={totalCost} />
       )}
+      <Footer />
       <style jsx>{styles}</style>
     </div>
   )

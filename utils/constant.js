@@ -1,3 +1,4 @@
+export const COOKIE_EXPIRE_TIME = 1 / 1440 // 1 minute
 export const MIN_DESKTOP_WIDTH = 1200
 export const MIN_TABLET_WIDTH = 768
 export const MIN_MOBILE_WIDTH = 320

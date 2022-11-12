@@ -1,13 +1,27 @@
-import NavBar from 'components/NavBar'
+import { useState, useEffect } from 'react'
 import styles from './styles'
+import Image from 'next/image'
+import ProductInformation from 'components/Product/Utils/ProductInformation'
+// import Link from 'next/link'
+import { MIN_DESKTOP_WIDTH, MODEL_WIDTH_ABOVE_DESKTOP, MODEL_WIDTH_BELOW_DESKTOP } from 'utils/constant'
+import { formatVNprice } from 'utils/function'
 
-const Home = () => {
+import NavBar from 'components/NavBar'
+import Slider from './Slider'
+import FeaturedProduct from './FeaturedProduct'
+import BlogPost from './BlogPost'
+import Footer from '../Utils/Footer'
+
+const Home = ({ home }) => {
   return (
-    <>
+    <div className="container">
       <NavBar />
-      <div className="home-wrapper">HomePage</div>
+      <Slider />
+      <FeaturedProduct />
+      <BlogPost />
+      <Footer />
       <style jsx>{styles}</style>
-    </>
+    </div>
   )
 }
 

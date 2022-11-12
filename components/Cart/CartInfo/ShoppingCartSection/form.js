@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Image from 'next/image'
 import styles from './styles'
 import Link from 'next/link'
+import Cookies from 'js-cookie'
+import { COOKIE_EXPIRE_TIME } from 'utils/constant'
 
 export const SignInForm = ({ setSignUp, callback }) => {
   const dispatch = useDispatch()
@@ -43,6 +45,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
         // Validate user
 
         // Set userSlice
+        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
         dispatch(setUser(userMock))
         setSubmitting(false)
         resetForm({ email: '', password: '' })
@@ -164,6 +167,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
         // Register user
 
         // Set userSlice
+        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
         dispatch(setUser(userMock))
         resetForm({ firstName: '', lastName: '', email: '', password: '' })
         setSubmitting(false)

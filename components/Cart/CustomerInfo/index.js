@@ -2,6 +2,7 @@ import styles from './styles'
 import NavBar from 'components/NavBar'
 import CheckoutDetailsSection from './CheckoutDetailsSection'
 import { useRouter } from 'next/router'
+import Footer from 'components/Utils/Footer'
 
 const Cart = ({ cartSlice }) => {
   const steps = ['Shopping Cart', 'Checkout Detail', 'Order Complete']
@@ -43,6 +44,7 @@ const Cart = ({ cartSlice }) => {
           customerBillingDetail={customerBillingDetail}
         />
       )}
+      <Footer />
       <style jsx>{styles}</style>
     </div>
   )

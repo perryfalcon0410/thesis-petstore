@@ -1,7 +1,7 @@
 export const userMock = {
   id: '1',
-  firstName: 'Dat',
+  firstName: 'Nam',
   lastName: 'Vo',
-  username: 'tuniss1@gmail.com',
-  password: '!Tuniss1',
+  username: 'nam.vo@example.com',
+  password: 'Namvo@123',
 }
