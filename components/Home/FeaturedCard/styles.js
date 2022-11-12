@@ -28,7 +28,7 @@ export default css`
             display: block;
             text-align: center;
             padding: 10px;
-            margin: 5px 15px;
+            margin: 10px 20px;
             flex: 25%;
             max-width: 25%;
 

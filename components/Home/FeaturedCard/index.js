@@ -2,7 +2,6 @@ import styles from './styles'
 import Image from 'next/image'
 
 const Products = (products) => {
-  console.log(products)
   return (
     <div className="elementor-column">
       <div className="elementor-column-wrapper">
@@ -15,13 +14,13 @@ const Products = (products) => {
                   <div className="product">
                     <div className="product-img">
                       <img src="/products/big-product-1.jpg" alt="Product 1" />
-
-                      {/* <span>OUT OF STOCK</span> */}
                     </div>
                     <div className="product-detail">
                       <span className="product-category">Product treatment</span>
                       <a href="" className="product-link">
-                        <h2>Alkin Mitecyn 50ml – Spray for treating dermatitis, fungus, scabies for dogs and cats</h2>
+                        <h2>
+                          {'Alkin Mitecyn 50ml - Spray for treating dermatitis, fungus, scabies for dogs and cats'}
+                        </h2>
                       </a>
                       <span className="price">
                         14.00 <span>$</span>
