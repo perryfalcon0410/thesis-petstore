@@ -29,7 +29,7 @@ const OrderDetail = ({ orderDetail }) => {
                   <tr key={product.id}>
                     <td style={{ minWidth: '60px', maxWidth: '90px', width: '90px' }} className="product-thumbnail">
                       <Image
-                        src={product.images.length !== 0 ? product.images[0].storageUrl : '/images/no-image.png'}
+                        src={product.images.length !== 0 ? product.images[0].url : '/images/no-image.png'}
                         alt={product.name}
                         width={IMAGE_QUALITY.LOW}
                         height={IMAGE_QUALITY.LOW}

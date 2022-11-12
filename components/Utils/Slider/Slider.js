@@ -59,7 +59,7 @@ const Slider = ({ DynamicWidth, sliderData }) => {
                 return (
                   <li className="big-image" style={{ width: `${DynamicWidth}px` }} key={index}>
                     <Image
-                      src={image.storageUrl}
+                      src={image.url}
                       alt="Hình ảnh sản phẩm to"
                       width={IMAGE_QUALITY.HIGH}
                       height={IMAGE_QUALITY.HIGH}
@@ -91,7 +91,7 @@ const Slider = ({ DynamicWidth, sliderData }) => {
                 return (
                   <li className="small-image" key={index}>
                     <Image
-                      src={image.storageUrl}
+                      src={image.url}
                       alt="Hình ảnh sản phẩm nhỏ"
                       width={IMAGE_QUALITY.LOW}
                       height={IMAGE_QUALITY.LOW}

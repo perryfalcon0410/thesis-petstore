@@ -27,7 +27,7 @@ const Products = () => {
                   </div>
                   <div className="product-detail">
                     <span className="product-category">Product treatment</span>
-                    <Link href="/products/1" passHref>
+                    <Link href="/products/635a8ae350ce863f0643003f" passHref>
                       <a className="product-link">
                         <h2>Alkin Mitecyn 50ml – Spray for treating dermatitis, fungus, scabies for dogs and cats</h2>
                       </a>

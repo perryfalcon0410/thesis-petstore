@@ -62,7 +62,7 @@ const NavBar = () => {
                     <div className="cart-card" key={cart.id}>
                       <div className="cart-img">
                         <Image
-                          src={cart.images.length !== 0 ? cart.images[0].storageUrl : '/images/no-image.png'}
+                          src={cart.images.length !== 0 ? cart.images[0].url : '/images/no-image.png'}
                           alt={cart.name}
                           width={IMAGE_QUALITY.MED}
                           height={IMAGE_QUALITY.MED}

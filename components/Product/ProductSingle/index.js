@@ -63,12 +63,12 @@ const ProductSingle = ({ isModel, productSingleData }) => {
               ) : null}
               <div className="infor-product">
                 <p>
-                  <span>Sku: </span> {productSingleData.productSku}
+                  <span>Sku: </span> {productSingleData.productSKU}
                 </p>
                 <p>
                   <span>Categories: </span>{' '}
                   {productSingleData.categories.map((category, index) =>
-                    index !== 0 ? ', ' + category.name : category.name,
+                    index !== 0 ? ', ' + category.category_name : category.category_name,
                   )}
                 </p>
                 <div>

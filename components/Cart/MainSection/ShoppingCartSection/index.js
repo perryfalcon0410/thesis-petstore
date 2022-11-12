@@ -9,7 +9,7 @@ import { decQuantityById, incQuantityById, updateQuantityById, removeItemById } 
 import { SignInForm, SignUpForm } from './form'
 
 const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
-  const userSlice = useSelector(state => state.user)
+  const userSlice = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
   const [formState, setFormState] = useState(1)
@@ -33,7 +33,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
     setResetPassword,
     callback: () => {
       setOpenModal(false)
-    }
+    },
   }
 
   return (
@@ -65,7 +65,7 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
                     </td>
                     <td style={{ minWidth: '60px', maxWidth: '90px', width: '90px' }} className="product-thumbnail">
                       <Image
-                        src={cart.images.length !== 0 ? cart.images[0].storageUrl : '/images/no-image.png'}
+                        src={cart.images.length !== 0 ? cart.images[0].url : '/images/no-image.png'}
                         alt={cart.name}
                         width={IMAGE_QUALITY.MED}
                         height={IMAGE_QUALITY.MED}
@@ -140,19 +140,28 @@ const ShoppingCartSection = ({ cartList, setStepIdx, totalCost }) => {
             <p className="total">Total</p>
             <p className="price">{formatVNprice(totalCost)}$</p>
           </div>
-          <div className="continue" onClick={() => {
-            if (userSlice.id !== null) {
-              setStepIdx(1)
-            }
-            setOpenModal(true)
-          }}>
+          <div
+            className="continue"
+            onClick={() => {
+              if (userSlice.id !== null) {
+                setStepIdx(1)
+              }
+              setOpenModal(true)
+            }}
+          >
             Make a payment
           </div>
         </div>
       </div>
-      <div className='absolute-form' onClick={(e) => {
-        if (e.target.className.includes('absolute-form')) { setOpenModal(false) }
-      }} style={openModal ? { opacity: 1, visibility: 'visible' } : { opacity: 0, visibility: 'hidden' }}>
+      <div
+        className="absolute-form"
+        onClick={(e) => {
+          if (e.target.className.includes('absolute-form')) {
+            setOpenModal(false)
+          }
+        }}
+        style={openModal ? { opacity: 1, visibility: 'visible' } : { opacity: 0, visibility: 'hidden' }}
+      >
         {formState === 1 && <SignInForm {...props} />}
         {formState === 2 && <SignUpForm {...props} />}
       </div>

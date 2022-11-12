@@ -77,7 +77,7 @@ const OrderList = ({ orderList }) => {
                         <div className="info-container">
                           <div className="image">
                             <Image
-                              src={product.images.length ? product.images[0].storageUrl : '/images/no-image.png'}
+                              src={product.images.length ? product.images[0].url : '/images/no-image.png'}
                               width={104}
                               height={104}
                             />
