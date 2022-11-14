@@ -1,51 +1,93 @@
 import Link from 'next/link'
 import styles from './styles'
-const Products = () => {
+import { useRouter } from 'next/router'
+
+const Products = ({ productListData, query, setQuery }) => {
+  const router = useRouter()
+
+  const firstCapitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  const { data, total, page, last_page } = productListData
+
+  const handleChangePage = (page) => {
+    router.replace({
+      pathname: '/products',
+      query: {
+        ...query,
+        page,
+      },
+    })
+    setQuery({
+      ...query,
+      page,
+    })
+  }
+
+  const handleChangeOrder = (e) => {
+    const orderBy = e.target.value
+    router.replace({
+      pathname: '/products',
+      query: {
+        ...query,
+        orderBy,
+      },
+    })
+    setQuery({
+      ...query,
+      orderBy,
+    })
+  }
+
   return (
     <div className="elementor-column">
       <div className="elementor-column-wrapper">
         <div className="woocommerce">
-          <p className="woocommerce-result-count">Show 1–12 of 242 results</p>
+          <p className="woocommerce-result-count">{`Show ${(page - 1) * 9 + 1} - ${
+            page * 9 > total ? total : page * 9
+          } of ${total} products`}</p>
           <form className="woocommerce-ordering" action="">
-            <select name="orderby" className="select-order">
-              <option value="menu_order">The default order</option>
-              <option value="popularity">Order by level of popularity</option>
-              <option value="rating">Order by rating</option>
-              <option value="date">Latest</option>
-              <option value="price">Order by price: low to high</option>
-              <option value="price-decs">Order by price: high to low</option>
+            <select name="orderby" className="select-order" onChange={handleChangeOrder}>
+              <option value="">Default order</option>
+              <option value="priceAsc">Price order from Low to High</option>
+              <option value="priceDesc">Price order from High to Low</option>
             </select>
           </form>
           <ul className="products">
-            {Array(9)
-              .fill(undefined)
-              .map((_el, idx) => (
-                <li className="product" key={idx}>
-                  <div className="product-img">
-                    <img src="images/Product/product-1.png" alt="Product 1" />
-                    <span>OUT OF STOCK</span>
-                  </div>
-                  <div className="product-detail">
-                    <span className="product-category">Product treatment</span>
-                    <Link href="/products/635a8ae350ce863f0643003f" passHref>
-                      <a className="product-link">
-                        <h2>Alkin Mitecyn 50ml – Spray for treating dermatitis, fungus, scabies for dogs and cats</h2>
-                      </a>
-                    </Link>
-                    <span className="price">
-                      14.00 <span>$</span>{' '}
-                    </span>
-                  </div>
-                </li>
-              ))}
+            {data.map((product, idx) => (
+              <li className="product" key={idx}>
+                <div className="product-img">
+                  <img src={product.images[0].url} alt={`Images of ${product.name}`} />
+                </div>
+                <div className="product-detail">
+                  <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>
+                  <Link href={`/products/${product._id}`} passHref>
+                    <a className="product-link">
+                      <h2>{product.name}</h2>
+                    </a>
+                  </Link>
+                  <span className="price">{`${product.price}$`}</span>
+                </div>
+              </li>
+            ))}
           </ul>
           <nav className="woocommerce-pagination">
             <ul>
-              {[1, 2, 3, 4, 5, '...', 6, 7, 8, 9, '→'].map((el, idx) => (
-                <li className="page-number" key={idx}>
-                  <span>{el}</span>
+              {[...Array(last_page).keys()].map((ele, idx) => (
+                <li
+                  className="page-number"
+                  key={idx}
+                  onClick={() => {
+                    handleChangePage(ele + 1)
+                  }}
+                >
+                  <span>{ele + 1}</span>
                 </li>
               ))}
+              <li className="page-number" key={last_page + 1}>
+                <span>→</span>
+              </li>
             </ul>
           </nav>
         </div>

@@ -18,7 +18,8 @@ export default css`
       .selection-container {
         display: inline-block;
         width: 100%;
-        border-radius: 99px;
+        height: 40px;
+        border-radius: 5px;
         padding: 0.75em;
         background-color: #fff;
         border: 1px solid #ddd;
@@ -35,13 +36,12 @@ export default css`
 
           .selection-rendered {
             width: 100%;
-            .selection-content-clear {
-              cursor: pointer;
-              float: right;
-              font-weight: 700;
-            }
           }
-
+          .selection-content-clear {
+            cursor: pointer;
+            float: right;
+            font-weight: 700;
+          }
           .selection-content-arrow {
             top: 50%;
             width: 1.7em;

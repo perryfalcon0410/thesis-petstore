@@ -3,7 +3,7 @@ import React from 'react'
 import styles from './styles'
 import PaymentSection from '../PaymentSection'
 
-const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum }) => {
+const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, orderId }) => {
   const orderingDate = new Date()
   const shippingDate = new Date(shipInfo.expectedDeliveryTime)
   const paymentMethodObj = {
@@ -80,7 +80,7 @@ const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum }
             {billInfo.paymentMethod === 'paypal' ? (
               <div className="payment">
                 <p className="payment-title">Please click this button to pay</p>
-                <PaymentSection totalCost={totalCost} />
+                <PaymentSection totalCost={totalCost} orderId={orderId} />
               </div>
             ) : null}
           </div>

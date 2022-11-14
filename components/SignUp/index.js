@@ -7,7 +7,8 @@ import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { setUser } from 'store/reducers/userSlice'
-import { COOKIE_EXPIRE_TIME } from 'utils/constant'
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -50,21 +51,33 @@ const SignUp = () => {
           passwordConfirm: '',
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
           try {
-            setSubmitting(true)
-            // Register user
+            const registerData = await axios
+              .post('http://localhost:3333/auth/signup', {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                password: values.password,
+              })
+              .then((res) => res.data)
 
-            // Set userSlice
-            Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
-            dispatch(setUser(userMock))
-            router.push('/')
-            resetForm({ firstName: '', lastName: '', email: '', password: '' })
-            setSubmitting(false)
+            if (registerData) {
+              const userInfo = {
+                id: registerData.user.id,
+                username: registerData.user.username,
+                firstName: registerData.user.firstName,
+                lastName: registerData.user.lastName,
+                token: registerData.accessToken,
+              }
+              Cookies.set('user', JSON.stringify(userInfo), { expires: registerData.expiredIn })
+              dispatch(setUser(userInfo))
+              router.push('/')
+            }
           } catch (e) {
-            resetForm({ firstName: '', lastName: '', email: '', password: '' })
-            setSubmitting(false)
+            console.log(e)
           }
+          setSubmitting(false)
+          resetForm()
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
@@ -82,13 +95,13 @@ const SignUp = () => {
                   name="firstName"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
-                  placeholder="FIRST NAME"
+                  value={values.firstName}
+                  placeholder="Enter first name"
                 />
               </div>
-              {touched['firstName'] && errors['firstName'] && (
+              {touched.firstName && errors.firstName && (
                 <div className="error">
-                  <p>{errors['firstName']}</p>
+                  <p>{errors.firstName}</p>
                 </div>
               )}
               <div className="input">
@@ -100,13 +113,13 @@ const SignUp = () => {
                   name="lastName"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
-                  placeholder="LAST NAME"
+                  value={values.lastName}
+                  placeholder="Enter last name"
                 />
               </div>
-              {touched['lastName'] && errors['lastName'] && (
+              {touched.lastName && errors.lastName && (
                 <div className="error">
-                  <p>{errors['lastName']}</p>
+                  <p>{errors.lastName}</p>
                 </div>
               )}
 
@@ -120,12 +133,12 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  placeholder="EMAIL"
+                  placeholder="Enter email"
                 />
               </div>
-              {touched['email'] && errors['email'] && (
+              {touched.email && errors.email && (
                 <div className="error">
-                  <p>{errors['email']}</p>
+                  <p>{errors.email}</p>
                 </div>
               )}
               <div className="input">
@@ -138,12 +151,31 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
-                  placeholder="PASSWORD"
+                  placeholder="Enter password"
                 />
               </div>
-              {touched['password'] && errors['password'] && (
+              {touched.password && errors.password && (
                 <div className="error">
-                  <p>{errors['password']}</p>
+                  <p>{errors.password}</p>
+                </div>
+              )}
+
+              <div className="input">
+                <div className="icon-sm">
+                  <Image src="/images/Auth/lock.svg" width={24} height={24} />
+                </div>
+                <input
+                  type="password"
+                  name="passwordConfirm"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.passwordConfirm}
+                  placeholder="Enter confirm password"
+                />
+              </div>
+              {touched.passwordConfirm && errors.passwordConfirm && (
+                <div className="error">
+                  <p>{errors.passwordConfirm}</p>
                 </div>
               )}
             </div>

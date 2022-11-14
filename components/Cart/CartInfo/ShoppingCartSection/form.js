@@ -1,13 +1,12 @@
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { setUser } from 'store/reducers/userSlice'
-import { userMock } from 'components/mocks/userMock'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Image from 'next/image'
 import styles from './styles'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
-import { COOKIE_EXPIRE_TIME } from 'utils/constant'
+import axios from 'axios'
 
 export const SignInForm = ({ setSignUp, callback }) => {
   const dispatch = useDispatch()
@@ -31,99 +30,110 @@ export const SignInForm = ({ setSignUp, callback }) => {
       }),
   })
 
-  return <Formik
-    validationSchema={USER_SCHEMA}
-    initialValues={{
-      email: '',
-      password: '',
-    }}
-    onSubmit={async (values, { setSubmitting, resetForm }) => {
-      console.log(values)
+  return (
+    <Formik
+      validationSchema={USER_SCHEMA}
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        try {
+          const loginInData = await axios
+            .post('http://localhost:3333/auth/signin', {
+              email: values.email,
+              password: values.password,
+            })
+            .then((res) => res.data)
 
-      try {
-        setSubmitting(true)
-        // Validate user
+          if (loginInData) {
+            const userInfo = {
+              id: loginInData.user.id,
+              username: loginInData.user.username,
+              firstName: loginInData.user.firstName,
+              lastName: loginInData.user.lastName,
+              token: loginInData.accessToken,
+            }
+            Cookies.set('user', JSON.stringify(userInfo), { expires: loginInData.expiredIn })
+            dispatch(setUser(userInfo))
+          }
 
-        // Set userSlice
-        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
-        dispatch(setUser(userMock))
+          callback()
+        } catch (e) {
+          console.log(e)
+        }
         setSubmitting(false)
-        resetForm({ email: '', password: '' })
-        callback()
-      } catch (e) {
-        setSubmitting(false)
-        resetForm({ email: '', password: '' })
-      }
-    }}
-  >
-    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
-      <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
-        <div className="icon-lg">
-          <Image src='/images/Cart/Logo.svg' width={128} height={128} />
-        </div>
-        <div className="form-container">
-          <div className="input">
-            <div className="icon-sm">
-              <Image src='/images/Cart/user.svg' width={24} height={24} />
-            </div>
-            <input
-              type="text"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="EMAIL"
-            />
+        resetForm()
+      }}
+    >
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
+          <div className="icon-lg">
+            <Image src="/images/Cart/Logo.svg" width={128} height={128} />
           </div>
-          {touched['email'] && errors['email'] && (
-            <div className="error">
-              <p>{errors['email']}</p>
+          <div className="form-container">
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/user.svg" width={24} height={24} />
+              </div>
+              <input
+                type="text"
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                placeholder="EMAIL"
+              />
             </div>
-          )}
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Cart/lock.svg" width={24} height={24} />
+            {touched['email'] && errors['email'] && (
+              <div className="error">
+                <p>{errors['email']}</p>
+              </div>
+            )}
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/lock.svg" width={24} height={24} />
+              </div>
+              <input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                placeholder="PASSWORD"
+                autoComplete="current-password"
+              />
             </div>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              placeholder="PASSWORD"
-              autoComplete="current-password"
-            />
+            {touched['password'] && errors['password'] && (
+              <div className="error">
+                <p>{errors['password']}</p>
+              </div>
+            )}
+            <div className="reset-password">
+              <Link href="/reset-password">
+                <a>Forgot password?</a>
+              </Link>
+            </div>
           </div>
-          {touched['password'] && errors['password'] && (
-            <div className="error">
-              <p>{errors['password']}</p>
-            </div>
-          )}
-          <div className="reset-password">
-            <Link href="/reset-password">
-              <a>Forgot password?</a>
-            </Link>
-          </div>
-        </div>
-        <div className="form-event">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="button"
-            style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
-          >
-            LOGIN
-          </button>
+          <div className="form-event">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="button"
+              style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+            >
+              LOGIN
+            </button>
 
-          <p className="sign-up">
-            You don't have account?{' '}
-            <span onClick={setSignUp}>Sign up here!</span>
-          </p>
-        </div>
-        <style jsx>{styles}</style>
-      </form>
-    )}
-  </Formik>
+            <p className="sign-up">
+              You don't have account? <span onClick={setSignUp}>Sign up here!</span>
+            </p>
+          </div>
+          <style jsx>{styles}</style>
+        </form>
+      )}
+    </Formik>
+  )
 }
 
 export const SignUpForm = ({ setSignIn, callback }) => {
@@ -151,127 +161,141 @@ export const SignUpForm = ({ setSignIn, callback }) => {
     passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
   })
 
-  return <Formik
-    validationSchema={USER_SCHEMA}
-    initialValues={{
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-    }}
-    onSubmit={async (values, { setSubmitting, resetForm }) => {
-      console.log(values)
-      try {
-        setSubmitting(true)
-        // Register user
+  return (
+    <Formik
+      validationSchema={USER_SCHEMA}
+      initialValues={{
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        passwordConfirm: '',
+      }}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        try {
+          const registerData = await axios
+            .post('http://localhost:3333/auth/signup', {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              email: values.email,
+              password: values.password,
+            })
+            .then((res) => res.data)
 
-        // Set userSlice
-        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
-        dispatch(setUser(userMock))
-        resetForm({ firstName: '', lastName: '', email: '', password: '' })
+          if (registerData) {
+            const userInfo = {
+              id: registerData.user.id,
+              username: registerData.user.username,
+              firstName: registerData.user.firstName,
+              lastName: registerData.user.lastName,
+              token: registerData.accessToken,
+            }
+            Cookies.set('user', JSON.stringify(userInfo), { expires: registerData.expiredIn })
+            dispatch(setUser(userInfo))
+          }
+
+          callback()
+        } catch (e) {
+          console.log(e)
+        }
         setSubmitting(false)
-        callback()
-      } catch (e) {
-        resetForm({ firstName: '', lastName: '', email: '', password: '' })
-        setSubmitting(false)
-      }
-    }}
-  >
-    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
-      <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
-        <div className="form-container">
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Cart/user.svg" width={24} height={24} />
+        resetForm()
+      }}
+    >
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
+          <div className="form-container">
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/user.svg" width={24} height={24} />
+              </div>
+              <input
+                type="text"
+                name="firstName"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                placeholder="FIRST NAME"
+              />
             </div>
-            <input
-              type="text"
-              name="firstName"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="FIRST NAME"
-            />
-          </div>
-          {touched['firstName'] && errors['firstName'] && (
-            <div className="error">
-              <p>{errors['firstName']}</p>
+            {touched['firstName'] && errors['firstName'] && (
+              <div className="error">
+                <p>{errors['firstName']}</p>
+              </div>
+            )}
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/user.svg" width={24} height={24} />
+              </div>
+              <input
+                type="text"
+                name="lastName"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                placeholder="LAST NAME"
+              />
             </div>
-          )}
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Cart/user.svg" width={24} height={24} />
-            </div>
-            <input
-              type="text"
-              name="lastName"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="LAST NAME"
-            />
-          </div>
-          {touched['lastName'] && errors['lastName'] && (
-            <div className="error">
-              <p>{errors['lastName']}</p>
-            </div>
-          )}
+            {touched['lastName'] && errors['lastName'] && (
+              <div className="error">
+                <p>{errors['lastName']}</p>
+              </div>
+            )}
 
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Cart/email.svg" width={24} height={24} />
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/email.svg" width={24} height={24} />
+              </div>
+              <input
+                type="text"
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                placeholder="EMAIL"
+              />
             </div>
-            <input
-              type="text"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="EMAIL"
-            />
+            {touched['email'] && errors['email'] && (
+              <div className="error">
+                <p>{errors['email']}</p>
+              </div>
+            )}
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Cart/lock.svg" width={24} height={24} />
+              </div>
+              <input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                placeholder="PASSWORD"
+              />
+            </div>
+            {touched['password'] && errors['password'] && (
+              <div className="error">
+                <p>{errors['password']}</p>
+              </div>
+            )}
           </div>
-          {touched['email'] && errors['email'] && (
-            <div className="error">
-              <p>{errors['email']}</p>
-            </div>
-          )}
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Cart/lock.svg" width={24} height={24} />
-            </div>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              placeholder="PASSWORD"
-            />
-          </div>
-          {touched['password'] && errors['password'] && (
-            <div className="error">
-              <p>{errors['password']}</p>
-            </div>
-          )}
-        </div>
-        <div className="form-event">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="button"
-            style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
-          >
-            REGISTER
-          </button>
+          <div className="form-event">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="button"
+              style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+            >
+              REGISTER
+            </button>
 
-          <p className="sign-in">
-            Already have an account?{' '}
-            <span onClick={setSignIn}>Sign in here!</span>
-          </p>
-        </div>
-        <style jsx>{styles}</style>
-      </form>
-    )}
-  </Formik>
+            <p className="sign-in">
+              Already have an account? <span onClick={setSignIn}>Sign in here!</span>
+            </p>
+          </div>
+          <style jsx>{styles}</style>
+        </form>
+      )}
+    </Formik>
+  )
 }

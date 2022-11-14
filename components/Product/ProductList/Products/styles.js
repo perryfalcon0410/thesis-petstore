@@ -23,13 +23,14 @@ export default css`
           margin-bottom: 2.5rem;
           float: right;
           vertical-align: top;
+
           .select-order {
             width: 250px;
-            padding: 8px;
+            padding: 10px 8px;
             margin-right: 10px;
             color: #666;
             background: #fafafa;
-            border-radius: 50px;
+            border-radius: 5px;
             border: 1px solid #eaeaea;
             outline: none;
           }
@@ -74,8 +75,8 @@ export default css`
             .product-img {
               position: relative;
               img {
-                width: 300px;
-                height: 300px;
+                width: 200px;
+                height: 200px;
                 object-fit: cover;
                 margin-bottom: 0.6rem;
               }

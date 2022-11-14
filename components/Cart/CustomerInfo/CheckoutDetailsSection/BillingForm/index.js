@@ -1,16 +1,25 @@
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import { useDispatch } from 'react-redux'
-import { updateBillingAndShipping } from 'store/reducers/checkoutSlice'
-import { formatVNprice } from 'utils/function'
+import { useDispatch, useSelector } from 'react-redux'
+import { resetCheckout, updateBillingAndShipping } from 'store/reducers/checkoutSlice'
 
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const userSlice = useSelector((state) => state.user)
+  const [completeOrder, setCompleteOrder] = useState('')
+
+  useEffect(() => {
+    if (completeOrder) localStorage.setItem('completeOrder', JSON.stringify(completeOrder))
+    return () => {
+      setCompleteOrder('')
+    }
+  }, [completeOrder])
 
   const BILLING_SCHEMA = Yup.object({
     firstName: Yup.string().required('It is a required field.'),
@@ -107,6 +116,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
         initialValues={customerBillingDetail}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
+            // ** Create delivery order through GHN API
             const deliveryOrder = await createDeliveryOrder(
               `${values.firstName} ${values.lastName}`,
               values.phone,
@@ -116,24 +126,45 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               values.region,
               cartList,
             )
-            dispatch(
-              updateBillingAndShipping({
-                bill: values,
-                shipping: {
-                  orderCode: deliveryOrder.order_code,
-                  totalFee: Number((deliveryOrder.total_fee / 24815).toFixed(2)),
-                  expectedDeliveryTime: deliveryOrder.expected_delivery_time,
-                },
-              }),
-            )
-            const checkoutData = { cart: cartList, bill: values, shipping: deliveryOrder.order_code }
-            console.log('Checkout: ', checkoutData)
+            const shippingData = {
+              orderCode: deliveryOrder.order_code,
+              totalFee: Number((deliveryOrder.total_fee / 24815).toFixed(2)),
+              expectedDeliveryTime: deliveryOrder.expected_delivery_time,
+            }
+
+            // ** Create order through API
+            const url = 'http://localhost:3333/order'
+            const checkoutData = {
+              cart: cartList,
+              bill: values,
+              shipping: deliveryOrder.order_code,
+              totalPrice: Number((totalCost + shippingData.totalFee).toFixed(2)),
+              shippingFee: shippingData.totalFee,
+            }
+            const config = {
+              headers: {
+                Authorization: `Bearer ${userSlice.token}`,
+              },
+            }
+            const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
+
+            // ** Update order state to local storage
+            setCompleteOrder({
+              orderId: createOrderData.orderId,
+              cart: cartList,
+              bill: values,
+              shipping: shippingData,
+              totalPrice: Number((totalCost + shippingData.totalFee).toFixed(2)),
+            })
+
+            // ** Reset checkout:
+            dispatch(resetCheckout())
             router.push('/checkout/order-complete')
-            setSubmitting(false)
-            resetForm()
           } catch (e) {
             console.log(e)
           }
+          setSubmitting(false)
+          resetForm()
         }}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
@@ -148,7 +179,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
                 <div id="customer_details">
                   <div className="clear">
                     <div className="woocommerce-billing-fields">
-                      <h3>Billing Information</h3>
+                      <h3 style={{ marginBottom: '10px' }}>Billing Information</h3>
                       <div className="woocommerce-billing-fields__field-wrapper">
                         <p className={'form-row form-row-first validate-required'}>
                           <label htmlFor={'firstName'}>
@@ -398,7 +429,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
                                 </td>
                                 <td className="product-total">
                                   <span className="woocommerce-Price-amount amount">
-                                    <bdi>{formatVNprice(cart.price * cart.quantity)}</bdi>
+                                    <bdi>{cart.price * cart.quantity}</bdi>
                                     <span className="woocommerce-Price-currencySymbol">$</span>
                                   </span>
                                 </td>
@@ -412,7 +443,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
                             <td>
                               <span className="woocommerce-Price-amount amount">
                                 <bdi>
-                                  {formatVNprice(totalCost)}
+                                  {totalCost}
                                   <span className="woocommerce-Price-currencySymbol">$</span>
                                 </bdi>
                               </span>
@@ -444,7 +475,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
                               <strong>
                                 <span className="woocommerce-Price-amount amount">
                                   <bdi>
-                                    {formatVNprice(totalCost)}
+                                    {totalCost}
                                     <span className="woocommerce-Price-currencySymbol">$</span>
                                   </bdi>
                                 </span>

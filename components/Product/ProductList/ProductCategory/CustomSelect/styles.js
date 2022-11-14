@@ -2,12 +2,11 @@ import css from 'styled-jsx/css'
 
 export default css`
   .select-dropdown {
-    width: 250px;
-    border: 1px solid #aaa;
+    width: 100%;
+    margin-top: -2px;
+    border: 1px solid #ddd;
     border-radius: 4px;
-    position: absolute;
-    left: 10px;
-    border-radius: 4px;
+    border-top: none;
     display: block;
     z-index: 100;
     background-color: #fff;
@@ -44,11 +43,11 @@ export default css`
       display: block;
 
       .select-results-options {
-        height: 200px;
+        height: auto;
         overflow-y: auto;
         list-style: none;
         margin: 0;
-        padding: 0;
+        padding: 10px 0;
         .select-results-option {
           cursor: pointer;
           padding: 6px 0.75em;

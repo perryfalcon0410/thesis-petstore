@@ -3,7 +3,7 @@ import css from 'styled-jsx/css'
 export default css`
   .background {
     width: 100%;
-    height: 500px;
+    height: 400px;
   }
   .next-arrow {
     display: flex;

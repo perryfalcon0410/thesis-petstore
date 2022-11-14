@@ -134,8 +134,7 @@ const ShoppingCartSection = ({ cartList, totalCost }) => {
           <div className="inner-row">
             <p className="shipping">Delivery</p>
             <div>
-              <p className="method">Free delivery</p>
-              <p className="destination">Shipping options will be updated during checkout.</p>
+              <p className="destination">Shipping options will be updated during checkout</p>
             </div>
           </div>
           <div className="inner-row">

@@ -56,7 +56,7 @@ export default css`
       }
 
       .short-desc {
-        margin-bottom: 5px;
+        margin: 10px 0px;
       }
     }
   }

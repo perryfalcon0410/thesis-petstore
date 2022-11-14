@@ -1,15 +1,13 @@
 import { Formik } from 'formik'
 import Image from 'next/image'
-import React from 'react'
 import styles from './styles'
 import * as Yup from 'yup'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { setUser } from 'store/reducers/userSlice'
-import { userMock } from 'components/mocks/userMock'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import { COOKIE_EXPIRE_TIME } from 'utils/constant'
+import axios from 'axios'
 
 function SignInForm({ formStyle }) {
   const dispatch = useDispatch()
@@ -34,105 +32,121 @@ function SignInForm({ formStyle }) {
       }),
   })
 
-  return <Formik
-    validationSchema={USER_SCHEMA}
-    initialValues={{
-      email: '',
-      password: '',
-    }}
-    onSubmit={async (values, { setSubmitting, resetForm }) => {
-      console.log(values)
+  return (
+    <Formik
+      validationSchema={USER_SCHEMA}
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        try {
+          const loginInData = await axios
+            .post('http://localhost:3333/auth/signin', {
+              email: values.email,
+              password: values.password,
+            })
+            .then((res) => res.data)
 
-      try {
-        setSubmitting(true)
-        // Validate user
-
-        // Set userSlice
-        Cookies.set('user', JSON.stringify(userMock), { expires: COOKIE_EXPIRE_TIME })
-        dispatch(setUser(userMock))
-        router.push('/')
+          if (loginInData) {
+            const userInfo = {
+              id: loginInData.user.id,
+              username: loginInData.user.username,
+              firstName: loginInData.user.firstName,
+              lastName: loginInData.user.lastName,
+              token: loginInData.accessToken,
+            }
+            Cookies.set('user', JSON.stringify(userInfo), { expires: loginInData.expiredIn })
+            dispatch(setUser(userInfo))
+            router.push('/')
+          }
+        } catch (e) {
+          console.log(e)
+        }
         setSubmitting(false)
-        resetForm({ email: '', password: '' })
-      } catch (e) {
-        setSubmitting(false)
-        resetForm({ email: '', password: '' })
-      }
-    }}
-  >
-    {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
-      <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit} style={formStyle}>
-        <div className="icon-lg">
-          <Image src="/images/Auth/Logo.svg" width={128} height={128} />
-        </div>
-        <div className="form-container">
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Auth/email.svg" width={24} height={24} />
-            </div>
-            <input
-              type="text"
-              name="email"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-              placeholder="EMAIL"
-            />
+        resetForm()
+      }}
+    >
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        <form
+          name="sign-in"
+          className="form-wrapper"
+          encType="multipart/form-data"
+          onSubmit={handleSubmit}
+          style={formStyle}
+        >
+          <div className="icon-lg">
+            <Image src="/images/Auth/Logo.svg" width={128} height={128} />
           </div>
-          {touched['email'] && errors['email'] && (
-            <div className="error">
-              <p>{errors['email']}</p>
+          <div className="form-container">
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Auth/email.svg" width={24} height={24} />
+              </div>
+              <input
+                type="text"
+                name="email"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+                placeholder="EMAIL"
+              />
             </div>
-          )}
-          <div className="input">
-            <div className="icon-sm">
-              <Image src="/images/Auth/lock.svg" width={24} height={24} />
+            {touched['email'] && errors['email'] && (
+              <div className="error">
+                <p>{errors['email']}</p>
+              </div>
+            )}
+            <div className="input">
+              <div className="icon-sm">
+                <Image src="/images/Auth/lock.svg" width={24} height={24} />
+              </div>
+              <input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                placeholder="PASSWORD"
+                autoComplete="current-password"
+              />
             </div>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              placeholder="PASSWORD"
-              autoComplete="current-password"
-            />
+            {touched['password'] && errors['password'] && (
+              <div className="error">
+                <p>{errors['password']}</p>
+              </div>
+            )}
+            <div className="reset-password">
+              <Link href="/reset-password">
+                <a>Forgot password?</a>
+              </Link>
+            </div>
           </div>
-          {touched['password'] && errors['password'] && (
-            <div className="error">
-              <p>{errors['password']}</p>
-            </div>
-          )}
-          <div className="reset-password">
-            <Link href="/reset-password">
-              <a>Forgot password?</a>
-            </Link>
-          </div>
-        </div>
-        <div className="form-event">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="button"
-            style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
-          >
-            LOGIN
-          </button>
+          <div className="form-event">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="button"
+              style={{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+            >
+              LOGIN
+            </button>
 
-          <p className="sign-up">
-            You don't have account?{' '}
-            <Link href="/sign-up">
-              <a>Sign up here!</a>
-            </Link>
-          </p>
-        </div>
-        <style jsx>{styles}</style>
-      </form>
-    )}
-  </Formik>
+            <p className="sign-up">
+              You don't have account?{' '}
+              <Link href="/sign-up">
+                <a>Sign up here!</a>
+              </Link>
+            </p>
+          </div>
+          <style jsx>{styles}</style>
+        </form>
+      )}
+    </Formik>
+  )
 }
 
 const SignIn = () => {
-
   return (
     <div className="wrapper">
       <div className="round-layer">

@@ -5,14 +5,14 @@ import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import Image from 'next/image'
-import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
-import { removeItemById } from 'store/reducers/checkoutSlice'
+import { removeItemById, resetCheckout } from 'store/reducers/checkoutSlice'
 import { resetUser } from 'store/reducers/userSlice'
+import Cookies from 'js-cookie'
 
 const NavBar = () => {
   const router = useRouter()
-
+  const dispatch = useDispatch()
   const CheckoutSlice = useSelector((state) => state.checkout)
   const UserSlice = useSelector((state) => state.user)
 
@@ -23,7 +23,16 @@ const NavBar = () => {
     totalQuantity += cart.quantity
   })
 
-  const dispatch = useDispatch()
+  const handleSignOut = () => {
+    // Remove cookie from application
+    Cookies.remove('user')
+
+    // Remove user from redux
+    dispatch(resetUser())
+
+    // Remove cart from redux
+    dispatch(resetCheckout())
+  }
 
   if (!router.isReady) return null
 
@@ -73,7 +82,7 @@ const NavBar = () => {
                           <a className="cart-name">{cart.name}</a>
                         </Link>
                         <p className="cart-quantity">
-                          {cart.quantity} &#215; <span className="cart-price">{formatVNprice(cart.price)}</span>
+                          {cart.quantity} &#215; <span className="cart-price">{cart.price}</span>
                           <span className="unit-price">$</span>
                         </p>
                       </div>
@@ -90,7 +99,7 @@ const NavBar = () => {
               <div className="row">
                 <p className="total">Subtotal:</p>
                 <p className="cart-total">
-                  <span className="cart-price">{formatVNprice(totalCost)}</span>
+                  <span className="cart-price">{totalCost}</span>
                   <span className="unit-price">$</span>
                 </p>
               </div>
@@ -101,7 +110,7 @@ const NavBar = () => {
               </div>
             </div>
           </div>
-          {UserSlice.id === null || UserSlice.id === undefined ? (
+          {UserSlice.id === '' ? (
             <Link href="/sign-in">
               <a className="user-href">
                 <div className="user">
@@ -123,12 +132,7 @@ const NavBar = () => {
                     </div>
                   </a>
                 </Link>
-                <div
-                  className="sign-out"
-                  onClick={() => {
-                    dispatch(resetUser())
-                  }}
-                >
+                <div className="sign-out" onClick={handleSignOut}>
                   Sign out
                 </div>
               </div>

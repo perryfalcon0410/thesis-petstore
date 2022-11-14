@@ -6,6 +6,13 @@ import { IMAGE_QUALITY } from 'utils/constant'
 
 const OrderDetail = ({ orderDetail }) => {
   let totalCost = 0
+  const shippingTitle = {
+    ready_to_pick: 'Ready to Pick',
+    picking: 'Picking',
+    picked: 'Picked',
+    storing: 'Storing',
+    return: 'Return',
+  }
 
   return (
     <div className="wrapper">
@@ -23,8 +30,8 @@ const OrderDetail = ({ orderDetail }) => {
               </tr>
             </thead>
             <tbody>
-              {orderDetail.products.map((product) => {
-                totalCost += product.price * product.quantity
+              {orderDetail.cart.map((product) => {
+                totalCost = Number((totalCost + product.price * product.quantity).toFixed(2))
                 return (
                   <tr key={product.id}>
                     <td style={{ minWidth: '60px', maxWidth: '90px', width: '90px' }} className="product-thumbnail">
@@ -39,7 +46,7 @@ const OrderDetail = ({ orderDetail }) => {
                       {product.name}
                     </td>
                     <td className="product-price">
-                      <span>{formatVNprice(product.price)}₫</span>
+                      <span>{formatVNprice(product.price)}$</span>
                     </td>
                     <td className="product-quantity">
                       <div>
@@ -47,7 +54,7 @@ const OrderDetail = ({ orderDetail }) => {
                       </div>
                     </td>
                     <td className="product-subtotal">
-                      <span>{formatVNprice(product.price * product.quantity)}₫</span>
+                      <span>{formatVNprice(product.price * product.quantity)}$</span>
                     </td>
                   </tr>
                 )
@@ -67,20 +74,19 @@ const OrderDetail = ({ orderDetail }) => {
           <div className="title">Order infomation</div>
           <div className="inner-row">
             <p className="subtotal">Temporary price</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{totalCost}$</p>
           </div>
           <div className="inner-row">
             <p className="shipping">Delivery</p>
             <div>
-              <p className="method">
-                {orderDetail.delivery.fee === 0 ? 'Free' : formatVNprice(orderDetail.delivery.fee) + '₫'}
-              </p>
-              <p className="destination">{orderDetail.delivery.destination}</p>
+              <p className="method">Cost: {orderDetail.shippingFee === 0 ? 'Free' : `${orderDetail.shippingFee}$`}</p>
+              <p className="destination">Status: {shippingTitle[orderDetail.shipping.status]}</p>
+              <p className="destination">{`To: ${orderDetail.bill.address}, ${orderDetail.bill.ward} ward, ${orderDetail.bill.district} district, ${orderDetail.bill.region} province/city`}</p>
             </div>
           </div>
           <div className="inner-row">
             <p className="total">Total</p>
-            <p className="price">{formatVNprice(totalCost + orderDetail.delivery.fee)}₫</p>
+            <p className="price">{orderDetail.totalPrice}$</p>
           </div>
         </div>
       </div>

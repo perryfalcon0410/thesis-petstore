@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { cartDetail } from 'components/mocks/cartDetail'
 
 const initialState = {
-  cart: cartDetail,
+  orderId: '',
+  cart: {},
   bill: {
     firstName: '',
     lastName: '',
@@ -21,29 +21,29 @@ const initialState = {
     totalFee: 0,
     expectedDeliveryTime: '',
   },
-  totalPrice: 8.26,
+  totalPrice: 0,
 }
 
 const CheckoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
-    resetCheckout: (state) => {
-      state = initialState
+    resetCheckout: (state, action) => {
+      const { orderId, cart, bill, shipping, totalPrice } = initialState
+      state.orderId = orderId
+      state.cart = cart
+      state.bill = bill
+      state.shipping = shipping
+      state.totalPrice = totalPrice
     },
     addItem: (state, action) => {
       if (state.cart[action.payload.id]) {
         state.cart[action.payload.id].quantity += action.payload.quantity
       } else {
-        state.cart[action.payload.id] = {
-          id: action.payload.id,
-          images: action.payload.images,
-          name: action.payload.name,
-          price: action.payload.price,
-          quantity: action.payload.quantity,
-        }
+        state.cart[action.payload.id] = action.payload
       }
       state.totalPrice += action.payload.price * action.payload.quantity
+      state.totalPrice = Number(state.totalPrice.toFixed(2))
     },
     incQuantityById: (state, action) => {
       // action.payload = id
@@ -51,6 +51,7 @@ const CheckoutSlice = createSlice({
       if (state.cart[itemId]) {
         state.cart[itemId].quantity += 1
         state.totalPrice += state.cart[itemId].price
+        state.totalPrice = Number(state.totalPrice.toFixed(2))
       }
     },
     decQuantityById: (state, action) => {
@@ -59,6 +60,7 @@ const CheckoutSlice = createSlice({
       if (state.cart[itemId]) {
         state.cart[itemId].quantity -= 1
         state.totalPrice -= state.cart[itemId].price
+        state.totalPrice = Number(state.totalPrice.toFixed(2))
       }
     },
     updateQuantityById: (state, action) => {
@@ -68,6 +70,7 @@ const CheckoutSlice = createSlice({
         state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
         state.cart[itemId].quantity = action.payload.quantity
         state.totalPrice += state.cart[itemId].price * state.cart[itemId].quantity
+        state.totalPrice = Number(state.totalPrice.toFixed(2))
       }
     },
     removeItemById: (state, action) => {
@@ -75,17 +78,23 @@ const CheckoutSlice = createSlice({
       const itemId = action.payload
       if (state.cart[itemId]) {
         state.totalPrice -= state.cart[itemId].price * state.cart[itemId].quantity
+        state.totalPrice = Number(state.totalPrice.toFixed(2))
         delete state.cart[itemId]
       }
     },
     updateBillingAndShipping: (state, action) => {
-      // action.payload = { bill, shipping }
+      state.orderId = action.payload.orderId
       state.bill = action.payload.bill
       state.shipping = action.payload.shipping
-      state.totalPrice = Number((state.totalPrice + action.payload.shipping.totalFee).toFixed(2))
+      state.totalPrice = state.totalPrice + action.payload.shipping.totalFee
+      state.totalPrice = Number(state.totalPrice.toFixed(2))
     },
   },
 })
+
+export const resetCheckout = () => async (dispatch, getState) => {
+  dispatch(CheckoutSlice.actions.resetCheckout())
+}
 
 export const addItem = (item) => async (dispatch, getState) => {
   dispatch(CheckoutSlice.actions.addItem(item))

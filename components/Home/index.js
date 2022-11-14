@@ -12,13 +12,13 @@ import BlogPost from './BlogPost'
 import Footer from '../Utils/Footer'
 import HeaderBanner from './HeaderBanner'
 
-const Home = ({ home }) => {
+const Home = ({ trendingProducts, blogs }) => {
   return (
     <div className="container">
       <NavBar />
       <HeaderBanner />
-      <FeaturedProduct />
-      <BlogPost />
+      <FeaturedProduct trendingProducts={trendingProducts} />
+      <BlogPost blogs={blogs} />
       <Footer />
       <style jsx>{styles}</style>
     </div>

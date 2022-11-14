@@ -16,6 +16,17 @@ const ProductSingle = ({ isModel, productSingleData }) => {
   const [productQuantity, setProductQuantity] = useState(1)
   const dispatch = useDispatch()
 
+  const handleAddToCart = () => {
+    const productCart = {
+      id: productSingleData._id,
+      name: productSingleData.name,
+      images: productSingleData.images,
+      price: productSingleData.price,
+      quantity: 1,
+    }
+    dispatch(addItem({ ...productCart, quantity: productQuantity }))
+  }
+
   useEffect(() => {
     const handleWindowChange = () => {
       if (isModel) {
@@ -97,13 +108,8 @@ const ProductSingle = ({ isModel, productSingleData }) => {
                     +
                   </button>
                 </div>
-                <div
-                  className="btn-group"
-                  onClick={() => {
-                    dispatch(addItem({ ...productSingleData, quantity: productQuantity }))
-                  }}
-                >
-                  <a href="#" className="btn add-to-cart">
+                <div className="btn-group">
+                  <a href="#" className="btn add-to-cart" onClick={handleAddToCart}>
                     ADD TO CART
                     <div className="add-to-cart-icon">
                       <Image src="/images/Product/cart-plus-solid.svg" alt="add cart icon" width={20} height={20} />

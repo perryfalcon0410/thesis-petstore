@@ -27,43 +27,43 @@ const Footer = () => {
       ],
     },
     {
-      title: 'Our service',
+      title: 'Services',
       items: [
         {
-          name: 'About us',
+          name: '5 Star Standard Pet Spa',
           path: '#',
         },
         {
-          name: 'Contact us',
+          name: 'Pet Bathing Service',
           path: '#',
         },
         {
-          name: 'Location & Working hours',
+          name: 'Trimming, Styling Service',
           path: '#',
         },
         {
-          name: 'Our guarantee',
+          name: 'Supply Products, Accessories',
           path: '#',
         },
       ],
     },
     {
-      title: 'Let us help you',
+      title: 'Pages',
       items: [
         {
-          name: 'About us',
+          name: 'Homepage',
           path: '#',
         },
         {
-          name: 'Contact us',
+          name: 'Products',
           path: '#',
         },
         {
-          name: 'Location & Working hours',
+          name: 'Blogs',
           path: '#',
         },
         {
-          name: 'Our guarantee',
+          name: 'Checkout',
           path: '#',
         },
       ],
@@ -106,7 +106,7 @@ const Footer = () => {
           {FOOTER_INFO.map((ele, index) => (
             <div className="col" key={index}>
               <div className="col-content">
-                <h2>{ele.title}</h2>
+                <h1>{ele.title}</h1>
                 {ele.items.map((item, idx) => (
                   <Link href={item.path} key={idx}>
                     <a>{item.name}</a>

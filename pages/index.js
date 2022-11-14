@@ -1,8 +1,25 @@
-import React, { } from 'react'
 import Home from '../components/Home'
+import axios from 'axios'
 
-const HomePage = (props) => {
-  return <Home />
+const HomePage = ({ trendingProducts, blogs }) => {
+  return <Home trendingProducts={trendingProducts} blogs={blogs} />
+}
+
+export async function getStaticProps() {
+  try {
+    const trendingProducts = await axios.get(`${process.env.HOST_API}/home`).then((res) => res.data.trendingProducts)
+    const blogs = await axios.get(`${process.env.HOST_API}/blog`).then((res) => res.data)
+
+    return {
+      props: {
+        trendingProducts,
+        blogs,
+      },
+      revalidate: 10,
+    }
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export default HomePage

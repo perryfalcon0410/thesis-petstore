@@ -9,9 +9,7 @@ import { useSelector } from 'react-redux'
 import Footer from 'components/Utils/Footer'
 
 const OrderManagement = ({ orderType, orderList, orderDetail }) => {
-  const userSlice = useSelector((state) => {
-    return state.user
-  })
+  const userSlice = useSelector((state) => state.user)
 
   return (
     <div className="wrapper">

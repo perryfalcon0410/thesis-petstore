@@ -51,7 +51,7 @@ export default css`
       }
     }
     .information-container {
-      margin-left: 150px;
+      margin-left: 120px;
       width: 100%;
       padding-top: 40px;
       display: flex;
@@ -61,10 +61,6 @@ export default css`
         .col-content {
           display: flex;
           flex-direction: column;
-
-          h1 {
-            margin-bottom: 28px;
-          }
 
           a {
             text-decoration: none;

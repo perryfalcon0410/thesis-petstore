@@ -1,34 +1,36 @@
 import styles from './styles'
 import Image from 'next/image'
+import Link from 'next/link'
 
-const Products = (products) => {
+const FeaturedCard = ({ trendingProducts }) => {
+  const firstCapitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
   return (
     <div className="elementor-column">
       <div className="elementor-column-wrapper">
         <div className="woocommerce">
           <ul className="products">
-            {Array(8)
-              .fill()
-              .map((_el, idx) => (
-                <li className="product-wrapper" key={idx}>
-                  <div className="product">
-                    <div className="product-img">
-                      <img src="/products/big-product-1.jpg" alt="Product 1" />
-                    </div>
-                    <div className="product-detail">
-                      <span className="product-category">Product treatment</span>
-                      <a href="" className="product-link">
-                        <h2>
-                          {'Alkin Mitecyn 50ml - Spray for treating dermatitis, fungus, scabies for dogs and cats'}
-                        </h2>
-                      </a>
-                      <span className="price">
-                        14.00 <span>$</span>
-                      </span>
-                    </div>
+            {trendingProducts.slice(0, 6).map((product) => (
+              <li className="product-wrapper" key={product.id}>
+                <div className="product">
+                  <div className="product-img">
+                    <img src={product.images[0].url} alt="product image" />
                   </div>
-                </li>
-              ))}
+                  <div className="product-detail">
+                    <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>
+                    <Link href={`/products/${product._id}`} passHref>
+                      <a className="product-link">
+                        <h2>{product.name}</h2>
+                      </a>
+                    </Link>
+
+                    <span className="price">{product.price}$</span>
+                  </div>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -37,4 +39,4 @@ const Products = (products) => {
   )
 }
 
-export default Products
+export default FeaturedCard

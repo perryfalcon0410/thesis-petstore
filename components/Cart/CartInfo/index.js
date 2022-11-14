@@ -1,4 +1,5 @@
 import styles from './styles'
+import Link from 'next/link'
 import NavBar from 'components/NavBar'
 import ShoppingCartSection from './ShoppingCartSection'
 import Footer from 'components/Utils/Footer'
@@ -26,7 +27,9 @@ const Cart = ({ cartSlice }) => {
         </div>
       </div>
       {cartList.length === 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: 20 }}>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', rowGap: 20, marginBottom: '50px' }}
+        >
           <p style={{ fontSize: 22, color: '#777', textAlign: 'center', lineHeight: 1.5 }}>
             There are no products in the cart
           </p>

@@ -57,7 +57,7 @@ const CardProduct = ({ productSingleData }) => {
                       </Link>
                     </p>
                     <p className="product-title">
-                      <Link href={`/products/${product.id}`}>
+                      <Link href={`/products/${product._id}`}>
                         <a>{product.name}</a>
                       </Link>
                     </p>

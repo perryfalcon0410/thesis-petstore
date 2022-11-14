@@ -109,6 +109,7 @@ export default css`
     }
 
     .order-container {
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
       width: 100%;

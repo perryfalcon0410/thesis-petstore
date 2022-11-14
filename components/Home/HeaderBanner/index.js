@@ -47,14 +47,11 @@ const HeaderBanner = () => {
       <Slider {...settings}>
         {banners.map((banner) => {
           return (
-            <div>
+            <div key={banner.id}>
               <div
                 style={{ backgroundImage: `url(${banner.src})`, backgroundSize: 'cover' }}
                 className="background"
-                key={banner.id}
-              >
-                <div style={{ position: 'absolute', top: '50%', right: '10%', backgroundColor: 'red' }}>abc</div>
-              </div>
+              ></div>
             </div>
           )
         })}

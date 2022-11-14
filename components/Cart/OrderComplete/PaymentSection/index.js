@@ -1,21 +1,43 @@
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 
-const PaymentSection = ({ totalCost }) => {
+const PaymentSection = ({ totalCost, orderId }) => {
+  const userSlice = useSelector((state) => state.user)
+
   const initialOptions = {
     'client-id': 'Af7FSeQMWm_VZujM5kJj6pfZoUI1yDrWrdHph_6CLwDphhUeOLzIGfZA5EfdksRrDZm7BC15Q-sWYBhL',
     currency: 'USD',
     'disable-funding': 'card',
   }
 
-  const handleSubmitPayment = (details) => {
-    console.log({
-      externalId: details.id,
-      payerFistName: details.payer.name.given_name,
-      payerLastName: details.payer.name.surname,
-      currencyCode: details.purchase_units[0].amount.currency_code,
-      totalAmount: details.purchase_units[0].amount.value,
-      type: 'paypal',
-    })
+  const handleSubmitPayment = async (details) => {
+    try {
+      const paymentUrl = 'http://localhost:3333/payment'
+      const paymentInfo = {
+        externalId: details.id,
+        payerFistName: details.payer.name.given_name,
+        payerLastName: details.payer.name.surname,
+        currencyCode: details.purchase_units[0].amount.currency_code,
+        totalAmount: details.purchase_units[0].amount.value,
+        type: 'paypal',
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userSlice.token}`,
+        },
+      }
+      const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
+      if (createPayment) {
+        const orderUrl = `http://localhost:3333/order/${orderId}`
+        const orderUpdate = {
+          payment: createPayment.paymentId,
+        }
+        const updateOrder = await axios.patch(orderUrl, orderUpdate, config).then((res) => res.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
