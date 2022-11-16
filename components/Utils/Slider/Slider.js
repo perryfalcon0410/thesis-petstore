@@ -9,17 +9,18 @@ const Slider = ({ DynamicWidth, sliderData }) => {
     smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
   })
 
-  const moveToSlide = (index) => {
-    setTranslation({
-      bigImage: {
-        transform: `translate3d(${index * -DynamicWidth}px, 0px, 0px)`,
-      },
-      smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
-    })
-  }
-
   useEffect(() => {
     const sliders = document.querySelectorAll('.slides')
+
+    const moveToSlide = (index) => {
+      setTranslation({
+        bigImage: {
+          transform: `translate3d(${index * -DynamicWidth}px, 0px, 0px)`,
+        },
+        smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
+      })
+    }
+
     Array.from(sliders).map((slider, index) => {
       if (index % 2 != 0) {
         const sliderSmallImage = Array.from(slider.children)

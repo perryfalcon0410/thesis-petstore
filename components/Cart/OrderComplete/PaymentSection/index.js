@@ -2,7 +2,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 
-const PaymentSection = ({ totalCost, orderId }) => {
+const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
   const userSlice = useSelector((state) => state.user)
 
   const initialOptions = {
@@ -33,7 +33,8 @@ const PaymentSection = ({ totalCost, orderId }) => {
         const orderUpdate = {
           payment: createPayment.paymentId,
         }
-        const updateOrder = await axios.patch(orderUrl, orderUpdate, config).then((res) => res.data)
+        await axios.patch(orderUrl, orderUpdate, config).then((res) => res.data)
+        setIsPaid(true)
       }
     } catch (e) {
       console.log(e)

@@ -6,7 +6,7 @@ import styles from './styles'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetCheckout, updateBillingAndShipping } from 'store/reducers/checkoutSlice'
+import { resetCheckout } from 'store/reducers/checkoutSlice'
 
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const router = useRouter()

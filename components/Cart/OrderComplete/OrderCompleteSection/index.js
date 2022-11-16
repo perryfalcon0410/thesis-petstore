@@ -1,15 +1,39 @@
+import { useState } from 'react'
 import Link from 'next/link'
-import React from 'react'
+import Image from 'next/image'
 import styles from './styles'
 import PaymentSection from '../PaymentSection'
 
 const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, orderId }) => {
+  const [isPaid, setIsPaid] = useState(false)
   const orderingDate = new Date()
   const shippingDate = new Date(shipInfo.expectedDeliveryTime)
   const paymentMethodObj = {
     paypal: 'Paypal',
     cod: 'Cash on Delivery',
   }
+  const renderPayment = (isPaid) => {
+    if (billInfo.paymentMethod === 'paypal') {
+      if (!isPaid) {
+        return (
+          <div className="payment">
+            <p className="payment-title">Please click this button to pay</p>
+            <PaymentSection totalCost={totalCost} orderId={orderId} setIsPaid={setIsPaid} />
+            <style jsx>{styles}</style>
+          </div>
+        )
+      } else {
+        return (
+          <div className="payment">
+            <p className="payment-title">Thank you for complete your payment!</p>
+            <style jsx>{styles}</style>
+          </div>
+        )
+      }
+    }
+    return null
+  }
+
   return (
     <div className="wrapper">
       <div className="row">
@@ -38,9 +62,9 @@ const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, 
           </div>
           <div className="row-cell">
             <p className="shipping">Shipping by</p>
-            <p className="method">
-              <img alt="GHN" width="100px" height="60px" src="/images/ghn.png" />
-            </p>
+            <div className="method">
+              <Image alt="GHN-icon" width="100px" height="60px" src="/images/ghn.png" />
+            </div>
           </div>
           <div className="row-cell">
             <p className="shipping-cost">Shipping cost</p>
@@ -77,12 +101,7 @@ const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, 
                 Payment method: <span className="payment-method">{paymentMethodObj[billInfo.paymentMethod]}</span>
               </li>
             </ul>
-            {billInfo.paymentMethod === 'paypal' ? (
-              <div className="payment">
-                <p className="payment-title">Please click this button to pay</p>
-                <PaymentSection totalCost={totalCost} orderId={orderId} />
-              </div>
-            ) : null}
+            {renderPayment(isPaid)}
           </div>
         </div>
       </div>

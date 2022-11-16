@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styles from './styles'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -81,7 +81,7 @@ const ShoppingCartSection = ({ cartList, totalCost }) => {
                       <div>
                         <span
                           className="material-icons sub"
-                          onClick={(e) => {
+                          onClick={() => {
                             if (cart.quantity == 0) return
                             dispatch(decQuantityById(cart.id))
                           }}
@@ -103,7 +103,7 @@ const ShoppingCartSection = ({ cartList, totalCost }) => {
                             )
                           }
                         />
-                        <span className="material-icons add" onClick={(e) => dispatch(incQuantityById(cart.id))}>
+                        <span className="material-icons add" onClick={() => dispatch(incQuantityById(cart.id))}>
                           add
                         </span>
                       </div>
@@ -144,7 +144,7 @@ const ShoppingCartSection = ({ cartList, totalCost }) => {
           <div
             className="continue"
             onClick={() => {
-              if (userSlice.id !== null) {
+              if (userSlice.id) {
                 setOpenModal(false)
                 router.push('/checkout/customer-info')
               } else {

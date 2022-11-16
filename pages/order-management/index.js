@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { orderListMock } from 'components/mocks/order'
 import OrderManagement from 'components/OrderManagement'
 import { ORDER_TYPE } from 'utils/constant'
 import { useSelector } from 'react-redux'
@@ -38,13 +37,12 @@ const OrderManagementPage = () => {
         }
       }
       setOrderList(orderList)
-      console.log(orderList)
     }
     fetchData()
     return () => {
       setOrderList('')
     }
-  }, [])
+  }, [userSlice.token])
 
   if (!orderList) {
     return <h1>Loading ...</h1>

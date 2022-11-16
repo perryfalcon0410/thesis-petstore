@@ -40,7 +40,7 @@ export default function OrderDetailPage({ orderId }) {
     return () => {
       setOrderDetail('')
     }
-  }, [])
+  }, [orderId, userSlice.token])
 
   if (!orderDetail) {
     return <h1>Loading ...</h1>

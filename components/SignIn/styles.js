@@ -23,6 +23,7 @@ export default css`
     margin: auto;
     position: relative;
     top: 50%;
+    left: 20%;
     transform: translateY(-50%);
     border-radius: 4px;
 
@@ -32,8 +33,6 @@ export default css`
     }
 
     .form-container {
-      margin-top: 40px;
-
       .input {
         margin-top: 20px;
         position: relative;
@@ -57,11 +56,11 @@ export default css`
           padding: 8px 4px 8px 44px;
           background: transparent;
           border: 1px solid #fff;
-          color: white;
+          color: #000000;
           font-weight: 100;
           font-size: 16px;
           line-height: 24px;
-          border-radius: 2px;
+          border-radius: 5px;
 
           &::placeholder {
             color: #666;
@@ -75,11 +74,11 @@ export default css`
       }
 
       .reset-password {
-        margin-top: 8px;
+        margin-top: 10px;
 
         a {
           text-decoration: none;
-          color: white;
+          color: #000000;
 
           &:hover {
             text-decoration: underline;
@@ -94,19 +93,19 @@ export default css`
       .button {
         width: 100%;
         padding: 11px 15px;
-        color: #2148c0;
+        color: #c58725;
         font-size: 16px;
         lineheight: 20px;
         font-weight: bold;
         border: 1px solid white;
         transition: all 0.3s;
-        border-radius: 2px;
+        border-radius: 5px;
 
         cursor: pointer;
 
         &:hover {
-          background: transparent;
-          color: #fff;
+          background: #c58725;
+          color: #ffffff;
         }
 
         &:active {
@@ -116,11 +115,12 @@ export default css`
 
       .sign-up {
         margin-top: 16px;
-        color: white;
+        color: #000000;
 
         a {
           text-decoration: none;
-          color: white;
+          font-weight: 700;
+          color: #000000;
 
           &:hover {
             text-decoration: underline;

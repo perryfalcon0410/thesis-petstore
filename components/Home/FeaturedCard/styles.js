@@ -46,29 +46,30 @@ export default css`
             }
 
             .product-img {
-              position: relative;
-              img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                margin-bottom: 0.6rem;
-              }
-              span {
-                position: absolute;
-                bottom: 1.5rem;
-                left: 1rem;
-                right: 1rem;
-                padding: 1rem 0;
-                background-color: #ffffffef;
-                text-transform: uppercase;
-                font-weight: 700;
-                color: #1b73eb;
-                transition: all 0.2s ease-in-out;
-                &:hover {
-                  cursor: pointer;
-                  color: #0a0a0a;
-                }
-              }
+              // position: relative;
+              // width: 500px;
+              // height: 100%;
+
+              // img {
+              //   object-fit: cover;
+              //   margin-bottom: 0.6rem;
+              // }
+              // span {
+              //   position: absolute;
+              //   bottom: 1.5rem;
+              //   left: 1rem;
+              //   right: 1rem;
+              //   padding: 1rem 0;
+              //   background-color: #ffffffef;
+              //   text-transform: uppercase;
+              //   font-weight: 700;
+              //   color: #1b73eb;
+              //   transition: all 0.2s ease-in-out;
+              //   &:hover {
+              //     cursor: pointer;
+              //     color: #0a0a0a;
+              //   }
+              // }
             }
             .product-detail {
               width: 100%;

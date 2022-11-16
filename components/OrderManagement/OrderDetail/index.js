@@ -1,7 +1,6 @@
 import styles from './styles'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
 
 const OrderDetail = ({ orderDetail }) => {
@@ -13,7 +12,10 @@ const OrderDetail = ({ orderDetail }) => {
     storing: 'Storing',
     return: 'Return',
   }
-
+  const paymentMethod = {
+    paypal: 'Paypal',
+    cod: 'Cash on Delivery',
+  }
   return (
     <div className="wrapper">
       <div className="row">
@@ -46,7 +48,7 @@ const OrderDetail = ({ orderDetail }) => {
                       {product.name}
                     </td>
                     <td className="product-price">
-                      <span>{formatVNprice(product.price)}$</span>
+                      <span>{product.price}$</span>
                     </td>
                     <td className="product-quantity">
                       <div>
@@ -54,7 +56,7 @@ const OrderDetail = ({ orderDetail }) => {
                       </div>
                     </td>
                     <td className="product-subtotal">
-                      <span>{formatVNprice(product.price * product.quantity)}$</span>
+                      <span>{(product.price * product.quantity).toFixed(2)}$</span>
                     </td>
                   </tr>
                 )
@@ -82,6 +84,12 @@ const OrderDetail = ({ orderDetail }) => {
               <p className="method">Cost: {orderDetail.shippingFee === 0 ? 'Free' : `${orderDetail.shippingFee}$`}</p>
               <p className="destination">Status: {shippingTitle[orderDetail.shipping.status]}</p>
               <p className="destination">{`To: ${orderDetail.bill.address}, ${orderDetail.bill.ward} ward, ${orderDetail.bill.district} district, ${orderDetail.bill.region} province/city`}</p>
+            </div>
+          </div>
+          <div className="inner-row">
+            <p className="shipping">Payment method</p>
+            <div>
+              <p className="method">{paymentMethod[orderDetail.bill.paymentMethod]}</p>
             </div>
           </div>
           <div className="inner-row">

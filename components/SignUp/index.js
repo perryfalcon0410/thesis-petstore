@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { setUser } from 'store/reducers/userSlice'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -21,16 +22,16 @@ const SignUp = () => {
     password: Yup.string()
       .required('Password is required')
       .min(8, 'At least 8 characters')
-      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value, _context) => {
+      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value) => {
         return /[A-Z]/.test(value)
       })
-      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value, _context) => {
+      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value) => {
         return /[a-z]/.test(value)
       })
-      .test('hasNumber', 'Password need at least 1 number', (value, _context) => {
+      .test('hasNumber', 'Password need at least 1 number', (value) => {
         return /[0-9]/.test(value)
       })
-      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value, _context) => {
+      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value) => {
         return /[!@#%&]/.test(value)
       }),
     passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
@@ -39,7 +40,7 @@ const SignUp = () => {
   return (
     <div className="wrapper">
       <div className="round-layer">
-        <Image src="/images/Auth/BG.png" layout="fill" alt="background" />
+        <Image src="/images/sign-in-background.jpg" layout="fill" objectFit="cover" alt="background" />
       </div>
       <Formik
         validationSchema={USER_SCHEMA}
@@ -80,15 +81,15 @@ const SignUp = () => {
           resetForm()
         }}
       >
-        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
-            {/* <div className="icon-lg">
-              <Image src="/images/Auth/Logo.svg" width={128} height={128} />
-            </div> */}
+            <div className="icon-lg">
+              <Image src="/images/auth-icon.png" width={128} height={128} alt="Icon" />
+            </div>
             <div className="form-container">
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/user.svg" width={24} height={24} />
+                  <MdPerson fontSize={24} />
                 </div>
                 <input
                   type="text"
@@ -106,7 +107,7 @@ const SignUp = () => {
               )}
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/user.svg" width={24} height={24} />
+                  <MdPerson fontSize={24} />
                 </div>
                 <input
                   type="text"
@@ -125,7 +126,7 @@ const SignUp = () => {
 
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/email.svg" width={24} height={24} />
+                  <MdEmail fontSize={24} />
                 </div>
                 <input
                   type="text"
@@ -143,7 +144,7 @@ const SignUp = () => {
               )}
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/lock.svg" width={24} height={24} />
+                  <MdLock fontSize={24} />
                 </div>
                 <input
                   type="password"
@@ -162,7 +163,7 @@ const SignUp = () => {
 
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/lock.svg" width={24} height={24} />
+                  <MdLock fontSize={24} />
                 </div>
                 <input
                   type="password"

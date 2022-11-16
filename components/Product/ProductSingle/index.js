@@ -40,7 +40,7 @@ const ProductSingle = ({ isModel, productSingleData }) => {
     handleWindowChange()
     window.addEventListener('resize', handleWindowChange)
     return window.removeEventListener('resize', handleWindowChange)
-  }, [])
+  }, [isModel])
 
   return (
     <>

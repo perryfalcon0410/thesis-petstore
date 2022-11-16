@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
 import { LIMIT_PRODUCT_ORDER_LIST, ORDER_STATUS } from 'utils/constant'
-import { formatVNprice } from 'utils/function'
 import styles from './styles'
 import { DeliveryIcon } from 'components/Utils/Icon'
 

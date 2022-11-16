@@ -7,6 +7,7 @@ import styles from './styles'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
 
 export const SignInForm = ({ setSignUp, callback }) => {
   const dispatch = useDispatch()
@@ -16,16 +17,16 @@ export const SignInForm = ({ setSignUp, callback }) => {
     password: Yup.string()
       .required('Password is required')
       .min(8, 'At least 8 characters')
-      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value, _context) => {
+      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value) => {
         return /[A-Z]/.test(value)
       })
-      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value, _context) => {
+      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value) => {
         return /[a-z]/.test(value)
       })
-      .test('hasNumber', 'Password need at least 1 number', (value, _context) => {
+      .test('hasNumber', 'Password need at least 1 number', (value) => {
         return /[0-9]/.test(value)
       })
-      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value, _context) => {
+      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value) => {
         return /[!@#%&]/.test(value)
       }),
   })
@@ -66,15 +67,15 @@ export const SignInForm = ({ setSignUp, callback }) => {
         resetForm()
       }}
     >
-      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
           <div className="icon-lg">
-            <Image src="/images/Cart/Logo.svg" width={128} height={128} />
+            <Image src="/images/auth-icon.png" width={128} height={128} alt="Image" />
           </div>
           <div className="form-container">
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/user.svg" width={24} height={24} />
+                <MdPerson fontSize={24} />
               </div>
               <input
                 type="text"
@@ -82,7 +83,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
-                placeholder="EMAIL"
+                placeholder="Enter email"
               />
             </div>
             {touched['email'] && errors['email'] && (
@@ -92,7 +93,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
             )}
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/lock.svg" width={24} height={24} />
+                <MdLock fontSize={24} />
               </div>
               <input
                 type="password"
@@ -100,7 +101,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
-                placeholder="PASSWORD"
+                placeholder="Enter password"
                 autoComplete="current-password"
               />
             </div>
@@ -126,7 +127,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
             </button>
 
             <p className="sign-up">
-              You don't have account? <span onClick={setSignUp}>Sign up here!</span>
+              {"You don't have account?"} <span onClick={setSignUp}>Sign up here!</span>
             </p>
           </div>
           <style jsx>{styles}</style>
@@ -146,16 +147,16 @@ export const SignUpForm = ({ setSignIn, callback }) => {
     password: Yup.string()
       .required('Password is required')
       .min(8, 'At least 8 characters')
-      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value, _context) => {
+      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value) => {
         return /[A-Z]/.test(value)
       })
-      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value, _context) => {
+      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value) => {
         return /[a-z]/.test(value)
       })
-      .test('hasNumber', 'Password need at least 1 number', (value, _context) => {
+      .test('hasNumber', 'Password need at least 1 number', (value) => {
         return /[0-9]/.test(value)
       })
-      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value, _context) => {
+      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value) => {
         return /[!@#%&]/.test(value)
       }),
     passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
@@ -202,20 +203,20 @@ export const SignUpForm = ({ setSignIn, callback }) => {
         resetForm()
       }}
     >
-      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
           <div className="form-container">
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/user.svg" width={24} height={24} />
+                <MdPerson fontSize={24} />
               </div>
               <input
                 type="text"
                 name="firstName"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.email}
-                placeholder="FIRST NAME"
+                value={values.firstName}
+                placeholder="Enter first name"
               />
             </div>
             {touched['firstName'] && errors['firstName'] && (
@@ -225,15 +226,15 @@ export const SignUpForm = ({ setSignIn, callback }) => {
             )}
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/user.svg" width={24} height={24} />
+                <MdPerson fontSize={24} />
               </div>
               <input
                 type="text"
                 name="lastName"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.email}
-                placeholder="LAST NAME"
+                value={values.lastName}
+                placeholder="Enter last name"
               />
             </div>
             {touched['lastName'] && errors['lastName'] && (
@@ -244,7 +245,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
 
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/email.svg" width={24} height={24} />
+                <MdEmail fontSize={24} />
               </div>
               <input
                 type="text"
@@ -252,7 +253,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
-                placeholder="EMAIL"
+                placeholder="Enter email"
               />
             </div>
             {touched['email'] && errors['email'] && (
@@ -262,7 +263,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
             )}
             <div className="input">
               <div className="icon-sm">
-                <Image src="/images/Cart/lock.svg" width={24} height={24} />
+                <MdLock fontSize={24} />
               </div>
               <input
                 type="password"
@@ -270,7 +271,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.password}
-                placeholder="PASSWORD"
+                placeholder="Enter password"
               />
             </div>
             {touched['password'] && errors['password'] && (

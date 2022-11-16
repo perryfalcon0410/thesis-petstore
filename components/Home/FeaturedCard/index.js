@@ -13,10 +13,10 @@ const FeaturedCard = ({ trendingProducts }) => {
         <div className="woocommerce">
           <ul className="products">
             {trendingProducts.slice(0, 6).map((product) => (
-              <li className="product-wrapper" key={product.id}>
+              <li className="product-wrapper" key={product._id}>
                 <div className="product">
                   <div className="product-img">
-                    <img src={product.images[0].url} alt="product image" />
+                    <Image src={product.images[0].url} alt="product image" width={900} height={900} objectFit="cover" />
                   </div>
                   <div className="product-detail">
                     <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import styles from './styles'
 import { useRouter } from 'next/router'
 
@@ -58,7 +59,7 @@ const Products = ({ productListData, query, setQuery }) => {
             {data.map((product, idx) => (
               <li className="product" key={idx}>
                 <div className="product-img">
-                  <img src={product.images[0].url} alt={`Images of ${product.name}`} />
+                  <Image src={product.images[0].url} alt={`Images of ${product.name}`} width={900} height={900} />
                 </div>
                 <div className="product-detail">
                   <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>

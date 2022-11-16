@@ -303,14 +303,14 @@ export default css`
       }
     }
 
-    .absolute-form{
+    .absolute-form {
       width: 100%;
       height: 100%;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 1000;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       transition: all 0.3s;
 
       .form-wrapper {
@@ -330,7 +330,7 @@ export default css`
         }
 
         .form-container {
-          margin-top: 40px;
+          margin-top: 10px;
 
           .input {
             margin-top: 20px;
@@ -387,12 +387,12 @@ export default css`
         }
 
         .form-event {
-          margin-top: 40px;
+          margin-top: 30px;
 
           .button {
             width: 100%;
             padding: 11px 15px;
-            color: #2148c0;
+            color: #c58725;
             font-size: 16px;
             lineheight: 20px;
             font-weight: bold;
@@ -403,9 +403,9 @@ export default css`
             cursor: pointer;
 
             &:hover {
-              background: transparent;
+              background: #c58725;
               border: 1px solid #333;
-              color: #333;
+              color: #ffffff;
             }
 
             &:active {
@@ -413,7 +413,8 @@ export default css`
             }
           }
 
-          .sign-up, .sign-in {
+          .sign-up,
+          .sign-in {
             margin-top: 16px;
             color: #333;
 
