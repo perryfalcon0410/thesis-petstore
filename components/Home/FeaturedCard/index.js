@@ -16,7 +16,13 @@ const FeaturedCard = ({ trendingProducts }) => {
               <li className="product-wrapper" key={product._id}>
                 <div className="product">
                   <div className="product-img">
-                    <Image src={product.images[0].url} alt="product image" width={900} height={900} objectFit="cover" />
+                    <Image
+                      src={product.images.length !== 0 ? product.images[0].url : '/images/no-image.png'}
+                      alt={product.images.length !== 0 ? product.images[0].image_name : 'product image'}
+                      width={900}
+                      height={900}
+                      objectFit="cover"
+                    />
                   </div>
                   <div className="product-detail">
                     <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>

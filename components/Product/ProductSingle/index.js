@@ -109,12 +109,12 @@ const ProductSingle = ({ isModel, productSingleData }) => {
                   </button>
                 </div>
                 <div className="btn-group">
-                  <a href="#" className="btn add-to-cart" onClick={handleAddToCart}>
+                  <div className="btn add-to-cart" onClick={handleAddToCart}>
                     ADD TO CART
                     <div className="add-to-cart-icon">
                       <Image src="/images/Product/cart-plus-solid.svg" alt="add cart icon" width={20} height={20} />
                     </div>
-                  </a>
+                  </div>
                 </div>
               </div>
               {isModel ? null : <ProductInformation productSingleData={productSingleData} />}

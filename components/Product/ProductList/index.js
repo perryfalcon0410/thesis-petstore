@@ -1,35 +1,22 @@
-import { useState } from 'react'
 import ProductCategory from './ProductCategory'
 import FilterPrice from './ProductCategory/FilterPrice'
 import Products from './Products'
 import styles from './styles'
 
-const ProductList = ({ productListData, categoryList }) => {
-  const [query, setQuery] = useState({
-    page: 1,
-    limit: 9,
-    orderBy: '',
-    categories: '',
-  })
-
+const ProductList = ({ productListData }) => {
   return (
     <div className="elementor-container">
       <div className="elementor-row">
         <div className="elementor-row-left">
           <div className="elementor-column-wrap">
             <div className="elementor-widget-wrap">
-              <FilterPrice minPrice={productListData.minPrice} maxPrice={productListData.maxPrice} />
-              <ProductCategory
-                categoryList={categoryList}
-                query={query}
-                setQuery={setQuery}
-                totalProduct={productListData.total}
-              />
+              <FilterPrice productListData={productListData} />
+              <ProductCategory productListData={productListData} />
             </div>
           </div>
         </div>
         <div className="elementor-row-right">
-          <Products productListData={productListData} query={query} setQuery={setQuery} />
+          <Products productListData={productListData} />
         </div>
       </div>
       <style jsx>{styles}</style>

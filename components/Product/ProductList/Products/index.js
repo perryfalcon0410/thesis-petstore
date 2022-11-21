@@ -3,14 +3,14 @@ import Image from 'next/image'
 import styles from './styles'
 import { useRouter } from 'next/router'
 
-const Products = ({ productListData, query, setQuery }) => {
+const firstCapitalize = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+const Products = ({ productListData }) => {
+  const { data, total, page, last_page, queryParams: query } = productListData
+
   const router = useRouter()
-
-  const firstCapitalize = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
-  const { data, total, page, last_page } = productListData
 
   const handleChangePage = (page) => {
     router.replace({
@@ -19,10 +19,6 @@ const Products = ({ productListData, query, setQuery }) => {
         ...query,
         page,
       },
-    })
-    setQuery({
-      ...query,
-      page,
     })
   }
 
@@ -35,16 +31,12 @@ const Products = ({ productListData, query, setQuery }) => {
         orderBy,
       },
     })
-    setQuery({
-      ...query,
-      orderBy,
-    })
   }
 
   return (
     <div className="elementor-column">
       <div className="elementor-column-wrapper">
-        <div className="woocommerce">
+        <div className="woocommerce" id="head-section">
           <p className="woocommerce-result-count">{`Show ${(page - 1) * 9 + 1} - ${
             page * 9 > total ? total : page * 9
           } of ${total} products`}</p>
@@ -59,7 +51,12 @@ const Products = ({ productListData, query, setQuery }) => {
             {data.map((product, idx) => (
               <li className="product" key={idx}>
                 <div className="product-img">
-                  <Image src={product.images[0].url} alt={`Images of ${product.name}`} width={900} height={900} />
+                  <Image
+                    src={product.images.length ? product.images[0].url : '/images/no-image.png'}
+                    alt={product.images.length !== 0 ? product.images[0].image_name : 'product image'}
+                    width={900}
+                    height={900}
+                  />
                 </div>
                 <div className="product-detail">
                   <span className="product-category">{firstCapitalize(product.categories[0].category_name)}</span>
@@ -76,19 +73,31 @@ const Products = ({ productListData, query, setQuery }) => {
           <nav className="woocommerce-pagination">
             <ul>
               {[...Array(last_page).keys()].map((ele, idx) => (
-                <li
-                  className="page-number"
-                  key={idx}
-                  onClick={() => {
-                    handleChangePage(ele + 1)
-                  }}
-                >
-                  <span>{ele + 1}</span>
+                <li className="page-number" key={idx}>
+                  <Link href={'#head-section'}>
+                    <a
+                      onClick={() => {
+                        handleChangePage(ele + 1)
+                      }}
+                    >
+                      {ele + 1}
+                    </a>
+                  </Link>
                 </li>
               ))}
-              <li className="page-number" key={last_page + 1}>
-                <span>→</span>
-              </li>
+              {page === last_page ? null : (
+                <li className="page-number" key={last_page + 1}>
+                  <Link href={'#head-section'}>
+                    <a
+                      onClick={() => {
+                        handleChangePage(page + 1)
+                      }}
+                    >
+                      {'>'}
+                    </a>
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>

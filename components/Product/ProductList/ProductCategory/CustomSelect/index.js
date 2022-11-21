@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from './styles'
 
-const CustomSelect = ({ categoryList, query, setQuery, totalProduct }) => {
+const CustomSelect = ({ categoryList, query, totalProduct, setChosenCategory }) => {
   const router = useRouter()
 
   const firstCapitalize = (string) => {
@@ -42,18 +42,20 @@ const CustomSelect = ({ categoryList, query, setQuery, totalProduct }) => {
         query: {
           ...query,
           categories: cate._id,
+          page: 1,
         },
       })
-      setQuery({ ...query, categories: cate })
+      setChosenCategory(cate)
     } else {
       router.replace({
         pathname: '/products',
         query: {
           ...query,
           categories: '',
+          page: 1,
         },
       })
-      setQuery({ ...query, categories: '' })
+      setChosenCategory('')
     }
   }
 

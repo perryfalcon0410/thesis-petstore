@@ -76,9 +76,9 @@ const OrderList = ({ orderList }) => {
                           <div className="image">
                             <Image
                               src={product.images.length ? product.images[0].url : '/images/no-image.png'}
+                              alt={product.images.length !== 0 ? product.images[0].image_name : 'product image'}
                               width={104}
                               height={104}
-                              alt="Product Image"
                             />
                           </div>
                           <div className="info">

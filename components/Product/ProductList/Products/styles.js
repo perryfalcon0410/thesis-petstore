@@ -125,6 +125,7 @@ export default css`
             /* padding: 15px; */
             float: left;
             overflow: hidden;
+            a,
             span {
               text-align: center;
               color: #1e73be;

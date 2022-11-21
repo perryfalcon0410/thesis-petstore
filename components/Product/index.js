@@ -6,7 +6,7 @@ import { PRODUCT_TYPE } from 'utils/constant'
 import NavBar from 'components/NavBar'
 import Footer from 'components/Utils/Footer'
 
-const Product = ({ productType, productData, categoryList = [] }) => {
+const Product = ({ productType, productData }) => {
   return (
     <div className="product-wrapper">
       <NavBar />
@@ -14,7 +14,7 @@ const Product = ({ productType, productData, categoryList = [] }) => {
       {productType === PRODUCT_TYPE.SINGLE ? (
         <ProductSingle isModel={false} productSingleData={productData} />
       ) : (
-        <ProductList productListData={productData} categoryList={categoryList} />
+        <ProductList productListData={productData} />
       )}
       <Footer />
       <style jsx>{styles}</style>

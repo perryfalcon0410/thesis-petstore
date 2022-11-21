@@ -39,7 +39,7 @@ const OrderDetail = ({ orderDetail }) => {
                     <td style={{ minWidth: '60px', maxWidth: '90px', width: '90px' }} className="product-thumbnail">
                       <Image
                         src={product.images.length !== 0 ? product.images[0].url : '/images/no-image.png'}
-                        alt={product.name}
+                        alt={product.images.length !== 0 ? product.images[0].image_name : 'product image'}
                         width={IMAGE_QUALITY.LOW}
                         height={IMAGE_QUALITY.LOW}
                       />

@@ -6,7 +6,13 @@ const CardPost = ({ blog }) => {
     <div className="cards">
       <div className="card">
         <div className="img-wrapper">
-          <Image src={blog.images[0].url} alt={blog.images[0].image_name} width={500} height={300} objectFit="cover" />
+          <Image
+            src={blog.images.length !== 0 ? blog.images[0].url : '/images/no-image.png'}
+            alt={blog.images.length !== 0 ? blog.images[0].image_name : 'blog image'}
+            width={500}
+            height={300}
+            objectFit="cover"
+          />
         </div>
         <div className="content">
           <h2 className="title">{blog.title}</h2>
