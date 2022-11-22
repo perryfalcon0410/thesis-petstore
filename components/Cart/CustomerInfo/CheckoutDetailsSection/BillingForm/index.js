@@ -7,12 +7,18 @@ import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetCheckout } from 'store/reducers/checkoutSlice'
+import { addMilliseconds } from 'date-fns'
 
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
+  const GHN_ShopId = '3410708'
+  const GHN_Token = '5e301d1a-5c48-11ed-8636-7617f3863de9'
   const router = useRouter()
   const dispatch = useDispatch()
   const userSlice = useSelector((state) => state.user)
   const [completeOrder, setCompleteOrder] = useState('')
+  const [listRegion, setListRegion] = useState([])
+  const [listDistrict, setListDistrict] = useState([])
+  const [listWard, setListWard] = useState([])
 
   useEffect(() => {
     if (completeOrder) localStorage.setItem('completeOrder', JSON.stringify(completeOrder))
@@ -21,92 +27,137 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
     }
   }, [completeOrder])
 
+  useEffect(() => {
+    const fetchRegion = async () => {
+      const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province'
+      const config = {
+        headers: {
+          Token: GHN_Token,
+        },
+      }
+      const regions = await axios.get(url, config).then((res) => res.data)
+      setListRegion(regions.data)
+    }
+    fetchRegion()
+    return () => {}
+  }, [])
+
+  const handleSelectRegion = async (regionId) => {
+    const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district'
+    const body = {
+      province_id: regionId,
+    }
+    const config = {
+      headers: {
+        Token: GHN_Token,
+      },
+    }
+    const districts = await axios.post(url, body, config).then((res) => res.data)
+    setListDistrict(districts.data)
+  }
+
+  const handleSelectDistrict = async (districtId) => {
+    const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward'
+    const body = {
+      district_id: districtId,
+    }
+    const config = {
+      headers: {
+        Token: GHN_Token,
+      },
+    }
+    const wards = await axios.post(url, body, config).then((res) => res.data)
+    setListWard(wards.data)
+  }
+
   const BILLING_SCHEMA = Yup.object({
     firstName: Yup.string().required('It is a required field.'),
     lastName: Yup.string().required('It is a required field.'),
     phone: Yup.string().required('It is a required field.'),
     email: Yup.string().required('It is a required field.'),
     company: Yup.string(),
-    region: Yup.string().required('It is a required field.'),
-    district: Yup.string().required('It is a required field'),
-    ward: Yup.string().required('It is a required field'),
+    regionId: Yup.number().required('It is a required field.'),
+    districtId: Yup.number().required('It is a required field'),
+    wardId: Yup.string().required('It is a required field'),
     address: Yup.string().required('It is a required field'),
     orderComment: Yup.string(),
     paymentMethod: Yup.string().required(),
   })
 
-  const createDeliveryOrder = async (
-    to_name,
-    to_phone,
-    to_address,
-    to_ward_name,
-    to_district_name,
-    to_province_name,
-    cartList,
-  ) => {
-    const postData = {
-      payment_type_id: 2,
-      note: '',
-      from_name: 'PetStore',
-      from_phone: '0909999999',
-      from_address: '',
-      from_ward_name: '',
-      from_district_name: 'Quận 10',
-      from_province_name: 'TP Hồ Chí Minh',
-      required_note: 'KHONGCHOXEMHANG',
-      return_name: 'Petstore',
-      return_phone: '0909999999',
-      return_address: '',
-      return_ward_name: '',
-      return_district_name: 'Quận 10',
-      return_province_name: 'TP Hồ Chí Minh',
-      client_order_code: '',
-      to_name: to_name,
-      to_phone: to_phone,
-      to_address: to_address,
-      to_ward_name: to_ward_name,
-      to_district_name: to_district_name,
-      to_province_name: to_province_name,
-      cod_amount: 200000,
-      content: '',
-      weight: 200,
-      length: null,
-      width: null,
-      height: null,
-      pick_station_id: 1444,
-      deliver_station_id: null,
-      insurance_value: 1000000,
-      service_id: 0,
-      service_type_id: 2,
-      coupon: null,
-      pick_shift: null,
-      pickup_time: 1665272576,
-      items: cartList.map((cart) => {
-        return {
-          name: cart.name,
-          code: '',
-          quantity: cart.quantity,
-          price: Math.round(cart.price * 24.867),
-          length: null,
-          width: null,
-          height: null,
-          category: {
-            level1: 'Đồ dùng cho thú cưng',
-          },
-        }
-      }),
+  const getDeliveryServicePack = async (from_district_id, to_district_id) => {
+    const url = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services'
+    const body = {
+      shop_id: Number(GHN_ShopId),
+      from_district: Number(from_district_id),
+      to_district: Number(to_district_id),
     }
-    const res = await axios
-      .post('https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', postData, {
-        headers: {
-          'Content-Type': 'application/json',
-          ShopId: '120553',
-          Token: '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
-        },
-      })
-      .then((res) => res.data)
-      .catch((error) => console.log(error))
-    return res.data
+    const config = {
+      headers: {
+        Token: GHN_Token,
+      },
+    }
+    const servicePacks = await axios.post(url, body, config).then((res) => res.data)
+    return servicePacks.data[0]
+  }
+
+  const calDeliveryFee = async (from_district_id, to_district_id, to_ward_code, servicePack) => {
+    const url = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee'
+    const body = {
+      from_district_id,
+      to_district_id,
+      to_ward_code,
+      service_id: servicePack.service_id,
+      service_type_id: servicePack.service_type_id,
+      height: 50,
+      length: 50,
+      weight: 500,
+      width: 50,
+      insurance_value: 0,
+      coupon: null,
+    }
+    const config = {
+      headers: {
+        Token: GHN_Token,
+        ShopId: GHN_ShopId,
+      },
+    }
+    const deliveryFee = await axios.post(url, body, config).then((res) => res.data)
+    return deliveryFee.data
+  }
+
+  const calShippingTime = async (from_district_id, from_ward_code, to_district_id, to_ward_code, servicePack) => {
+    const url = 'https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime'
+    const body = {
+      from_district_id,
+      from_ward_code,
+      to_district_id,
+      to_ward_code,
+      service_id: servicePack.service_id,
+    }
+    const config = {
+      headers: {
+        Token: GHN_Token,
+        ShopId: GHN_ShopId,
+      },
+    }
+    const shippingTime = await axios.post(url, body, config).then((res) => res.data)
+    return shippingTime.data
+  }
+
+  const getShipInfo = async (from_district_id, from_ward_code, to_district_id, to_ward_code) => {
+    const servicePack = await getDeliveryServicePack(from_district_id, to_district_id)
+    const { leadtime } = await calShippingTime(
+      from_district_id,
+      from_ward_code,
+      to_district_id,
+      to_ward_code,
+      servicePack,
+    )
+    const { total } = await calDeliveryFee(from_district_id, to_district_id, to_ward_code, servicePack)
+    return {
+      shippingFee: Number((total / 24815).toFixed(2)),
+      shippingTime: addMilliseconds(new Date().getTime(), new Date(leadtime).getTime()),
+    }
   }
 
   return (
@@ -116,30 +167,23 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
         initialValues={customerBillingDetail}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            // ** Create delivery order through GHN API
-            const deliveryOrder = await createDeliveryOrder(
-              `${values.firstName} ${values.lastName}`,
-              values.phone,
-              values.address,
-              values.ward,
-              values.district,
-              values.region,
-              cartList,
-            )
-            const shippingData = {
-              orderCode: deliveryOrder.order_code,
-              totalFee: Number((deliveryOrder.total_fee / 24815).toFixed(2)),
-              expectedDeliveryTime: deliveryOrder.expected_delivery_time,
-            }
+            const from_district_id = 1455
+            const from_ward_id = '21410'
+            const region = listRegion.filter((region) => region.ProvinceID === values.regionId)[0].ProvinceName
+            const district = listDistrict.filter((district) => district.DistrictID === values.districtId)[0]
+              .DistrictName
+            const ward = listWard.filter((ward) => ward.WardCode === values.wardId)[0].WardName
+            // ** Get GHN delivery info
+            const shipInfo = await getShipInfo(from_district_id, from_ward_id, values.districtId, values.wardId)
 
             // ** Create order through API
             const url = 'http://localhost:3333/order'
             const checkoutData = {
               cart: cartList,
-              bill: values,
-              shipping: deliveryOrder.order_code,
-              totalPrice: Number((totalCost + shippingData.totalFee).toFixed(2)),
-              shippingFee: shippingData.totalFee,
+              bill: { ...values, district, region, ward },
+              shippingTime: shipInfo.shippingTime,
+              shippingFee: shipInfo.shippingFee,
+              totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
             const config = {
               headers: {
@@ -147,16 +191,14 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               },
             }
             const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
-
             // ** Update order state to local storage
             setCompleteOrder({
               orderId: createOrderData.orderId,
               cart: cartList,
               bill: values,
-              shipping: shippingData,
-              totalPrice: Number((totalCost + shippingData.totalFee).toFixed(2)),
+              shipping: shipInfo,
+              totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             })
-
             // ** Reset checkout:
             dispatch(resetCheckout())
             router.push('/checkout/order-complete')
@@ -286,71 +328,98 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
                             />
                           </span>
                         </p>
-                        <p className={'form-row form-row-wide validate-required validate-region'}>
-                          <label htmlFor={'region'}>
-                            {'Province/City'}{' '}
-                            <abbr className="required" title="required">
+                        <p className="form-row form-row-wide address-field update_totals_on_change validate-required">
+                          <label htmlFor="regionId">
+                            {'Province/City'}
+                            <abbr className="required" title="bắt buộc">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'region'}
-                              className="input-text"
-                              autoComplete={'address-level1'}
-                              onChange={handleChange}
+                            <select
+                              name="regionId"
+                              className="country_to_state country_select"
+                              data-placeholder="Choose Province/City…"
+                              aria-hidden="true"
+                              tabIndex="-1"
+                              value={values.regionId}
+                              onChange={(e) => {
+                                const regionId = Number(e.target.value)
+                                setFieldValue('regionId', regionId)
+                                handleSelectRegion(regionId, setFieldValue)
+                              }}
                               onBlur={handleBlur}
-                              value={values.region}
-                              placeholder={'Enter province or city'}
-                            />
+                            >
+                              {listRegion.map((region, index) => {
+                                return (
+                                  <option value={region.ProvinceID} key={index}>
+                                    {region.ProvinceName}
+                                  </option>
+                                )
+                              })}
+                            </select>
                           </span>
                         </p>
-                        {touched.region && errors.region ? <p className="error-message">{errors.region}</p> : null}
-                        <p className={'form-row form-row-wide validate-required validate-district'}>
-                          <label htmlFor={'district'}>
-                            {'District'}{' '}
-                            <abbr className="required" title="required">
+                        <p className="form-row form-row-wide address-field update_totals_on_change validate-required">
+                          <label htmlFor="districtId">
+                            {'District'}
+                            <abbr className="required" title="bắt buộc">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'district'}
-                              className="input-text"
-                              autoComplete={'address-level2'}
-                              onChange={handleChange}
+                            <select
+                              name="districtId"
+                              className="country_to_state country_select"
+                              data-placeholder="Choose District…"
+                              aria-hidden="true"
+                              tabIndex="-1"
+                              value={values.districtId}
+                              onChange={(e) => {
+                                const districtId = Number(e.target.value)
+                                setFieldValue('districtId', districtId)
+                                handleSelectDistrict(districtId, setFieldValue)
+                              }}
                               onBlur={handleBlur}
-                              value={values.district}
-                              placeholder={'Enter district'}
-                            />
+                            >
+                              {listDistrict.map((district, index) => {
+                                return (
+                                  <option value={district.DistrictID} key={index}>
+                                    {district.DistrictName}
+                                  </option>
+                                )
+                              })}
+                            </select>
                           </span>
                         </p>
-                        {touched.district && errors.district ? (
-                          <p className="error-message">{errors.district}</p>
-                        ) : null}
-                        <p className={'form-row form-row-wide validate-required validate-ward'}>
-                          <label htmlFor={'ward'}>
-                            {'Ward'}{' '}
-                            <abbr className="required" title="required">
+                        <p className="form-row form-row-wide address-field update_totals_on_change validate-required">
+                          <label htmlFor="wardId">
+                            {'Ward'}
+                            <abbr className="required" title="bắt buộc">
                               *
                             </abbr>
                           </label>
                           <span className="woocommerce-input-wrapper">
-                            <input
-                              type={'text'}
-                              name={'ward'}
-                              className="input-text"
-                              autoComplete={'address-level3'}
+                            <select
+                              name="wardId"
+                              className="country_to_state country_select"
+                              data-placeholder="Choose District…"
+                              aria-hidden="true"
+                              tabIndex="-1"
+                              value={values.wardId}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={values.ward}
-                              placeholder={'Enter ward'}
-                            />
+                            >
+                              {listWard.map((ward, index) => {
+                                return (
+                                  <option value={ward.WardCode} key={index}>
+                                    {ward.WardName}
+                                  </option>
+                                )
+                              })}
+                            </select>
                           </span>
                         </p>
-                        {touched.ward && errors.ward ? <p className="error-message">{errors.ward}</p> : null}
                         <p className={'form-row form-row-wide validate-required validate-address'}>
                           <label htmlFor={'address'}>
                             {'Address'}{' '}

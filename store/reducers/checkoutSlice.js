@@ -17,9 +17,8 @@ const initialState = {
     paymentMethod: 'paypal',
   },
   shipping: {
-    orderCode: '',
-    totalFee: 0,
-    expectedDeliveryTime: '',
+    shippingFee: 0,
+    shippingTime: '',
   },
   totalPrice: 0,
 }

@@ -6,20 +6,19 @@ import { DeliveryIcon } from 'components/Utils/Icon'
 
 const OrderList = ({ orderList }) => {
   const currentStatus = -1
-  // const [searchText, setSearchText] = useState('')
-  const shippingColor = {
-    ready_to_pick: '#E3503E ',
-    picking: '#F3A638',
-    picked: '##54B7D3',
-    storing: '#1E91CF',
-    return: '#E3D4D4',
+  const statusColor = {
+    pending: '#FFB020',
+    confirm: '#2196F3',
+    delivering: '#10B981',
+    finish: '#14B8A6',
+    cancel: '#D14343',
   }
-  const shippingTitle = {
-    ready_to_pick: 'Ready to Pick',
-    picking: 'Picking',
-    picked: 'Picked',
-    storing: 'Storing',
-    return: 'Return',
+  const statusTitle = {
+    pending: 'Pending',
+    confirm: 'Confirmed',
+    delivering: 'Delivering',
+    finish: 'Finished',
+    cancel: 'Canceled',
   }
 
   if (orderList.length === 0)
@@ -43,26 +42,14 @@ const OrderList = ({ orderList }) => {
           )
         })}
       </div>
-      {/* <div className="search-container">
-        <div className="search-icon">
-          <Image src="/search-icon.svg" width={16} height={16} alt="search icon" />
-        </div>
-        <input
-          type="text"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          placeholder="Search by OrderID"
-        />
-        <div className="search-button">Search</div>
-      </div> */}
       <div className="order-container">
         {orderList.map((order) => {
           return (
             <div className="card" key={order.id}>
               <div className="top">
                 <div className="status">
-                  <DeliveryIcon width={20} height={20} stroke={shippingColor[order.shipping.status]} fill={'white'} />
-                  <p style={{ color: shippingColor[order.shipping.status] }}>{shippingTitle[order.shipping.status]}</p>
+                  <DeliveryIcon width={20} height={20} stroke={statusColor[order.status]} fill={'white'} />
+                  <p style={{ color: statusColor[order.status] }}>{statusTitle[order.status]}</p>
                   {/* <div className="column-divider"></div>
                   <p style={{ color: '#DD583B' }}>DELIVERED</p> */}
                 </div>

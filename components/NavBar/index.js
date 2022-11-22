@@ -9,7 +9,6 @@ import { IMAGE_QUALITY } from 'utils/constant'
 import { removeItemById, resetCheckout } from 'store/reducers/checkoutSlice'
 import { resetUser } from 'store/reducers/userSlice'
 import Cookies from 'js-cookie'
-import { resetProduct } from 'store/reducers/productSlice'
 
 const NavBar = () => {
   const router = useRouter()

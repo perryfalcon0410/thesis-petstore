@@ -2,15 +2,16 @@ import styles from './styles'
 import Link from 'next/link'
 import Image from 'next/image'
 import { IMAGE_QUALITY } from 'utils/constant'
+import { format } from 'date-fns'
 
 const OrderDetail = ({ orderDetail }) => {
   let totalCost = 0
-  const shippingTitle = {
-    ready_to_pick: 'Ready to Pick',
-    picking: 'Picking',
-    picked: 'Picked',
-    storing: 'Storing',
-    return: 'Return',
+  const statusTitle = {
+    pending: 'Pending',
+    confirm: 'Confirmed',
+    delivering: 'Delivering',
+    finish: 'Finished',
+    cancel: 'Canceled',
   }
   const paymentMethod = {
     paypal: 'Paypal',
@@ -81,9 +82,21 @@ const OrderDetail = ({ orderDetail }) => {
           <div className="inner-row">
             <p className="shipping">Delivery</p>
             <div>
-              <p className="method">Cost: {orderDetail.shippingFee === 0 ? 'Free' : `${orderDetail.shippingFee}$`}</p>
-              <p className="destination">Status: {shippingTitle[orderDetail.shipping.status]}</p>
-              <p className="destination">{`To: ${orderDetail.bill.address}, ${orderDetail.bill.ward} ward, ${orderDetail.bill.district} district, ${orderDetail.bill.region} province/city`}</p>
+              <p className="method">
+                <span style={{ fontWeight: 700 }}>Cost: </span>
+                {orderDetail.shippingFee === 0 ? 'Free' : `${orderDetail.shippingFee}$`}
+              </p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>Status: </span> {statusTitle[orderDetail.status]}
+              </p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>Expected Time: </span>{' '}
+                {format(new Date(orderDetail.shippingTime), 'dd/MM/yyyy')}
+              </p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>To: </span>{' '}
+                {` ${orderDetail.bill.address}, ${orderDetail.bill.ward}, ${orderDetail.bill.district}, ${orderDetail.bill.region}`}
+              </p>
             </div>
           </div>
           <div className="inner-row">

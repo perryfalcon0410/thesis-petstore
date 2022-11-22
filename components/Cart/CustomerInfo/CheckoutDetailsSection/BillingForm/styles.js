@@ -7,7 +7,7 @@ export default css`
       margin-bottom: 0.5em;
     }
   }
-  p {
+  update_totals_on_change p {
     margin-top: 0;
   }
   label {

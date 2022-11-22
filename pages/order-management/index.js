@@ -10,35 +10,16 @@ const OrderManagementPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const baseUrl = 'http://localhost:3333'
+      const url = 'http://localhost:3333/order'
       const config = {
         headers: {
           Authorization: `Bearer ${userSlice.token}`,
         },
       }
-      const orderList = await axios.get(`${baseUrl}/order`, config).then((res) => res.data.orders)
-
-      // ** Get shipping information
-      const urlGHN = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail'
-      const configGHN = {
-        headers: {
-          'Content-Type': 'application/json',
-          Token: '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
-        },
-      }
-      for (const order of orderList) {
-        const dataGHN = {
-          order_code: order.shipping,
-        }
-        const shippingData = await axios.post(urlGHN, dataGHN, configGHN).then((res) => res.data.data)
-        order.shipping = {
-          totalFee: order.shippingFee,
-          status: shippingData.status,
-        }
-      }
-      setOrderList(orderList)
+      const orderList = await axios.get(url, config).then((res) => res.data)
+      setOrderList(orderList.orders)
     }
-    fetchData()
+    if (userSlice.token) fetchData()
     return () => {
       setOrderList('')
     }

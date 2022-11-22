@@ -16,27 +16,10 @@ export default function OrderDetailPage({ orderId }) {
           Authorization: `Bearer ${userSlice.token}`,
         },
       }
-      const orderData = await axios.get(`${baseUrl}/order/${orderId}`, config).then((res) => res.data.order)
-
-      // ** Get shipping information
-      const urlGHN = 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail'
-      const configGHN = {
-        headers: {
-          'Content-Type': 'application/json',
-          Token: '5afa38c1-5c4b-11ed-b8cc-a20ef301dcd7',
-        },
-      }
-      const dataGHN = {
-        order_code: orderData.shipping,
-      }
-      const shippingData = await axios.post(urlGHN, dataGHN, configGHN).then((res) => res.data.data)
-      orderData.shipping = {
-        totalFee: orderData.shippingFee,
-        status: shippingData.status,
-      }
-      setOrderDetail(orderData)
+      const orderData = await axios.get(`${baseUrl}/order/${orderId}`, config).then((res) => res.data)
+      setOrderDetail(orderData.order)
     }
-    fetchData()
+    if (userSlice.token) fetchData()
     return () => {
       setOrderDetail('')
     }

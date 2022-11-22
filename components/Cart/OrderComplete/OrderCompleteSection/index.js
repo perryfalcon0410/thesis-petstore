@@ -7,7 +7,7 @@ import PaymentSection from '../PaymentSection'
 const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, orderId }) => {
   const [isPaid, setIsPaid] = useState(false)
   const orderingDate = new Date()
-  const shippingDate = new Date(shipInfo.expectedDeliveryTime)
+  const shippingDate = new Date(shipInfo.shippingTime)
   const paymentMethodObj = {
     paypal: 'Paypal',
     cod: 'Cash on Delivery',
@@ -58,7 +58,7 @@ const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, 
           })}
           <div className="row-cell">
             <p className="sub-total">Subtotal</p>
-            <p className="sub-price">{(totalCost - shipInfo.totalFee).toFixed(2)}$</p>
+            <p className="sub-price">{(totalCost - shipInfo.shippingFee).toFixed(2)}$</p>
           </div>
           <div className="row-cell">
             <p className="shipping">Shipping by</p>
@@ -68,7 +68,7 @@ const OrderCompleteSection = ({ cartInfo, billInfo, shipInfo, totalCost, SOnum, 
           </div>
           <div className="row-cell">
             <p className="shipping-cost">Shipping cost</p>
-            <p className="price">{shipInfo.totalFee}$</p>
+            <p className="price">{shipInfo.shippingFee}$</p>
           </div>
           <div className="row-cell">
             <p className="total">Total</p>

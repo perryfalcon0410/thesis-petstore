@@ -10,6 +10,7 @@ import Footer from 'components/Utils/Footer'
 
 const OrderManagement = ({ orderType, orderList, orderDetail }) => {
   const userSlice = useSelector((state) => state.user)
+  console.log(orderList)
 
   return (
     <div className="wrapper">
