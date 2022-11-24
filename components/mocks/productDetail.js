@@ -12,15 +12,15 @@ export const productDetail = {
   images: [
     {
       id: '8V1efBqb5PRLfOwkOZRT',
-      storageUrl: '/products/big-product-1.jpg',
+      url: '/products/big-product-1.jpg',
     },
     {
       id: 'X5KTmJ1hZaMHVO1IQ5sa',
-      storageUrl: '/products/big-product-2.jpg',
+      url: '/products/big-product-2.jpg',
     },
     {
       id: 'AgO8T9MQGoRUJC3dKldC',
-      storageUrl: '/products/big-product-3.jpg',
+      url: '/products/big-product-3.jpg',
     },
   ],
   categories: [
@@ -39,7 +39,7 @@ export const productDetail = {
       images: [
         {
           id: 'Ehp1SSezdSNrEx93rCfC',
-          storageUrl: '/products/related-product-1.jpg',
+          url: '/products/related-product-1.jpg',
         },
       ],
       price: 1.41,
@@ -59,7 +59,7 @@ export const productDetail = {
       images: [
         {
           id: 'Wx4weCHSssLID68H9uoc',
-          storageUrl: '/products/related-product-2.jpg',
+          url: '/products/related-product-2.jpg',
         },
       ],
       price: 1.61,
@@ -79,7 +79,7 @@ export const productDetail = {
       images: [
         {
           id: 'MeQvRv23baXXjgrhgKVu',
-          storageUrl: '/products/related-product-3.jpg',
+          url: '/products/related-product-3.jpg',
         },
       ],
       price: 2.01,
@@ -99,11 +99,11 @@ export const productDetail = {
       images: [
         {
           id: 'kahHgGaP3nN29VLajc62',
-          storageUrl: '/products/related-product-4.jpg',
+          url: '/products/related-product-4.jpg',
         },
         {
           id: '6wiW4CgCtckpMOevlRms',
-          storageUrl: '/products/related-product-4-2.jpg',
+          url: '/products/related-product-4-2.jpg',
         },
       ],
       price: 3.43,

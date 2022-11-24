@@ -1,12 +1,22 @@
 import styles from './styles'
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
+import { format } from 'date-fns'
 
 const OrderDetail = ({ orderDetail }) => {
   let totalCost = 0
-
+  const statusTitle = {
+    pending: 'Pending',
+    confirm: 'Confirmed',
+    delivering: 'Delivering',
+    finish: 'Finished',
+    cancel: 'Canceled',
+  }
+  const paymentMethod = {
+    paypal: 'Paypal',
+    cod: 'Cash on Delivery',
+  }
   return (
     <div className="wrapper">
       <div className="row">
@@ -23,14 +33,14 @@ const OrderDetail = ({ orderDetail }) => {
               </tr>
             </thead>
             <tbody>
-              {orderDetail.products.map((product) => {
-                totalCost += product.price * product.quantity
+              {orderDetail.cart.map((product) => {
+                totalCost = Number((totalCost + product.price * product.quantity).toFixed(2))
                 return (
                   <tr key={product.id}>
                     <td style={{ minWidth: '60px', maxWidth: '90px', width: '90px' }} className="product-thumbnail">
                       <Image
-                        src={product.images.length !== 0 ? product.images[0].storageUrl : '/images/no-image.png'}
-                        alt={product.name}
+                        src={product.images.length !== 0 ? product.images[0].url : '/images/no-image.png'}
+                        alt={product.images.length !== 0 ? product.images[0].image_name : 'product image'}
                         width={IMAGE_QUALITY.LOW}
                         height={IMAGE_QUALITY.LOW}
                       />
@@ -39,7 +49,7 @@ const OrderDetail = ({ orderDetail }) => {
                       {product.name}
                     </td>
                     <td className="product-price">
-                      <span>{formatVNprice(product.price)}₫</span>
+                      <span>{product.price}$</span>
                     </td>
                     <td className="product-quantity">
                       <div>
@@ -47,7 +57,7 @@ const OrderDetail = ({ orderDetail }) => {
                       </div>
                     </td>
                     <td className="product-subtotal">
-                      <span>{formatVNprice(product.price * product.quantity)}₫</span>
+                      <span>{(product.price * product.quantity).toFixed(2)}$</span>
                     </td>
                   </tr>
                 )
@@ -67,20 +77,37 @@ const OrderDetail = ({ orderDetail }) => {
           <div className="title">Order infomation</div>
           <div className="inner-row">
             <p className="subtotal">Temporary price</p>
-            <p className="price">{formatVNprice(totalCost)}₫</p>
+            <p className="price">{totalCost}$</p>
           </div>
           <div className="inner-row">
             <p className="shipping">Delivery</p>
             <div>
               <p className="method">
-                {orderDetail.delivery.fee === 0 ? 'Free' : formatVNprice(orderDetail.delivery.fee) + '₫'}
+                <span style={{ fontWeight: 700 }}>Cost: </span>
+                {orderDetail.shippingFee === 0 ? 'Free' : `${orderDetail.shippingFee}$`}
               </p>
-              <p className="destination">{orderDetail.delivery.destination}</p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>Status: </span> {statusTitle[orderDetail.status]}
+              </p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>Expected Time: </span>{' '}
+                {format(new Date(orderDetail.shippingTime), 'dd/MM/yyyy')}
+              </p>
+              <p className="destination">
+                <span style={{ fontWeight: 700 }}>To: </span>{' '}
+                {` ${orderDetail.bill.address}, ${orderDetail.bill.ward}, ${orderDetail.bill.district}, ${orderDetail.bill.region}`}
+              </p>
+            </div>
+          </div>
+          <div className="inner-row">
+            <p className="shipping">Payment method</p>
+            <div>
+              <p className="method">{paymentMethod[orderDetail.bill.paymentMethod]}</p>
             </div>
           </div>
           <div className="inner-row">
             <p className="total">Total</p>
-            <p className="price">{formatVNprice(totalCost + orderDetail.delivery.fee)}₫</p>
+            <p className="price">{orderDetail.totalPrice}$</p>
           </div>
         </div>
       </div>

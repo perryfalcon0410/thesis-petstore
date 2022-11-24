@@ -9,17 +9,18 @@ const Slider = ({ DynamicWidth, sliderData }) => {
     smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
   })
 
-  const moveToSlide = (index) => {
-    setTranslation({
-      bigImage: {
-        transform: `translate3d(${index * -DynamicWidth}px, 0px, 0px)`,
-      },
-      smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
-    })
-  }
-
   useEffect(() => {
     const sliders = document.querySelectorAll('.slides')
+
+    const moveToSlide = (index) => {
+      setTranslation({
+        bigImage: {
+          transform: `translate3d(${index * -DynamicWidth}px, 0px, 0px)`,
+        },
+        smallImage: { transform: 'translate3d(0px, 0px, 0px)' },
+      })
+    }
+
     Array.from(sliders).map((slider, index) => {
       if (index % 2 != 0) {
         const sliderSmallImage = Array.from(slider.children)
@@ -59,7 +60,7 @@ const Slider = ({ DynamicWidth, sliderData }) => {
                 return (
                   <li className="big-image" style={{ width: `${DynamicWidth}px` }} key={index}>
                     <Image
-                      src={image.storageUrl}
+                      src={image.url}
                       alt="Hình ảnh sản phẩm to"
                       width={IMAGE_QUALITY.HIGH}
                       height={IMAGE_QUALITY.HIGH}
@@ -91,7 +92,7 @@ const Slider = ({ DynamicWidth, sliderData }) => {
                 return (
                   <li className="small-image" key={index}>
                     <Image
-                      src={image.storageUrl}
+                      src={image.url}
                       alt="Hình ảnh sản phẩm nhỏ"
                       width={IMAGE_QUALITY.LOW}
                       height={IMAGE_QUALITY.LOW}

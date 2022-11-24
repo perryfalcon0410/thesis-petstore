@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import Head from 'next/head'
 import store from '../store'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import { Provider } from 'react-redux'
 
 import 'styles/utils.scss'
 import 'styles/responsive.scss'
+import { UserProvider } from 'context/UserContext'
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -22,7 +25,9 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <Provider store={store}>
-        <Component {...pageProps} />
+        <UserProvider>
+          <Component {...pageProps} />
+        </UserProvider>
       </Provider>
     </>
   )

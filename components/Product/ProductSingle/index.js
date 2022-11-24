@@ -16,6 +16,17 @@ const ProductSingle = ({ isModel, productSingleData }) => {
   const [productQuantity, setProductQuantity] = useState(1)
   const dispatch = useDispatch()
 
+  const handleAddToCart = () => {
+    const productCart = {
+      id: productSingleData._id,
+      name: productSingleData.name,
+      images: productSingleData.images,
+      price: productSingleData.price,
+      quantity: 1,
+    }
+    dispatch(addItem({ ...productCart, quantity: productQuantity }))
+  }
+
   useEffect(() => {
     const handleWindowChange = () => {
       if (isModel) {
@@ -29,7 +40,7 @@ const ProductSingle = ({ isModel, productSingleData }) => {
     handleWindowChange()
     window.addEventListener('resize', handleWindowChange)
     return window.removeEventListener('resize', handleWindowChange)
-  }, [])
+  }, [isModel])
 
   return (
     <>
@@ -63,12 +74,12 @@ const ProductSingle = ({ isModel, productSingleData }) => {
               ) : null}
               <div className="infor-product">
                 <p>
-                  <span>Sku: </span> {productSingleData.productSku}
+                  <span>Sku: </span> {productSingleData.productSKU}
                 </p>
                 <p>
                   <span>Categories: </span>{' '}
                   {productSingleData.categories.map((category, index) =>
-                    index !== 0 ? ', ' + category.name : category.name,
+                    index !== 0 ? ', ' + category.category_name : category.category_name,
                   )}
                 </p>
                 <div>
@@ -97,18 +108,13 @@ const ProductSingle = ({ isModel, productSingleData }) => {
                     +
                   </button>
                 </div>
-                <div
-                  className="btn-group"
-                  onClick={() => {
-                    dispatch(addItem({ ...productSingleData, quantity: productQuantity }))
-                  }}
-                >
-                  <a href="#" className="btn add-to-cart">
+                <div className="btn-group">
+                  <div className="btn add-to-cart" onClick={handleAddToCart}>
                     ADD TO CART
                     <div className="add-to-cart-icon">
                       <Image src="/images/Product/cart-plus-solid.svg" alt="add cart icon" width={20} height={20} />
                     </div>
-                  </a>
+                  </div>
                 </div>
               </div>
               {isModel ? null : <ProductInformation productSingleData={productSingleData} />}

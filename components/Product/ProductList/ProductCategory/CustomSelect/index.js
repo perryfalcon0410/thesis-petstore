@@ -1,7 +1,14 @@
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styles from './styles'
 
-const CustomSelect = () => {
+const CustomSelect = ({ categoryList, query, totalProduct, setChosenCategory }) => {
+  const router = useRouter()
+
+  const firstCapitalize = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
   useEffect(() => {
     const productWrapper = document.querySelector('.product-wrapper')
     const selectResultsOption = document.querySelector('.select-results-options')
@@ -27,23 +34,45 @@ const CustomSelect = () => {
       productWrapper.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const handleChangeCate = (cate) => {
+    if (cate) {
+      router.replace({
+        pathname: '/products',
+        query: {
+          ...query,
+          categories: cate._id,
+          page: 1,
+        },
+      })
+      setChosenCategory(cate)
+    } else {
+      router.replace({
+        pathname: '/products',
+        query: {
+          ...query,
+          categories: '',
+          page: 1,
+        },
+      })
+      setChosenCategory('')
+    }
+  }
+
   return (
     <span className="select-dropdown select-dropdown-below">
-      <span className="select-search select-search--dropdown">
-        <input className="select-search-field" type="text" />
-      </span>
       <span className="select-results">
         <ul className="select-results-options">
-          <li className="select-results-option">Pate & Sốt (0)</li>
-          <li className="select-results-option">Phụ kiện thú cưng (56)</li>
-          <li className="select-results-option">Đồ chơi& (6)</li>
-          <li className="select-results-option">Sản phẩm điều trị&(27)</li>
-          <li className="select-results-option">Sản phẩm vệ sinh (70)</li>
-          <li className="select-results-option">Thực phẩm chức năng (4)</li>
-          <li className="select-results-option select-results-option--highlighted">Thực phẩm thú cưng (101)</li>
-          <li className="select-results-option">Bánh thưởng (26)</li>
-          <li className="select-results-option">Hạt (3)</li>
-          <li className="select-results-option">Pate Sốt (1)</li>
+          <li className="select-results-option" onClick={() => handleChangeCate('')}>
+            {`All categories (${totalProduct})`}
+          </li>
+          {categoryList.map((cate) => {
+            return (
+              <li className="select-results-option" key={cate._id} onClick={() => handleChangeCate(cate)}>
+                {`${firstCapitalize(cate.category_name)} (${cate.totalProducts})`}
+              </li>
+            )
+          })}
         </ul>
       </span>
       <style jsx>{styles}</style>

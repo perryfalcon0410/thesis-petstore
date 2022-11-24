@@ -6,11 +6,11 @@ import OrderList from './OrderList'
 import styles from './styles'
 import Title from './Title'
 import { useSelector } from 'react-redux'
+import Footer from 'components/Utils/Footer'
 
 const OrderManagement = ({ orderType, orderList, orderDetail }) => {
-  const userSlice = useSelector((state) => {
-    return state.user
-  })
+  const userSlice = useSelector((state) => state.user)
+  console.log(orderList)
 
   return (
     <div className="wrapper">
@@ -32,6 +32,7 @@ const OrderManagement = ({ orderType, orderList, orderDetail }) => {
           )}
         </>
       )}
+      <Footer />
       <style jsx>{styles}</style>
     </div>
   )

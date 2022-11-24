@@ -23,13 +23,14 @@ export default css`
           margin-bottom: 2.5rem;
           float: right;
           vertical-align: top;
+
           .select-order {
             width: 250px;
-            padding: 8px;
+            padding: 10px 8px;
             margin-right: 10px;
             color: #666;
             background: #fafafa;
-            border-radius: 50px;
+            border-radius: 5px;
             border: 1px solid #eaeaea;
             outline: none;
           }
@@ -40,61 +41,26 @@ export default css`
           /* important */
           padding-left: 0;
 
-          /* display: grid; */
-          /* grid-row-gap: 20px; */
-          /* grid-column-gap: 20px; */
-          /* grid-template-columns: repeat(3, minmax(0, 1fr)); */
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
+          display: grid;
+          grid-row-gap: 30px;
+          grid-column-gap: 30px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
 
           .product {
             display: block;
-            height: 100%;
             justify-self: center;
             text-align: center;
             padding: 15px;
-            margin-bottom: 0.8rem;
             max-width: 450px;
 
             box-shadow: 0px 0px 10px -8px rgb(0 0 0 / 50%);
             border: 1px solid #efefef;
             border-radius: 15px;
 
-            flex: 1;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            margin: 10px;
             transition: all 0.2s ease-in-out;
             cursor: pointer;
+
             .product-img {
-              position: relative;
-              img {
-                width: 300px;
-                height: 300px;
-                object-fit: cover;
-                margin-bottom: 0.6rem;
-              }
-              span {
-                position: absolute;
-                bottom: 1.5rem;
-                left: 1rem;
-                right: 1rem;
-                padding: 1rem 0;
-                background-color: #ffffffef;
-                text-transform: uppercase;
-                font-weight: 700;
-                color: #1b73eb;
-                transition: all 0.2s ease-in-out;
-                &:hover {
-                  cursor: pointer;
-                  color: #0a0a0a;
-                }
-              }
             }
             .product-detail {
               width: 100%;
@@ -159,6 +125,7 @@ export default css`
             /* padding: 15px; */
             float: left;
             overflow: hidden;
+            a,
             span {
               text-align: center;
               color: #1e73be;

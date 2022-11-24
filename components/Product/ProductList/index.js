@@ -1,22 +1,22 @@
 import ProductCategory from './ProductCategory'
-import FilterPrice from './ProductCategory/PriceFilter'
+import FilterPrice from './ProductCategory/FilterPrice'
 import Products from './Products'
 import styles from './styles'
 
-const ProductList = () => {
+const ProductList = ({ productListData }) => {
   return (
     <div className="elementor-container">
       <div className="elementor-row">
         <div className="elementor-row-left">
           <div className="elementor-column-wrap">
             <div className="elementor-widget-wrap">
-              <FilterPrice />
-              <ProductCategory />
+              <FilterPrice productListData={productListData} />
+              <ProductCategory productListData={productListData} />
             </div>
           </div>
         </div>
         <div className="elementor-row-right">
-          <Products />
+          <Products productListData={productListData} />
         </div>
       </div>
       <style jsx>{styles}</style>

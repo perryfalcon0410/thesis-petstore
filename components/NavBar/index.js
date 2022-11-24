@@ -5,14 +5,14 @@ import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import Image from 'next/image'
-import { formatVNprice } from 'utils/function'
 import { IMAGE_QUALITY } from 'utils/constant'
-import { removeItemById } from 'store/reducers/checkoutSlice'
+import { removeItemById, resetCheckout } from 'store/reducers/checkoutSlice'
 import { resetUser } from 'store/reducers/userSlice'
+import Cookies from 'js-cookie'
 
 const NavBar = () => {
   const router = useRouter()
-
+  const dispatch = useDispatch()
   const CheckoutSlice = useSelector((state) => state.checkout)
   const UserSlice = useSelector((state) => state.user)
 
@@ -23,7 +23,16 @@ const NavBar = () => {
     totalQuantity += cart.quantity
   })
 
-  const dispatch = useDispatch()
+  const handleSignOut = () => {
+    // Remove cookie from application
+    Cookies.remove('user')
+
+    // Remove user from redux
+    dispatch(resetUser())
+
+    // Remove cart from redux
+    dispatch(resetCheckout())
+  }
 
   if (!router.isReady) return null
 
@@ -31,7 +40,7 @@ const NavBar = () => {
     <nav className="top-navbar-wrapper">
       <div className="navbar-container">
         <div className="image-logo">
-          <Image src="/images/Logo.png" alt="companyLogo" loading="lazy" width={120} height={40} />
+          <Image src="/images/logo.png" alt="companyLogo" loading="lazy" width={120} height={40} />
         </div>
 
         <div className="menus">
@@ -62,7 +71,7 @@ const NavBar = () => {
                     <div className="cart-card" key={cart.id}>
                       <div className="cart-img">
                         <Image
-                          src={cart.images.length !== 0 ? cart.images[0].storageUrl : '/images/no-image.png'}
+                          src={cart.images.length !== 0 ? cart.images[0].url : '/images/no-image.png'}
                           alt={cart.name}
                           width={IMAGE_QUALITY.MED}
                           height={IMAGE_QUALITY.MED}
@@ -73,7 +82,7 @@ const NavBar = () => {
                           <a className="cart-name">{cart.name}</a>
                         </Link>
                         <p className="cart-quantity">
-                          {cart.quantity} &#215; <span className="cart-price">{formatVNprice(cart.price)}</span>
+                          {cart.quantity} &#215; <span className="cart-price">{cart.price}</span>
                           <span className="unit-price">$</span>
                         </p>
                       </div>
@@ -90,7 +99,7 @@ const NavBar = () => {
               <div className="row">
                 <p className="total">Subtotal:</p>
                 <p className="cart-total">
-                  <span className="cart-price">{formatVNprice(totalCost)}</span>
+                  <span className="cart-price">{totalCost}</span>
                   <span className="unit-price">$</span>
                 </p>
               </div>
@@ -101,7 +110,7 @@ const NavBar = () => {
               </div>
             </div>
           </div>
-          {UserSlice.id === null || UserSlice.id === undefined ? (
+          {UserSlice.id === '' ? (
             <Link href="/sign-in">
               <a className="user-href">
                 <div className="user">
@@ -116,19 +125,14 @@ const NavBar = () => {
               <p>{UserSlice.firstName + ' ' + UserSlice.lastName}</p>
               <div className="tooltip-arrow"></div>
               <div className="user-menu">
-                <Link href="order-management">
+                <Link href="/order-management">
                   <a>
                     <div className={classNames('title', { isChosen: router.asPath === '/order-management' })}>
                       Your order
                     </div>
                   </a>
                 </Link>
-                <div
-                  className="sign-out"
-                  onClick={() => {
-                    dispatch(resetUser())
-                  }}
-                >
+                <div className="sign-out" onClick={handleSignOut}>
                   Sign out
                 </div>
               </div>

@@ -1,6 +1,6 @@
+import Cart from 'components/Cart/CartInfo'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import Cart from 'components/Cart'
 
 const CheckoutPage = () => {
   const router = useRouter()

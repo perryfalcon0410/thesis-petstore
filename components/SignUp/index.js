@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { setUser } from 'store/reducers/userSlice'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
 
 const SignUp = () => {
   const dispatch = useDispatch()
@@ -19,16 +22,16 @@ const SignUp = () => {
     password: Yup.string()
       .required('Password is required')
       .min(8, 'At least 8 characters')
-      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value, _context) => {
+      .test('hasUpperCase', 'Password need at least 1 uppercase character', (value) => {
         return /[A-Z]/.test(value)
       })
-      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value, _context) => {
+      .test('hasLowerCase', 'Password need at least 1 lowercase character', (value) => {
         return /[a-z]/.test(value)
       })
-      .test('hasNumber', 'Password need at least 1 number', (value, _context) => {
+      .test('hasNumber', 'Password need at least 1 number', (value) => {
         return /[0-9]/.test(value)
       })
-      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value, _context) => {
+      .test('hasSymbol', 'Password need at least 1 special character (!, @, #, %, &)', (value) => {
         return /[!@#%&]/.test(value)
       }),
     passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Password must match'),
@@ -37,7 +40,7 @@ const SignUp = () => {
   return (
     <div className="wrapper">
       <div className="round-layer">
-        <Image src="/images/Auth/BG.png" layout="fill" alt="background" />
+        <Image src="/images/sign-in-background.jpg" layout="fill" objectFit="cover" alt="background" />
       </div>
       <Formik
         validationSchema={USER_SCHEMA}
@@ -49,68 +52,81 @@ const SignUp = () => {
           passwordConfirm: '',
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
           try {
-            setSubmitting(true)
-            // Register user
+            const registerData = await axios
+              .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}auth/signup`, {
+                firstName: values.firstName,
+                lastName: values.lastName,
+                email: values.email,
+                password: values.password,
+              })
+              .then((res) => res.data)
 
-            // Set userSlice
-            dispatch(setUser(userMock))
-            router.push('/')
-            resetForm({ firstName: '', lastName: '', email: '', password: '' })
-            setSubmitting(false)
+            if (registerData) {
+              const userInfo = {
+                id: registerData.user.id,
+                username: registerData.user.username,
+                firstName: registerData.user.firstName,
+                lastName: registerData.user.lastName,
+                token: registerData.accessToken,
+              }
+              Cookies.set('user', JSON.stringify(userInfo), { expires: registerData.expiredIn })
+              dispatch(setUser(userInfo))
+              router.push('/')
+            }
           } catch (e) {
-            resetForm({ firstName: '', lastName: '', email: '', password: '' })
-            setSubmitting(false)
+            console.log(e)
           }
+          setSubmitting(false)
+          resetForm()
         }}
       >
-        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form name="sign-in" className="form-wrapper" encType="multipart/form-data" onSubmit={handleSubmit}>
-            {/* <div className="icon-lg">
-              <Image src="/images/Auth/Logo.svg" width={128} height={128} />
-            </div> */}
+            <div className="icon-lg">
+              <Image src="/images/auth-icon.png" width={128} height={128} alt="Icon" />
+            </div>
             <div className="form-container">
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/user.svg" width={24} height={24} />
+                  <MdPerson fontSize={24} />
                 </div>
                 <input
                   type="text"
                   name="firstName"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
-                  placeholder="FIRST NAME"
+                  value={values.firstName}
+                  placeholder="Enter first name"
                 />
               </div>
-              {touched['firstName'] && errors['firstName'] && (
+              {touched.firstName && errors.firstName && (
                 <div className="error">
-                  <p>{errors['firstName']}</p>
+                  <p>{errors.firstName}</p>
                 </div>
               )}
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/user.svg" width={24} height={24} />
+                  <MdPerson fontSize={24} />
                 </div>
                 <input
                   type="text"
                   name="lastName"
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  value={values.email}
-                  placeholder="LAST NAME"
+                  value={values.lastName}
+                  placeholder="Enter last name"
                 />
               </div>
-              {touched['lastName'] && errors['lastName'] && (
+              {touched.lastName && errors.lastName && (
                 <div className="error">
-                  <p>{errors['lastName']}</p>
+                  <p>{errors.lastName}</p>
                 </div>
               )}
 
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/email.svg" width={24} height={24} />
+                  <MdEmail fontSize={24} />
                 </div>
                 <input
                   type="text"
@@ -118,17 +134,17 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.email}
-                  placeholder="EMAIL"
+                  placeholder="Enter email"
                 />
               </div>
-              {touched['email'] && errors['email'] && (
+              {touched.email && errors.email && (
                 <div className="error">
-                  <p>{errors['email']}</p>
+                  <p>{errors.email}</p>
                 </div>
               )}
               <div className="input">
                 <div className="icon-sm">
-                  <Image src="/images/Auth/lock.svg" width={24} height={24} />
+                  <MdLock fontSize={24} />
                 </div>
                 <input
                   type="password"
@@ -136,12 +152,31 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
-                  placeholder="PASSWORD"
+                  placeholder="Enter password"
                 />
               </div>
-              {touched['password'] && errors['password'] && (
+              {touched.password && errors.password && (
                 <div className="error">
-                  <p>{errors['password']}</p>
+                  <p>{errors.password}</p>
+                </div>
+              )}
+
+              <div className="input">
+                <div className="icon-sm">
+                  <MdLock fontSize={24} />
+                </div>
+                <input
+                  type="password"
+                  name="passwordConfirm"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.passwordConfirm}
+                  placeholder="Enter confirm password"
+                />
+              </div>
+              {touched.passwordConfirm && errors.passwordConfirm && (
+                <div className="error">
+                  <p>{errors.passwordConfirm}</p>
                 </div>
               )}
             </div>
