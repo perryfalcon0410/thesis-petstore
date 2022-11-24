@@ -6,7 +6,7 @@ import styles from './styles'
 const FilterPrice = ({ productListData }) => {
   const router = useRouter()
   const { queryParams: query, minPrice, maxPrice } = productListData
-  const [rangePrice, setRangePrice] = useState([query.minPrice, query.maxPrice])
+  const [rangePrice, setRangePrice] = useState([minPrice, maxPrice])
 
   const handleChangePrice = (event, newPrice) => {
     setRangePrice(newPrice)
