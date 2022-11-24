@@ -15,8 +15,6 @@ const ProductListPage = ({ productList, queryParams }) => {
     const updateProductSlice = () => {
       dispatch(setProductData(productList))
       dispatch(setQueryParams(queryParams))
-      console.log(queryParams)
-      console.log(productList)
     }
     updateProductSlice()
 
