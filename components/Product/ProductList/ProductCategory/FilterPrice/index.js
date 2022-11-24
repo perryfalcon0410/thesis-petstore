@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Slider } from '@mui/material'
 import { useRouter } from 'next/router'
 import styles from './styles'
@@ -7,6 +7,12 @@ const FilterPrice = ({ productListData }) => {
   const router = useRouter()
   const { queryParams: query, minPrice, maxPrice } = productListData
   const [rangePrice, setRangePrice] = useState([minPrice, maxPrice])
+
+  useEffect(() => {
+    setRangePrice([minPrice, maxPrice])
+
+    return () => {}
+  }, [minPrice, maxPrice])
 
   const handleChangePrice = (event, newPrice) => {
     setRangePrice(newPrice)
