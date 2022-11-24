@@ -13,7 +13,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
 
   const handleSubmitPayment = async (details) => {
     try {
-      const paymentUrl = 'http://localhost:3333/payment'
+      const paymentUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment`
       const paymentInfo = {
         externalId: details.id,
         payerFistName: details.payer.name.given_name,
@@ -29,7 +29,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
       }
       const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
       if (createPayment) {
-        const orderUrl = `http://localhost:3333/order/${orderId}`
+        const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
         const orderUpdate = {
           payment: createPayment.paymentId,
         }

@@ -177,7 +177,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             const shipInfo = await getShipInfo(from_district_id, from_ward_id, values.districtId, values.wardId)
 
             // ** Create order through API
-            const url = 'http://localhost:3333/order'
+            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
             const checkoutData = {
               cart: cartList,
               bill: { ...values, district, region, ward },

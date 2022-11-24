@@ -10,7 +10,7 @@ export default function OrderDetailPage({ orderId }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const baseUrl = 'http://localhost:3333'
+      const baseUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}`
       const config = {
         headers: {
           Authorization: `Bearer ${userSlice.token}`,

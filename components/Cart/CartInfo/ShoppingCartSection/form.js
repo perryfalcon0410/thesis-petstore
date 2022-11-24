@@ -41,7 +41,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
           const loginInData = await axios
-            .post('http://localhost:3333/auth/signin', {
+            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
               email: values.email,
               password: values.password,
             })
@@ -175,7 +175,7 @@ export const SignUpForm = ({ setSignIn, callback }) => {
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
           const registerData = await axios
-            .post('http://localhost:3333/auth/signup', {
+            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
               firstName: values.firstName,
               lastName: values.lastName,
               email: values.email,

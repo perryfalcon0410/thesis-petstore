@@ -54,7 +54,7 @@ const SignUp = () => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
             const registerData = await axios
-              .post('http://localhost:3333/auth/signup', {
+              .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}auth/signup`, {
                 firstName: values.firstName,
                 lastName: values.lastName,
                 email: values.email,

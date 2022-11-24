@@ -13,7 +13,7 @@ const ProductSinglePage = ({ productData }) => {
 }
 
 export async function getStaticPaths() {
-  const pListIds = await axios.get(`${process.env.HOST_API}/product/listId`).then((res) => res.data)
+  const pListIds = await axios.get(`${process.env.BACKEND_URL}/product/listId`).then((res) => res.data)
 
   return {
     paths: pListIds.map((id) => ({ params: { id } })),
@@ -24,7 +24,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { id } = params
 
-  const productData = await axios.get(`${process.env.HOST_API}/product/${id}`).then((res) => res.data.productDetail)
+  const productData = await axios.get(`${process.env.BACKEND_URL}/product/${id}`).then((res) => res.data.productDetail)
 
   if (!productData) {
     return {

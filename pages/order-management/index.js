@@ -10,7 +10,7 @@ const OrderManagementPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = 'http://localhost:3333/order'
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
       const config = {
         headers: {
           Authorization: `Bearer ${userSlice.token}`,

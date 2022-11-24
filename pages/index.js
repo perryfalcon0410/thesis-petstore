@@ -7,8 +7,8 @@ const HomePage = ({ trendingProducts, blogs }) => {
 
 export async function getStaticProps() {
   try {
-    const trendingProducts = await axios.get(`${process.env.HOST_API}/home`).then((res) => res.data.trendingProducts)
-    const blogs = await axios.get(`${process.env.HOST_API}/blog`).then((res) => res.data)
+    const trendingProducts = await axios.get(`${process.env.BACKEND_URL}/home`).then((res) => res.data.trendingProducts)
+    const blogs = await axios.get(`${process.env.BACKEND_URL}/blog`).then((res) => res.data)
 
     return {
       props: {
