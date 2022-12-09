@@ -4,6 +4,7 @@ import FeaturedProduct from './FeaturedProduct'
 import BlogPost from './BlogPost'
 import Footer from '../Utils/Footer'
 import HeaderBanner from './HeaderBanner'
+import MessengerChatBox from './MessengerChatBox'
 
 const Home = ({ trendingProducts, blogs }) => {
   return (
@@ -12,6 +13,7 @@ const Home = ({ trendingProducts, blogs }) => {
       <HeaderBanner />
       <FeaturedProduct trendingProducts={trendingProducts} />
       <BlogPost blogs={blogs} />
+      <MessengerChatBox />
       <Footer />
       <style jsx>{styles}</style>
     </div>
