@@ -1,9 +1,14 @@
 import Home from '../components/Home'
 import axios from 'axios'
 
-const HomePage = ({ trendingProducts, blogs }) => {
-  return <Home trendingProducts={trendingProducts} blogs={blogs} />
+// const HomePage = ({ trendingProducts, blogs }) => {
+//   return <Home trendingProducts={trendingProducts} blogs={blogs} />
+// }
+
+const HomePage = ({ trendingProducts }) => {
+  return <Home trendingProducts={trendingProducts}/>
 }
+
 
 export async function getStaticProps() {
   try {

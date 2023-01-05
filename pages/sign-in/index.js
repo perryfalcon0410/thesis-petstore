@@ -1,7 +1,13 @@
+import NavBar from 'components/NavBar'
 import SignIn from 'components/SignIn'
 
 const SignInPage = () => {
-  return <SignIn />
+  return (
+    <div>
+      <NavBar />
+      <SignIn />
+    </div>
+  )
 }
 
 export default SignInPage

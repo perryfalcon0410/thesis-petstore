@@ -99,7 +99,7 @@ const Footer = () => {
           </div>
           <div className="brand-email">
             <Image src="/icons/Mail.svg" alt="address" height={40} width={40} objectFit="contain" />
-            <p>Email: nam.vo@example.com</p>
+            <p>Email: quang.truong@example.com</p>
           </div>
         </div>
         <div className="information-container">
