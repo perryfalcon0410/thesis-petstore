@@ -32,6 +32,7 @@ export const ORDER_STATUS = {
   DELIVERING: 2,
   FINISHED: 3,
   CANCELLED: 4,
+  RETURNED: 5,
 }
 export const LIMIT_PRODUCT_ORDER_LIST = 2
 export const POPUP_STATE_CLOSE = -1

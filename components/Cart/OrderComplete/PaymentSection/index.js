@@ -1,7 +1,32 @@
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
-
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
+const CREATE_PAYMENT = gql`
+mutation CreatePayment($input: CreatePaymentInput!) {
+  createPayment(input: $input) {
+    externalId
+    payerFistName
+    payerLastName
+    currencyCode
+    totalAmount
+    type
+    user
+    createdAt
+    updatedAt
+  }
+}`
+const UPDATE_ORDER = gql`
+mutation UpdateOrder($updateOrderId: ID!, $input: UpdateOrderInput!) {
+  updateOrder(id: $updateOrderId, input: $input) {
+    success
+    msg
+    data {
+      _id
+    }
+  }
+}
+`
 const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
   const userSlice = useSelector((state) => state.user)
 
@@ -10,10 +35,31 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
     currency: 'USD',
     'disable-funding': 'card',
   }
-
+  const [createPaymentMutation, { loading: mutationLoading1, error: mutationError1 }] = useMutation(CREATE_PAYMENT, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${userSlice.token}`,
+      },
+    },
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
+  const [updateOrderMutation, { loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_ORDER, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${userSlice.token}`,
+      },
+    },
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
   const handleSubmitPayment = async (details) => {
     try {
-      const paymentUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment`
+      // const paymentUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/payment`
       const paymentInfo = {
         externalId: details.id,
         payerFistName: details.payer.name.given_name,
@@ -27,13 +73,21 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
           Authorization: `Bearer ${userSlice.token}`,
         },
       }
-      const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
+      console.log(paymentInfo);
+      // const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
+      const { data } = await createPaymentMutation({
+        variables: { input: paymentInfo }
+      })
+      const createPayment = data.createPayment;
+      console.log(createPayment);
       if (createPayment) {
-        const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
+        // const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
         const orderUpdate = {
-          payment: createPayment.paymentId,
+          payment: createPayment._id,
         }
-        await axios.patch(orderUrl, orderUpdate, config).then((res) => res.data)
+        await updateOrderMutation({
+          variables: { input: orderUpdate, updateOrderId: orderId }
+        })
         setIsPaid(true)
       }
     } catch (e) {

@@ -9,11 +9,32 @@ import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import { MdEmail, MdLock } from 'react-icons/md'
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
+const LOGIN_MUTATION = gql`
+mutation Mutation($input: AuthInput!) {
+  signIn(input: $input) {
+    accessToken
+    expiredIn
+    user {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+    statusCode
+  }
+}`
 
 function SignInForm({ formStyle }) {
   const dispatch = useDispatch()
   const router = useRouter()
-
+  const [loginMutation, { loading: mutationLoading, error: mutationError }] = useMutation(LOGIN_MUTATION, {
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
   const USER_SCHEMA = Yup.object({
     email: Yup.string().email().required('Username is required'),
     password: Yup.string()
@@ -42,13 +63,22 @@ function SignInForm({ formStyle }) {
       }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          const loginInData = await axios
-            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
-              email: values.email,
-              password: values.password,
-            })
-            .then((res) => res.data)
-
+          // const loginInData = await axios
+          //   .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
+          //     email: values.email,
+          //     password: values.password,
+          //   })
+          //   .then((res) => res.data)
+          const inputs = {
+            email: values.email,
+            password: values.password,
+          }
+          console.log(inputs);
+          const { data } = await loginMutation({
+            variables: { input: inputs },
+          })
+          console.log("login", data.signIn)
+          const loginInData = data.signIn;
           if (loginInData) {
             const userInfo = {
               id: loginInData.user.id,

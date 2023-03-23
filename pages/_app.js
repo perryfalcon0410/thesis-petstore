@@ -8,7 +8,12 @@ import { Provider } from 'react-redux'
 import 'styles/utils.scss'
 import 'styles/responsive.scss'
 import { UserProvider } from 'context/UserContext'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+const client = new ApolloClient({
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+  cache: new InMemoryCache(),
+});
 function MyApp({ Component, pageProps }) {
   return (
     <>
@@ -24,11 +29,14 @@ function MyApp({ Component, pageProps }) {
           rel="stylesheet"
         />
       </Head>
-      <Provider store={store}>
-        <UserProvider>
-          <Component {...pageProps} />
-        </UserProvider>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
+
+        </Provider>
+      </ApolloProvider>
     </>
   )
 }

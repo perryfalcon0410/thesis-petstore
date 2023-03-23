@@ -7,11 +7,12 @@ import { format } from 'date-fns'
 const OrderDetail = ({ orderDetail }) => {
   let totalCost = 0
   const statusTitle = {
-    pending: 'Pending',
-    confirm: 'Confirmed',
-    delivering: 'Delivering',
-    finish: 'Finished',
-    cancel: 'Canceled',
+    PENDING: "Pending",
+    CONFIRMED: "Confirmed",
+    CANCELLED: "Canceled",
+    DELIVERING: "Delivering",
+    FINISHED: "Finished",
+    RETURNED: "Returned",
   }
   const paymentMethod = {
     paypal: 'Paypal',

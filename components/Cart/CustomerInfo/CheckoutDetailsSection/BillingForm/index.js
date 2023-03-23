@@ -8,7 +8,19 @@ import { Formik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetCheckout } from 'store/reducers/checkoutSlice'
 import { addMilliseconds } from 'date-fns'
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 
+const CREATE_ORDER = gql`
+mutation CreateOrder($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    data {
+      _id
+    }
+    success
+    msg
+  }
+}
+`
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const GHN_ShopId = '3410708'
   const GHN_Token = '5e301d1a-5c48-11ed-8636-7617f3863de9'
@@ -19,6 +31,17 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const [listRegion, setListRegion] = useState([])
   const [listDistrict, setListDistrict] = useState([])
   const [listWard, setListWard] = useState([])
+  const [createOrderMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_ORDER, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${userSlice.token}`,
+      },
+    },
+    client: new ApolloClient({
+      uri: "http://localhost:3000/graphql",
+      cache: new InMemoryCache(),
+    })
+  })
 
   useEffect(() => {
     if (completeOrder) localStorage.setItem('completeOrder', JSON.stringify(completeOrder))
@@ -39,7 +62,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
       setListRegion(regions.data)
     }
     fetchRegion()
-    return () => {}
+    return () => { }
   }, [])
 
   const handleSelectRegion = async (regionId) => {
@@ -173,27 +196,52 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             const district = listDistrict.filter((district) => district.DistrictID === values.districtId)[0]
               .DistrictName
             const ward = listWard.filter((ward) => ward.WardCode === values.wardId)[0].WardName
+            const { districtId, regionId, wardId, ...newValues } = values;
             // ** Get GHN delivery info
             const shipInfo = await getShipInfo(from_district_id, from_ward_id, values.districtId, values.wardId)
 
             // ** Create order through API
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
+            // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
+
+            const plainBill = { ...newValues, district, region, ward }
+            function convertCartToArray(cart) {
+              return Object.values(cart).map((cartItem) => ({
+                id: cartItem.id,
+                name: cartItem.name,
+                images: cartItem.images,
+                price: cartItem.price,
+                quantity: cartItem.quantity,
+              }));
+            }
+            const plainCartList = convertCartToArray(cartList);
             const checkoutData = {
               cart: cartList,
-              bill: { ...values, district, region, ward },
-              shippingTime: shipInfo.shippingTime,
+              bill: plainBill,
+              shippingTime: new Date(shipInfo.shippingTime).toISOString(),
               shippingFee: shipInfo.shippingFee,
               totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
+            console.log(checkoutData);
+            console.log(userSlice.token);
             const config = {
               headers: {
                 Authorization: `Bearer ${userSlice.token}`,
               },
             }
-            const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
+
+            const { data } = await createOrderMutation({
+              variables: { input: checkoutData },
+
+            })
+            console.log("order:", data);
+
+
+
+            const createOrderData = data.createOrder.data;
+            // const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
             // ** Update order state to local storage
             setCompleteOrder({
-              orderId: createOrderData.orderId,
+              orderId: createOrderData._id,
               cart: cartList,
               bill: values,
               shipping: shipInfo,
@@ -614,7 +662,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
         )}
       </Formik>
       <style jsx>{styles}</style>
-    </div>
+    </div >
   )
 }
 

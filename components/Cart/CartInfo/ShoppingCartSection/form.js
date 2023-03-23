@@ -8,10 +8,49 @@ import Link from 'next/link'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
+
+const LOGIN_MUTATION = gql`
+mutation Mutation($input: AuthInput!) {
+  signIn(input: $input) {
+    accessToken
+    expiredIn
+    user {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+    statusCode
+  }
+}
+`
+const SIGNUP_MUTATION = gql`
+mutation Mutation($input: AuthInput!) {
+  signUp(input: $input) {
+    accessToken
+    expiredIn
+    user {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+    statusCode
+  }
+}
+`
 
 export const SignInForm = ({ setSignUp, callback }) => {
   const dispatch = useDispatch()
-
+  const [loginMutation, { loading: mutationLoading, error: mutationError }] = useMutation(LOGIN_MUTATION, {
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
   const USER_SCHEMA = Yup.object({
     email: Yup.string().email('Email must be valid').required('Username is required'),
     password: Yup.string()
@@ -40,12 +79,23 @@ export const SignInForm = ({ setSignUp, callback }) => {
       }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          const loginInData = await axios
-            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
-              email: values.email,
-              password: values.password,
-            })
-            .then((res) => res.data)
+
+          // const loginInData = await axios
+          //   .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
+          //     email: values.email,
+          //     password: values.password,
+          //   })
+          //   .then((res) => res.data)
+          const inputs = {
+            email: values.email,
+            password: values.password,
+          }
+          console.log(inputs);
+          const { data } = await loginMutation({
+            variables: { input: inputs },
+          })
+          console.log("login", data.signIn)
+          const loginInData = data.signIn;
 
           if (loginInData) {
             const userInfo = {
@@ -139,7 +189,12 @@ export const SignInForm = ({ setSignUp, callback }) => {
 
 export const SignUpForm = ({ setSignIn, callback }) => {
   const dispatch = useDispatch()
-
+  const [signUpMutation, { loading: mutationLoading, error: mutationError }] = useMutation(SIGNUP_MUTATION, {
+    client: ({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
   const USER_SCHEMA = Yup.object({
     firstName: Yup.string().required('First name is required'),
     lastName: Yup.string().required('Last name is required'),
@@ -174,14 +229,27 @@ export const SignUpForm = ({ setSignIn, callback }) => {
       }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          const registerData = await axios
-            .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
-              firstName: values.firstName,
-              lastName: values.lastName,
-              email: values.email,
-              password: values.password,
-            })
-            .then((res) => res.data)
+          // const registerData = await axios
+          //   .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
+          //     firstName: values.firstName,
+          //     lastName: values.lastName,
+          //     email: values.email,
+          //     password: values.password,
+          //   })
+          //   .then((res) => res.data)
+
+          const inputs = {
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            password: values.password,
+          }
+          console.log(inputs);
+          const { data } = await signUpMutation({
+            variables: { input: inputs },
+          })
+          console.log("signUp", data.signUp)
+          const registerData = data.signUp;
 
           if (registerData) {
             const userInfo = {

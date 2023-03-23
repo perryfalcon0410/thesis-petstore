@@ -10,10 +10,32 @@ import { setUser } from 'store/reducers/userSlice'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
-
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
+const SIGNUP_MUTATION = gql`
+mutation Mutation($input: AuthInput!) {
+  signUp(input: $input) {
+    accessToken
+    expiredIn
+    user {
+      id
+      firstName
+      lastName
+      email
+      role
+    }
+    statusCode
+  }
+}
+`
 const SignUp = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const [signUpMutation, { loading: mutationLoading, error: mutationError }] = useMutation(SIGNUP_MUTATION, {
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
 
   const USER_SCHEMA = Yup.object({
     firstName: Yup.string().required('First name is required'),
@@ -53,15 +75,27 @@ const SignUp = () => {
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            const registerData = await axios
-              .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                password: values.password,
-              })
-              .then((res) => res.data)
-
+            // const registerData = await axios
+            //   .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
+            //     firstName: values.firstName,
+            //     lastName: values.lastName,
+            //     email: values.email,
+            //     password: values.password,
+            //   })
+            //   .then((res) => res.data)
+            const inputs = {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              email: values.email,
+              password: values.password,
+            }
+            console.log(inputs);
+            // console.log(process.env.GRAPHQL_BACKEND_URL)
+            const { data } = await signUpMutation({
+              variables: { input: inputs },
+            })
+            console.log("signUp", data.signUp)
+            const registerData = data.signUp;
             if (registerData) {
               const userInfo = {
                 id: registerData.user.id,
