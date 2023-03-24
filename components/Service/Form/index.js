@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
 import {
    Backdrop,
@@ -50,23 +50,70 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       reservationHour: "",
       locationType: "",
       region: "",
+      regionId: "",
       district: "",
+      districtId: "",
       ward: "",
+      wardId: "",
       address: "",
       description: "",
    });
+   const GHN_Token = '5e301d1a-5c48-11ed-8636-7617f3863de9'
+   const [listRegion, setListRegion] = useState([])
+   const [listDistrict, setListDistrict] = useState([])
+   const [listWard, setListWard] = useState([])
+   const [regionId, setRegionId] = useState("")
+   const [districtId, setDistrictId] = useState("")
+   const [wardId, setWardId] = useState("")
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
-   const navigateToPageAndRefresh = (targetPage) => {
-      // Navigate to the target page
-      Router.push(targetPage);
+   useEffect(() => {
+      const fetchRegion = async () => {
+         const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province'
+         const config = {
+            headers: {
+               Token: GHN_Token,
+            },
+         }
+         const regions = await axios.get(url, config).then((res) => res.data)
 
-      // Reload the page after a short delay
-      setTimeout(() => {
-         window.location.reload();
-      }, 10);
-   };
+         setListRegion(regions.data)
+         console.log("regions", regions.data);
+      }
+      fetchRegion()
+      return () => { }
+   }, [])
+   const handleSelectRegion = async (regionId) => {
+      const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district'
+      const body = {
+         province_id: regionId,
+      }
+      const config = {
+         headers: {
+            Token: GHN_Token,
+         },
+      }
+      const districts = await axios.post(url, body, config).then((res) => res.data)
+      setListDistrict(districts.data)
+      console.log("district", districts.data)
+   }
+
+   const handleSelectDistrict = async (districtId) => {
+      const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward'
+      const body = {
+         district_id: districtId,
+      }
+      const config = {
+         headers: {
+            Token: GHN_Token,
+         },
+      }
+      const wards = await axios.post(url, body, config).then((res) => res.data)
+      setListWard(wards.data)
+      console.log("ward", wards.data);
+   }
+
    const [createReservationMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_RESERVATION, {
       context: {
          headers: {
@@ -128,6 +175,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          };
       }
    }
+
    const handleChangeHour = (event) => {
       console.log("Event", event)
       for (const i in hoursDetail) {
@@ -351,37 +399,96 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                   </Grid>
 
                   <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <TextField
-                        fullWidth
-                        label="Province/City"
-                        name="region"
-                        onChange={handleChange}
-                        value={values.region}
-                        variant="outlined"
-                        required
-                     />
+                     <FormControl sx={{ width: "100%" }}>
+                        <InputLabel id="select-autowidth-label">Province/City *</InputLabel>
+                        <Select
+                           labelId="select-autowidth-label"
+                           name="region"
+                           value={values.regionId}
+                           onChange={(e) => {
+                              const regionId = Number(e.target.value)
+                              const res = listRegion.find(region => region.ProvinceID === regionId)
+                              setValues({
+                                 ...values,
+                                 regionId: regionId,
+                                 region: res.ProvinceName,
+                                 district: '',
+                                 districtId: '',
+                                 ward: '',
+                                 wardId: '',
+                              })
+                              handleSelectRegion(regionId, setValues)
+                           }}
+                           label="region"
+                           required
+                           variant="outlined"
+                        >
+                           {listRegion.map((region, index) => {
+                              return <MenuItem value={region.ProvinceID} key={index}>
+                                 {region.ProvinceName}
+                              </MenuItem>
+                           })}
+                        </Select>
+                     </FormControl>
                   </Grid>
 
                   <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <TextField
-                        fullWidth
-                        label="District"
-                        name="district"
-                        onChange={handleChange}
-                        value={values.district}
-                        variant="outlined"
-                     />
+                     <FormControl sx={{ width: "100%" }}>
+                        <InputLabel id="select-autowidth-label">District *</InputLabel>
+                        <Select
+                           labelId="select-autowidth-label"
+                           name="district"
+                           value={values.districtId}
+                           onChange={(e) => {
+                              const districtId = Number(e.target.value)
+                              const res = listDistrict.find(district => district.DistrictID === districtId)
+                              handleSelectDistrict(districtId, setValues)
+                              setValues({
+                                 ...values,
+                                 districtId: districtId,
+                                 district: res.DistrictName,
+                                 ward: '',
+                                 wardId: '',
+                              })
+                           }}
+                           label="district"
+                           required
+                           variant="outlined"
+                        >
+                           {listDistrict.map((district, index) => {
+                              return <MenuItem value={district.DistrictID} key={index}>
+                                 {district.DistrictName}
+                              </MenuItem>
+                           })}
+                        </Select>
+                     </FormControl>
                   </Grid>
                   <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <TextField
-                        fullWidth
-                        label="Ward"
-                        name="ward"
-                        onChange={handleChange}
-                        value={values.ward}
-                        variant="outlined"
-                        required
-                     />
+                     <FormControl sx={{ width: "100%" }}>
+                        <InputLabel id="select-autowidth-label">Ward *</InputLabel>
+                        <Select
+                           labelId="select-autowidth-label"
+                           name="ward"
+                           value={values.wardId}
+                           onChange={(e) => {
+                              const res = listWard.find(ward => ward.WardCode === e.target.value)
+                              setValues({
+                                 ...values,
+                                 wardId: e.target.value,
+                                 ward: res.WardName,
+                              })
+                           }}
+                           label="ward"
+                           required
+                           variant="outlined"
+                        >
+                           {listWard.map((ward, index) => {
+                              return <MenuItem value={ward.WardCode} key={index}>
+                                 {ward.WardName}
+                              </MenuItem>
+                           })}
+                        </Select>
+                     </FormControl>
                   </Grid>
                   <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
                      <TextField
