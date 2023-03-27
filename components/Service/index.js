@@ -34,9 +34,11 @@ query serviceType {
   }
 }`
 const Service = () => {
+  const userSlice = useSelector((state) => state.user)
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     cache: new InMemoryCache(),
+
   });
   const [serviceTypeData, setServiceTypeData] = useState("");
   const [getHours, setGetHours] = useState("");
