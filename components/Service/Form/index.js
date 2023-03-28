@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
+import styles from "./styles";
 import {
    Backdrop,
    Box,
@@ -30,6 +31,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import Router from "next/router";
 import { gql, useMutation, ApolloClient, InMemoryCache } from '@apollo/client';
+import { SignInForm, SignUpForm } from "components/Cart/CartInfo/ShoppingCartSection/form";
 const CREATE_RESERVATION = gql`
 mutation CreateReservation($reservation: ReservationInput!) {
    createReservation(reservation: $reservation) {
@@ -267,12 +269,18 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const handleSaveChanges = async (event) => {
       event.preventDefault();
       if (values.userName && values.phoneNumber && values.species && values.weight && values.breed && values.locationType && values.ward && values.address) {
-         setShowConfirmation(true);
+         if (userSlice.id) {
+            setShowConfirmation(true);
+         }
+         else {
+            setOpenModal(true);
+         }
       }
       else {
          // if any required field is empty, show an error message
          alert("Please fill in all required fields");
       };
+
    }
    const handleConfirmationClose = async (confirmed) => {
       // This function is called when the confirmation box is closed
@@ -316,322 +324,361 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          }
       }
    };
+   const [formState, setFormState] = useState(1)
+   const [openModal, setOpenModal] = useState(false)
+
+   const setSignIn = () => {
+      setFormState(1)
+   }
+
+   const setSignUp = () => {
+      setFormState(2)
+   }
+
+   const setResetPassword = () => {
+      setFormState(3)
+   }
+
+   const props = {
+      setSignIn,
+      setSignUp,
+      setResetPassword,
+      callback: () => {
+         setOpenModal(false)
+      },
+   }
    return (
-
-      <Box mx="auto" width="50%">
-         <Card>
-            <CardHeader title="Reservation Detail" />
-            <Divider />
-            <form onSubmit={handleSaveChanges}>
-               <Grid container spacing={3}>
-                  <Grid item md={6} xs={12}>
-                     <TextField
-                        fullWidth
-                        label="Name"
-                        name="userName"
-                        onChange={handleChange}
-                        value={values.userName}
-                        variant="outlined"
-                        required
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <TextField
-                        fullWidth
-                        label="Phone Number"
-                        name="phoneNumber"
-                        onChange={handleChange}
-                        value={values.phoneNumber}
-                        variant="outlined"
-                        required
-                     />
-                  </Grid>
-
-                  <Grid item md={6} xs={12}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Species *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="species"
-                           value={values.species}
-                           onChange={handleChange}
-                           label="Species"
-                        >
-                           {renderReservationSpecies()}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <TextField
-                        name="breed"
-                        label="Breed"
-                        value={values.breed}
-                        onChange={handleChange}
-                        required
-                        fullWidth
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <TextField
-                        fullWidth
-                        label="Weight (Kg)"
-                        name="weight"
-                        onChange={handleChange}
-                        value={values.weight}
-                        variant="outlined"
-                        required
-                     />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Location Type *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="locationType"
-                           value={values.locationType}
-                           onChange={handleLocation}
-                           label="locationType"
-                           required
-                        >
-                           {renderLocationType()}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-
-                  <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Province/City *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="region"
-                           value={values.regionId}
-                           onChange={(e) => {
-                              const regionId = Number(e.target.value)
-                              const res = listRegion.find(region => region.ProvinceID === regionId)
-                              setValues({
-                                 ...values,
-                                 regionId: regionId,
-                                 region: res.ProvinceName,
-                                 district: '',
-                                 districtId: '',
-                                 ward: '',
-                                 wardId: '',
-                              })
-                              handleSelectRegion(regionId, setValues)
-                           }}
-                           label="region"
-                           required
-                           variant="outlined"
-                        >
-                           {listRegion.map((region, index) => {
-                              return <MenuItem value={region.ProvinceID} key={index}>
-                                 {region.ProvinceName}
-                              </MenuItem>
-                           })}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-
-                  <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">District *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="district"
-                           value={values.districtId}
-                           onChange={(e) => {
-                              const districtId = Number(e.target.value)
-                              const res = listDistrict.find(district => district.DistrictID === districtId)
-                              handleSelectDistrict(districtId, setValues)
-                              setValues({
-                                 ...values,
-                                 districtId: districtId,
-                                 district: res.DistrictName,
-                                 ward: '',
-                                 wardId: '',
-                              })
-                           }}
-                           label="district"
-                           required
-                           variant="outlined"
-                        >
-                           {listDistrict.map((district, index) => {
-                              return <MenuItem value={district.DistrictID} key={index}>
-                                 {district.DistrictName}
-                              </MenuItem>
-                           })}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Ward *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="ward"
-                           value={values.wardId}
-                           onChange={(e) => {
-                              const res = listWard.find(ward => ward.WardCode === e.target.value)
-                              setValues({
-                                 ...values,
-                                 wardId: e.target.value,
-                                 ward: res.WardName,
-                              })
-                           }}
-                           label="ward"
-                           required
-                           variant="outlined"
-                        >
-                           {listWard.map((ward, index) => {
-                              return <MenuItem value={ward.WardCode} key={index}>
-                                 {ward.WardName}
-                              </MenuItem>
-                           })}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
-                     <TextField
-                        fullWidth
-                        label="Address"
-                        name="address"
-                        onChange={handleChange}
-                        value={values.address}
-                        variant="outlined"
-                        required
-                     />
-                  </Grid>
-
-                  <Grid item md={12} xs={12}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Service Type *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="serviceType"
-                           value={values.serviceType._id || ""}
-                           onChange={handleChangeServiceType}
-                           label="serviceType"
-                        >
-                           {renderReservationServiceTypes()}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                     <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ date: 'DD/MM/YYYY' }}>
-                        <DatePicker
+      <div className="wrapper">
+         <Box mx="auto" width="75%">
+            <Card>
+               <CardHeader title="Reservation Detail" />
+               <Divider />
+               <form onSubmit={handleSaveChanges}>
+                  <Grid container spacing={3}>
+                     <Grid item md={6} xs={12}>
+                        <TextField
                            fullWidth
-                           label="Date *"
-                           name="reservationDate"
-                           value={timeValue}
-                           onChange={handleDateChange}
-                           renderInput={(params) => (
-                              <TextField {...params} variant="outlined" />
-                           )}
-
+                           label="Name"
+                           name="userName"
+                           onChange={handleChange}
+                           value={values.userName}
+                           variant="outlined"
+                           required
                         />
-                     </LocalizationProvider>
+                     </Grid>
+                     <Grid item md={6} xs={12}>
+                        <TextField
+                           fullWidth
+                           label="Phone Number"
+                           name="phoneNumber"
+                           onChange={handleChange}
+                           value={values.phoneNumber}
+                           variant="outlined"
+                           required
+                        />
+                     </Grid>
+
+                     <Grid item md={6} xs={12}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Species *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="species"
+                              value={values.species}
+                              onChange={handleChange}
+                              label="Species"
+                           >
+                              {renderReservationSpecies()}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                     <Grid item md={6} xs={12}>
+                        <TextField
+                           name="breed"
+                           label="Breed"
+                           value={values.breed}
+                           onChange={handleChange}
+                           required
+                           fullWidth
+                        />
+                     </Grid>
+                     <Grid item md={6} xs={12}>
+                        <TextField
+                           fullWidth
+                           label="Weight (Kg)"
+                           name="weight"
+                           onChange={handleChange}
+                           value={values.weight}
+                           variant="outlined"
+                           required
+                        />
+                     </Grid>
+                     <Grid item md={6} xs={12}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Location Type *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="locationType"
+                              value={values.locationType}
+                              onChange={handleLocation}
+                              label="locationType"
+                              required
+                           >
+                              {renderLocationType()}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+
+                     <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Province/City *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="region"
+                              value={values.regionId}
+                              onChange={(e) => {
+                                 const regionId = Number(e.target.value)
+                                 const res = listRegion.find(region => region.ProvinceID === regionId)
+                                 setValues({
+                                    ...values,
+                                    regionId: regionId,
+                                    region: res.ProvinceName,
+                                    district: '',
+                                    districtId: '',
+                                    ward: '',
+                                    wardId: '',
+                                 })
+                                 handleSelectRegion(regionId, setValues)
+                              }}
+                              label="region"
+                              required
+                              variant="outlined"
+                           >
+                              {listRegion.map((region, index) => {
+                                 return <MenuItem value={region.ProvinceID} key={index}>
+                                    {region.ProvinceName}
+                                 </MenuItem>
+                              })}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+
+                     <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">District *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="district"
+                              value={values.districtId}
+                              onChange={(e) => {
+                                 const districtId = Number(e.target.value)
+                                 const res = listDistrict.find(district => district.DistrictID === districtId)
+                                 handleSelectDistrict(districtId, setValues)
+                                 setValues({
+                                    ...values,
+                                    districtId: districtId,
+                                    district: res.DistrictName,
+                                    ward: '',
+                                    wardId: '',
+                                 })
+                              }}
+                              label="district"
+                              required
+                              variant="outlined"
+                           >
+                              {listDistrict.map((district, index) => {
+                                 return <MenuItem value={district.DistrictID} key={index}>
+                                    {district.DistrictName}
+                                 </MenuItem>
+                              })}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                     <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Ward *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="ward"
+                              value={values.wardId}
+                              onChange={(e) => {
+                                 const res = listWard.find(ward => ward.WardCode === e.target.value)
+                                 setValues({
+                                    ...values,
+                                    wardId: e.target.value,
+                                    ward: res.WardName,
+                                 })
+                              }}
+                              label="ward"
+                              required
+                              variant="outlined"
+                           >
+                              {listWard.map((ward, index) => {
+                                 return <MenuItem value={ward.WardCode} key={index}>
+                                    {ward.WardName}
+                                 </MenuItem>
+                              })}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                     <Grid item md={6} xs={12} style={{ display: values.locationType === "HOME" ? "block" : "none" }}>
+                        <TextField
+                           fullWidth
+                           label="Address"
+                           name="address"
+                           onChange={handleChange}
+                           value={values.address}
+                           variant="outlined"
+                           required
+                        />
+                     </Grid>
+
+                     <Grid item md={12} xs={12}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Service Type *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="serviceType"
+                              value={values.serviceType._id || ""}
+                              onChange={handleChangeServiceType}
+                              label="serviceType"
+                           >
+                              {renderReservationServiceTypes()}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                     <Grid item xs={12} sm={6}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ date: 'DD/MM/YYYY' }}>
+                           <DatePicker
+                              fullWidth
+                              label="Date *"
+                              name="reservationDate"
+                              value={timeValue}
+                              onChange={handleDateChange}
+                              renderInput={(params) => (
+                                 <TextField {...params} variant="outlined" />
+                              )}
+
+                           />
+                        </LocalizationProvider>
+                     </Grid>
+                     <Grid item xs={12} sm={6}>
+                        <FormControl sx={{ width: "100%" }}>
+                           <InputLabel id="select-autowidth-label">Time *</InputLabel>
+                           <Select
+                              labelId="select-autowidth-label"
+                              name="reservationHour"
+                              value={values.reservationHour._id || ""}
+                              onChange={handleChangeHour}
+                              label="reservationHour"
+                           >
+                              {values.reservationDate && renderReservationHour()}
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                     <Grid item md={12} xs={24}>
+                        <TextField
+                           fullWidth
+                           label="Note"
+                           name="description"
+                           onChange={handleChange}
+                           value={values.description}
+                           variant="outlined"
+                           multiline
+                           rows={5}
+                        />
+                     </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                     <FormControl sx={{ width: "100%" }}>
-                        <InputLabel id="select-autowidth-label">Time *</InputLabel>
-                        <Select
-                           labelId="select-autowidth-label"
-                           name="reservationHour"
-                           value={values.reservationHour._id || ""}
-                           onChange={handleChangeHour}
-                           label="reservationHour"
-                        >
-                           {values.reservationDate && renderReservationHour()}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item md={12} xs={24}>
-                     <TextField
-                        fullWidth
-                        label="Note"
-                        name="description"
-                        onChange={handleChange}
-                        value={values.description}
-                        variant="outlined"
-                        multiline
-                        rows={5}
-                     />
-                  </Grid>
-               </Grid>
 
 
 
-            </form>
-            <Box
-               sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  p: 2,
-               }}
-            >
-               <Button color="primary" variant="contained" onClick={handleSaveChanges}>
-                  Submit
-               </Button>
-            </Box>
-         </Card>
-         <Box>
-            <Dialog open={showConfirmation} onClose={() => handleConfirmationClose(false)}>
-               <DialogTitle><Typography fontWeight={"bold"} fontSize={25}>Confirm Submission</Typography></DialogTitle>
-               <DialogContent>
-                  <DialogContentText>
-
-                  </DialogContentText>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Name: {values.userName}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Phone Number: {values.phoneNumber}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Pet information: {capiStr(values.species)} - {capiStr(values.breed)}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Weight: {values.weight}Kg</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Location: {values.locationType === "STORE" ? `${capiStr(values.locationType)}` : `${values.address} - ${values.district} - ${values.region}`}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Service: {values.serviceType.name}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Name: {values.userName}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Date and Time: {values.reservationDate.slice(0, 10)} - {values.reservationHour.name}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
-                     <Typography>Note: {values.description}</Typography>
-                  </Box>
-                  <Box sx={{ mt: 2, p: 2 }}>
-                     <Typography fontSize={20} fontWeight={"bold"}>Price: ${getPrice()}</Typography>
-                  </Box>
-
-
-               </DialogContent>
-               <DialogActions>
-                  <Button onClick={() => handleConfirmationClose(false)}>Go Back</Button>
-                  <Button onClick={() => handleConfirmationClose(true)}>Confirm</Button>
-               </DialogActions>
-            </Dialog>
-
-            <Backdrop open={showConfirmation} sx={{ zIndex: 1 }}>
-               <Stack
-                  direction="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{ height: "100vh" }}
+               </form>
+               <Box
+                  sx={{
+                     display: "flex",
+                     justifyContent: "flex-end",
+                     p: 2,
+                  }}
                >
-                  {/* Add any content you want to show behind the confirmation box here */}
-               </Stack>
-            </Backdrop>
-         </Box>
-      </Box >
+                  <Button color="primary" variant="contained" onClick={handleSaveChanges}>
+                     Submit
+                  </Button>
+               </Box>
+            </Card>
+            <Box>
+               <Dialog open={showConfirmation} onClose={() => handleConfirmationClose(false)}>
+                  <DialogTitle><Typography fontWeight={"bold"} fontSize={25}>Confirm Submission</Typography></DialogTitle>
+                  <DialogContent>
+                     <DialogContentText>
+                     </DialogContentText>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Name: {values.userName}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Phone Number: {values.phoneNumber}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Pet information: {capiStr(values.species)} - {capiStr(values.breed)}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Weight: {values.weight}Kg</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Location: {values.locationType === "STORE" ? `${capiStr(values.locationType)}` : `${values.address} - ${values.district} - ${values.region}`}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Service: {values.serviceType.name}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Name: {values.userName}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Date and Time: {values.reservationDate.slice(0, 10)} - {values.reservationHour.name}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100" }}>
+                        <Typography>Note: {values.description}</Typography>
+                     </Box>
+                     <Box sx={{ mt: 2, p: 2 }}>
+                        <Typography fontSize={20} fontWeight={"bold"}>Price: ${getPrice()}</Typography>
+                     </Box>
+
+
+                  </DialogContent>
+                  <DialogActions>
+                     <Button onClick={() => handleConfirmationClose(false)}>Go Back</Button>
+                     <Button onClick={() => handleConfirmationClose(true)}>Confirm</Button>
+                  </DialogActions>
+               </Dialog>
+
+               <Backdrop open={showConfirmation} sx={{ zIndex: 1 }}>
+                  <Stack
+                     direction="column"
+                     alignItems="center"
+                     justifyContent="center"
+                     sx={{ height: "100vh" }}
+                  >
+                     {/* Add any content you want to show behind the confirmation box here */}
+                  </Stack>
+               </Backdrop>
+            </Box>
+
+
+         </Box >
+
+         <div
+            className="absolute-form"
+            onClick={(e) => {
+               if (e.target.className.includes('absolute-form')) {
+                  setOpenModal(false)
+               }
+            }}
+            style={openModal ? { opacity: 1, visibility: 'visible' } : { opacity: 0, visibility: 'hidden' }}
+         >
+            {formState === 1 && <SignInForm {...props} />}
+            {formState === 2 && <SignUpForm {...props} />}
+         </div>
+         <style jsx>{styles}</style>
+      </div>
 
    );
 };
