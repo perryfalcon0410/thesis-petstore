@@ -34,6 +34,12 @@ export const ORDER_STATUS = {
   CANCELLED: 4,
   RETURNED: 5,
 }
+export const RESERVATION_STATUS = {
+  ALL: -1,
+  BOOKED: 0,
+  SUCCESS: 1,
+  CANCELLED: 2,
+}
 export const LIMIT_PRODUCT_ORDER_LIST = 2
 export const POPUP_STATE_CLOSE = -1
 

@@ -316,6 +316,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                variables: { reservation: input },
             })
             alert("The reservation is booked successfully");
+            console.log(data);
             Router.push("/");
          }
          catch (error) {

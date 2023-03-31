@@ -130,7 +130,14 @@ const NavBar = () => {
                 <Link href="/order-management">
                   <a>
                     <div className={classNames('title', { isChosen: router.asPath === '/order-management' })}>
-                      Your order
+                      Your orders
+                    </div>
+                  </a>
+                </Link>
+                <Link href="/reservation-management">
+                  <a>
+                    <div className={classNames('title', { isChosen: router.asPath === '/reservation-management' })}>
+                      Your reservations
                     </div>
                   </a>
                 </Link>
