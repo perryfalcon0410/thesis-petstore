@@ -205,11 +205,24 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          serviceTypeTitle[service_id[i]] = service_name[i];
       }
       console.log("title", serviceTypeTitle)
-      return Object.keys(serviceTypeTitle).map((status, idx) => (
+      // return Object.keys(serviceTypeTitle).map((status, idx) => (
+      //    <MenuItem value={status} key={idx}>
+      //       {serviceTypeTitle[status]}
+      //    </MenuItem>
+      // ));
+      const menuItem = Object.keys(serviceTypeTitle).map((status, idx) => (
          <MenuItem value={status} key={idx}>
             {serviceTypeTitle[status]}
          </MenuItem>
       ));
+      if (userSlice.token) {
+         menuItem[0] = (
+            <MenuItem value={Object.keys(serviceTypeTitle)[0]} key={0}>
+               {serviceTypeTitle[Object.keys(serviceTypeTitle)[0]]} (Recommend)
+            </MenuItem >
+         );
+      }
+      return menuItem;
    };
    const renderReservationHour = () => {
       const hour_name = [];
@@ -259,15 +272,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          })
       }
    }
-   // const handleDateChange = (date) => {
-   //    console.log(date)
-   //    setTimeValue(date)
-   //    setValues({
-   //       ...values,
-   //       reservationDate: dayjs(date).format(),
-   //       reservationHour: {}
-   //    });
-   // };
    const handleDateChange = (date) => {
       console.log(date);
       const newDate = dayjs(date).add(7, 'hour');
