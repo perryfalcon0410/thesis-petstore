@@ -70,6 +70,8 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
+   const now = new Date();
+   const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
    useEffect(() => {
       const fetchRegion = async () => {
          const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province'
@@ -257,18 +259,30 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          })
       }
    }
+   // const handleDateChange = (date) => {
+   //    console.log(date)
+   //    setTimeValue(date)
+   //    setValues({
+   //       ...values,
+   //       reservationDate: dayjs(date).format(),
+   //       reservationHour: {}
+   //    });
+   // };
    const handleDateChange = (date) => {
-      console.log(date)
-      setTimeValue(date)
+      console.log(date);
+      const newDate = dayjs(date).add(7, 'hour');
+      setTimeValue(newDate);
       setValues({
          ...values,
-         reservationDate: dayjs(date).format(),
-         reservationHour: {}
+         reservationDate: newDate.format(),
+         reservationHour: {},
       });
    };
+
+
    const handleSaveChanges = async (event) => {
       event.preventDefault();
-      if (values.userName && values.phoneNumber && values.species && values.weight && values.breed && values.locationType && values.ward && values.address) {
+      if (values.userName && values.phoneNumber && values.species && values.weight && values.breed && values.locationType && values.ward && values.address && values.serviceType) {
          if (userSlice.id) {
             setShowConfirmation(true);
          }
@@ -547,19 +561,25 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               {renderReservationServiceTypes()}
                            </Select>
                         </FormControl>
+                        {values.serviceType.description && (
+                           <Typography variant="subtitle1" sx={{ mt: 2, ml: 2 }}>
+                              Description: {values.serviceType.description}
+                           </Typography>
+                        )}
                      </Grid>
+
                      <Grid item xs={12} sm={6}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ date: 'DD/MM/YYYY' }}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} >
                            <DatePicker
                               fullWidth
                               label="Date *"
                               name="reservationDate"
                               value={timeValue}
                               onChange={handleDateChange}
+                              minDate={dayjs(minDate)}
                               renderInput={(params) => (
                                  <TextField {...params} variant="outlined" />
                               )}
-
                            />
                         </LocalizationProvider>
                      </Grid>
@@ -679,7 +699,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             {formState === 2 && <SignUpForm {...props} />}
          </div>
          <style jsx>{styles}</style>
-      </div>
+      </div >
 
    );
 };

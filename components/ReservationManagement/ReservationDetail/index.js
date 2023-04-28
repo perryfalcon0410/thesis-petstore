@@ -4,15 +4,64 @@ import Image from 'next/image'
 import { IMAGE_QUALITY } from 'utils/constant'
 import { format } from 'date-fns'
 import { productDetail } from 'components/mocks/productDetail'
+import { useState } from 'react'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
+import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
+const CANCEL_RESERVATION = gql`
+mutation Mutation($updateReservationId: ID!, $reservation: UpdateReservationInput!) {
+  updateReservation(id: $updateReservationId, reservation: $reservation) {
+    _id
+  }
+}
+`
 
 const ReservationDetail = ({ reservationDetail }) => {
   const statusTitle = {
     BOOKED: "Booked",
     CANCELLED: "Cancelled",
-    FINISHED: "Finished",
+    SUCCESS: "Success",
   }
+  const [cancelId, setCancelId] = useState("")
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const capiStr = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+  const handleCancel = (id) => {
+    console.log(id)
+    setCancelId(id);
+    setShowConfirmation(true);
+  }
+  const [cancelReservationMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CANCEL_RESERVATION, {
+    client: new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      cache: new InMemoryCache(),
+    })
+  })
+  const now = new Date();
+  const reservationDate = new Date(reservationDetail.reservationDate);
+  reservationDate.setDate(reservationDate.getDate() + 1);
+  const handleConfirmationClose = async (confirmed) => {
+    console.log("cancelId", cancelId);
+    setShowConfirmation(false);
+    if (confirmed) {
+      try {
+        const { data } = await cancelReservationMutation({
+          variables: {
+            updateReservationId: cancelId,
+            reservation: {
+              status: "CANCELLED"
+            }
+          },
+        })
+        alert("The reservation is canceled");
+        console.log(data);
+        window.location.href = "/reservation-management";
+      }
+      catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
   }
   const getPrice = (reservation) => {
 
@@ -59,6 +108,14 @@ const ReservationDetail = ({ reservationDetail }) => {
               </div>
             </a>
           </Link>
+          {reservationDetail.status === 'BOOKED' && reservationDate <= now && (
+            <a className="product-path" onClick={() => handleCancel(reservationDetail._id)}>
+              <div className="go-back">
+
+                <p>Cancel Reservation</p>
+              </div>
+            </a>
+          )}
         </div>
         <div className="col-large-5">
           <div className="title">Reservation infomation</div>
@@ -86,9 +143,25 @@ const ReservationDetail = ({ reservationDetail }) => {
             <p className="total">Total</p>
             <p className="price">${getPrice(reservationDetail)}</p>
           </div>
+
         </div>
       </div>
       <style jsx>{styles}</style>
+      <Box>
+        <Dialog open={showConfirmation} onClose={() => handleConfirmationClose(false)}>
+          <DialogTitle><Typography fontWeight={"bold"} fontSize={25}>Confirm Submission</Typography></DialogTitle>
+          <DialogContent>
+            <DialogContentText> Are you sure to cancel this reservation </DialogContentText>
+
+
+
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => handleConfirmationClose(false)}>Go Back</Button>
+            <Button onClick={() => handleConfirmationClose(true)}>Confirm</Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
     </div>
   )
 }

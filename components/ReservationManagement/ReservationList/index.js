@@ -62,8 +62,8 @@ const ReservationList = ({ reservationList }) => {
             <div className="card" key={reservation._id}>
               <div className="top">
                 <div className="status">
-                  <DeliveryIcon width={20} height={20} stroke={statusColor[reservation.status]} fill={'white'} />
-                  <p style={{ color: statusColor[reservation.status] }}>{statusTitle[reservation.status]}</p>
+                  <p style={{ fontWeight: "bold", color: "black" }}>Status: </p>
+                  <p style={{ fontWeight: "bold", color: statusColor[reservation.status] }}>{statusTitle[reservation.status]}</p>
                 </div>
                 <div className="divider"></div>
                 <div className="product-container">
