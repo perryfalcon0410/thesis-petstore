@@ -235,11 +235,23 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          hourTitle[hour_id[i]] = hour_name[i];
       }
       console.log("hourTitle", hourTitle)
+
       return Object.keys(hourTitle).map((status, idx) => (
-         <MenuItem value={status} key={idx}>
+         <Button variant="outlined" value={status} key={idx}>
             {hourTitle[status]}
-         </MenuItem>
+         </Button>
       ));
+      // return (
+      //    <Grid container spacing={2}>
+      //       {Object.keys(hourTitle).map((status, idx) => (
+      //          <Grid item xs={6} key={idx}>
+      //             <Button variant="outlined" fullWidth value={status} key={idx}>
+      //                {hourTitle[status]}
+      //             </Button>
+      //          </Grid>
+      //       ))}
+      //    </Grid>
+      // )
    };
    const handleChange = (event) => {
       console.log("event", event);
