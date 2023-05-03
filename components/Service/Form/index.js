@@ -202,14 +202,12 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          service_id.push(serviceTypeDetail[serviceType]._id);
       }
       for (const i in service_name) {
-         serviceTypeTitle[service_id[i]] = service_name[i];
+         if (service_name[i].toLowerCase().includes(values.species.toLowerCase())) {
+            serviceTypeTitle[service_id[i]] = service_name[i];
+         }
       }
       console.log("title", serviceTypeTitle)
-      // return Object.keys(serviceTypeTitle).map((status, idx) => (
-      //    <MenuItem value={status} key={idx}>
-      //       {serviceTypeTitle[status]}
-      //    </MenuItem>
-      // ));
+
       const menuItem = Object.keys(serviceTypeTitle).map((status, idx) => (
          <MenuItem value={status} key={idx}>
             {serviceTypeTitle[status]}
@@ -250,6 +248,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          [event.target.name]: event.target.value,
       });
    };
+
    const handleLocation = (event) => {
       if (event.target.value === "STORE") {
          setValues({
@@ -404,7 +403,15 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               labelId="select-autowidth-label"
                               name="species"
                               value={values.species}
-                              onChange={handleChange}
+                              onChange={(e) => {
+                                 setValues({
+                                    ...values,
+                                    species: e.target.value,
+                                    breed: "",
+                                    weight: "",
+                                    serviceType: "",
+                                 })
+                              }}
                               label="Species"
                            >
                               {renderReservationSpecies()}
@@ -551,8 +558,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                            required
                         />
                      </Grid>
-
-                     <Grid item md={12} xs={12}>
+                     {values.species && (<Grid item md={12} xs={12}>
                         <FormControl sx={{ width: "100%" }}>
                            <InputLabel id="select-autowidth-label">Service Type *</InputLabel>
                            <Select
@@ -570,7 +576,8 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               Description: {values.serviceType.description}
                            </Typography>
                         )}
-                     </Grid>
+                     </Grid>)}
+
 
                      <Grid item xs={12} sm={6}>
                         <LocalizationProvider dateAdapter={AdapterDayjs} >
