@@ -6,7 +6,7 @@ const CustomNextArrow = (props) => {
   const { onClick } = props
   return (
     <div className="next-arrow" onClick={onClick}>
-      <BsArrowRight fontSize={20} />
+      <BsArrowRight fontSize={40} />
       <style jsx>{styles}</style>
     </div>
   )
@@ -16,19 +16,17 @@ const CustomPrevArrow = (props) => {
   const { onClick } = props
   return (
     <div className="prev-arrow" onClick={onClick}>
-      <BsArrowLeft fontSize={20} />
+      <BsArrowLeft fontSize={40} />
       <style jsx>{styles}</style>
     </div>
   )
 }
 
-const HeaderBanner = () => {
+const HeaderServiceBanner = () => {
   const banners = [
-    { id: 1, src: '/banners/service1.PNG', link: '/services/form' },
-    { id: 2, src: '/banners/image2.png',link:'/products' },
-    { id: 3, src: '/banners/image4.jpg' },
-    { id: 4, src: '/banners/image1.png' },
-    { id: 5, src: '/banners/image3.jpg' },
+    { id: 1, src: '/banners/service1.PNG' },
+    { id: 2, src: '/banners/service2.PNG' },
+    { id: 3, src: '/banners/service3.PNG' }
   ]
 
   const settings = {
@@ -49,12 +47,12 @@ const HeaderBanner = () => {
         {banners.map((banner) => {
           return (
             <div key={banner.id}>
-              <a href={banner.link}>
+              <a href="/services/form">
                 <div
                   style={{ backgroundImage: `url(${banner.src})`, backgroundSize: 'cover' }}
                   className="background"
-                ></div></a>
-
+                ></div>
+              </a>
             </div>
           )
         })}
@@ -64,4 +62,4 @@ const HeaderBanner = () => {
   )
 }
 
-export default HeaderBanner
+export default HeaderServiceBanner

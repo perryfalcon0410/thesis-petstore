@@ -15,6 +15,9 @@ const Title = () => {
               <Link href="/services">
                 <a>/Service</a>
               </Link>
+              <Link href="/form">
+                <a>/Reservation Form</a>
+              </Link>
             </div>
           </div>
         </div>
