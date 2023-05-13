@@ -90,11 +90,11 @@ export const SignInForm = ({ setSignUp, callback }) => {
             email: values.email,
             password: values.password,
           }
-          console.log(inputs);
+          
           const { data } = await loginMutation({
             variables: { input: inputs },
           })
-          console.log("login", data.signIn)
+          
           const loginInData = data.signIn;
 
           if (loginInData) {
@@ -244,11 +244,11 @@ export const SignUpForm = ({ setSignIn, callback }) => {
             email: values.email,
             password: values.password,
           }
-          console.log(inputs);
+          
           const { data } = await signUpMutation({
             variables: { input: inputs },
           })
-          console.log("signUp", data.signUp)
+          
           const registerData = data.signUp;
 
           if (registerData) {

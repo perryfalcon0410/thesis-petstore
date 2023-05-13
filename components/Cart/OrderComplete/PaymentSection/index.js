@@ -73,13 +73,13 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
           Authorization: `Bearer ${userSlice.token}`,
         },
       }
-      console.log(paymentInfo);
+      
       // const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
       const { data } = await createPaymentMutation({
         variables: { input: paymentInfo }
       })
       const createPayment = data.createPayment;
-      console.log(createPayment);
+      
       if (createPayment) {
         // const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
         const orderUpdate = {

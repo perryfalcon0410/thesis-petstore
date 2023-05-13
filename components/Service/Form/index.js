@@ -35,6 +35,7 @@ import { SignInForm, SignUpForm } from "components/Cart/CartInfo/ShoppingCartSec
 
 
 
+
 const CREATE_RESERVATION = gql`
 mutation CreateReservation($reservation: ReservationInput!) {
    createReservation(reservation: $reservation) {
@@ -73,6 +74,8 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
+
+   
    const now = new Date();
    const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
    useEffect(() => {
@@ -84,9 +87,11 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             },
          }
          const regions = await axios.get(url, config).then((res) => res.data)
+         const filteredRegions = regions.data.filter((region) => {
+            return region.ProvinceName === 'Hồ Chí Minh';
+          });
+         setListRegion(filteredRegions)
 
-         setListRegion(regions.data)
-         console.log("regions", regions.data);
       }
       fetchRegion()
       return () => { }
@@ -103,7 +108,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       }
       const districts = await axios.post(url, body, config).then((res) => res.data)
       setListDistrict(districts.data)
-      console.log("district", districts.data)
+
    }
 
    const handleSelectDistrict = async (districtId) => {
@@ -118,7 +123,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       }
       const wards = await axios.post(url, body, config).then((res) => res.data)
       setListWard(wards.data)
-      console.log("ward", wards.data);
+
    }
 
    const [createReservationMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_RESERVATION, {
@@ -132,7 +137,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          cache: new InMemoryCache(),
       })
    })
-   console.log("values", values);
+
    const renderReservationSpecies = () => {
       const reservationSpecies = ["dog", "cat"];
       const speciesTitle = {
@@ -171,7 +176,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       return 0;
    }
    const handleChangeServiceType = (event) => {
-      console.log("Event", event)
+
       for (const i in serviceTypeDetail) {
          if (serviceTypeDetail[i]._id == event.target.value) {
             setValues({
@@ -184,7 +189,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    }
 
    const handleChangeHour = (event) => {
-      console.log("Event", event)
+
       for (const i in hoursDetail) {
          if (hoursDetail[i]._id == event.target.value) {
             setValues({
@@ -199,7 +204,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       const service_name = [];
       const service_id = [];
       const serviceTypeTitle = {};
-      console.log("detail", serviceTypeDetail);
+
       for (const serviceType in serviceTypeDetail) {
          service_name.push(serviceTypeDetail[serviceType].name);
          service_id.push(serviceTypeDetail[serviceType]._id);
@@ -209,7 +214,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             serviceTypeTitle[service_id[i]] = service_name[i];
          }
       }
-      console.log("title", serviceTypeTitle)
 
       const menuItem = Object.keys(serviceTypeTitle).map((status, idx) => (
          <MenuItem value={status} key={idx}>
@@ -229,7 +233,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       const hour_name = [];
       const hour_id = [];
       const hourTitle = {};
-      console.log("hourDetail", hoursDetail);
+
       for (const hour in hoursDetail) {
          hour_name.push(hoursDetail[hour].name);
          hour_id.push(hoursDetail[hour]._id);
@@ -237,7 +241,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       for (const i in hour_name) {
          hourTitle[hour_id[i]] = hour_name[i];
       }
-      console.log("hourTitle", hourTitle)
+
 
       return Object.keys(hourTitle).map((status, idx) => (
          <Button variant="outlined" value={status} key={idx}>
@@ -257,7 +261,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       // )
    };
    const handleChange = (event) => {
-      console.log("event", event);
+
       setValues({
          ...values,
          [event.target.name]: event.target.value,
@@ -269,10 +273,10 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          setValues({
             ...values,
             locationType: "STORE",
-            region: "Ho Chi Minh",
-            district: "10",
-            ward: "13",
-            address: "270 Ly Thuong Kiet",
+            region: "Hồ Chí Minh",
+            district: "Quận 10",
+            ward: "Phường 13",
+            address: "270 Lý Thường Kiệt",
          })
       }
       else {
@@ -287,7 +291,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       }
    }
    const handleDateChange = (date) => {
-      console.log(date);
+
       const newDate = dayjs(date).add(7, 'hour');
       setTimeValue(newDate);
       setValues({
@@ -341,14 +345,13 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             note: values.description,
             status: "BOOKED"
          }
-         console.log("data", input);
-         console.log("key", userSlice.token);
+
          try {
             const { data } = await createReservationMutation({
                variables: { reservation: input },
             })
             alert("The reservation is booked successfully");
-            console.log(data);
+
             Router.push("/");
          }
          catch (error) {
@@ -527,7 +530,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               required
                               variant="outlined"
                            >
-                              {listDistrict.map((district, index) => {
+                              {values.region && listDistrict.map((district, index) => {
                                  return <MenuItem value={district.DistrictID} key={index}>
                                     {district.DistrictName}
                                  </MenuItem>
@@ -554,7 +557,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               required
                               variant="outlined"
                            >
-                              {listWard.map((ward, index) => {
+                              {values.district && listWard.map((ward, index) => {
                                  return <MenuItem value={ward.WardCode} key={index}>
                                     {ward.WardName}
                                  </MenuItem>
@@ -573,6 +576,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                            required
                         />
                      </Grid>
+                     
                      {values.species && (<Grid item md={12} xs={12}>
                         <FormControl sx={{ width: "100%" }}>
                            <InputLabel id="select-autowidth-label">Service Type *</InputLabel>

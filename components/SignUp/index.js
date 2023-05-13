@@ -89,12 +89,11 @@ const SignUp = () => {
               email: values.email,
               password: values.password,
             }
-            console.log(inputs);
-            // console.log(process.env.GRAPHQL_BACKEND_URL)
+            
             const { data } = await signUpMutation({
               variables: { input: inputs },
             })
-            console.log("signUp", data.signUp)
+            
             const registerData = data.signUp;
             if (registerData) {
               const userInfo = {

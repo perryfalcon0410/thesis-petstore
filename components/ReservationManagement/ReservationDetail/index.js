@@ -27,7 +27,7 @@ const ReservationDetail = ({ reservationDetail }) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
   const handleCancel = (id) => {
-    console.log(id)
+
     setCancelId(id);
     setShowConfirmation(true);
   }
@@ -41,7 +41,7 @@ const ReservationDetail = ({ reservationDetail }) => {
   const reservationDate = new Date(reservationDetail.reservationDate);
   reservationDate.setDate(reservationDate.getDate() + 1);
   const handleConfirmationClose = async (confirmed) => {
-    console.log("cancelId", cancelId);
+
     setShowConfirmation(false);
     if (confirmed) {
       try {
@@ -53,8 +53,8 @@ const ReservationDetail = ({ reservationDetail }) => {
             }
           },
         })
-        alert("The reservation is canceled");
-        console.log(data);
+        alert("The reservation is CANCELLED");
+
         window.location.href = "/reservation-management";
       }
       catch (error) {

@@ -221,8 +221,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               shippingFee: shipInfo.shippingFee,
               totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
-            console.log(checkoutData);
-            console.log(userSlice.token);
+            
             const config = {
               headers: {
                 Authorization: `Bearer ${userSlice.token}`,
@@ -233,7 +232,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               variables: { input: checkoutData },
 
             })
-            console.log("order:", data);
+            ;
 
 
 

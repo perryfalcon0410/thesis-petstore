@@ -10,7 +10,7 @@ import Footer from 'components/Utils/Footer'
 
 const ReservationManagement = ({ reservationType, reservationList, reservationDetail }) => {
   const userSlice = useSelector((state) => state.user)
-  console.log(reservationList)
+  
   
   return (
     <div className="wrapper">

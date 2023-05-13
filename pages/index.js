@@ -22,14 +22,14 @@ query RecommendProduct {
 
 const HomePage = ({ trendingProducts }) => {
   const userSlice = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(true);
   const [recommendProducts, setRecommendProducts] = useState([]);
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     cache: new InMemoryCache(),
   });
-  console.log(userSlice.token);
+
   const { error, data } = useQuery(RECOMMEND_PRODUCTS, {
+    skip: !userSlice.token,
     context: {
       headers: {
         Authorization: `Bearer ${userSlice.token}`,
@@ -40,18 +40,14 @@ const HomePage = ({ trendingProducts }) => {
   useEffect(() => {
     if (data && data.recommendProduct) {
       setRecommendProducts(data.recommendProduct);
-      setLoading(false);
     }
   }, [data]);
 
   if (error) {
-    console.log(error);
+    // console.log(error);
     return <Home trendingProducts={trendingProducts} />;
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
   if (recommendProducts.length === 0) {
     return <Home trendingProducts={trendingProducts} />;
   }
@@ -64,7 +60,7 @@ export async function getStaticProps() {
     const blogs = await axios
       .get(`${process.env.BACKEND_URL}/blog`)
       .then((res) => res.data);
-    console.log(process.env.BACKEND_URL);
+
 
     return {
       props: {

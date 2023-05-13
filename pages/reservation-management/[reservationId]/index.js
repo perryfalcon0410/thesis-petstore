@@ -47,7 +47,7 @@ export default function ReservationDetailPage({ reservationId }) {
   const [reservationDetail, setReservationDetail] = useState('')
   const userSlice = useSelector((state) => state.user)
   const [loading, setLoading] = useState(true);
-  console.log("resId", reservationId);
+  
   const client = new ApolloClient({
     uri: "http://localhost:3000/graphql",
     cache: new InMemoryCache(),
@@ -68,7 +68,7 @@ export default function ReservationDetailPage({ reservationId }) {
   if (!reservationDetail) {
     return <h1>Loading ...</h1>
   }
-  console.log(reservationDetail)
+  
   return <ReservationManagement reservationType={ORDER_TYPE.SINGLE} reservationDetail={reservationDetail} />
 }
 

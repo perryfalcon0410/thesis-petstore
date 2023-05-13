@@ -13,6 +13,7 @@ export default css`
     margin-block-start: 0;
     margin-block-end: 0;
     margin-top: 32px;
+    text-align: center;
   }
   .desc {
     font-size: 24px;

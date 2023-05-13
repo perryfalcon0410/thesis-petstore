@@ -6,7 +6,7 @@ import { DeliveryIcon } from 'components/Utils/Icon'
 import { useState } from 'react'
 
 const ReservationList = ({ reservationList }) => {
-  console.log("list", reservationList)
+  
   const [currentStatus, setCurrentStatus] = useState(RESERVATION_STATUS.ALL);
   const statusColor = {
     BOOKED: '#FFB020',

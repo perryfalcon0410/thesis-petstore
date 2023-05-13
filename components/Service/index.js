@@ -71,7 +71,7 @@ const Service = () => {
       },
     },
   });
-  console.log(data);
+  
   useEffect(() => {
     if (data && data.getHours) {
       setGetHours(data.getHours);
@@ -83,11 +83,12 @@ const Service = () => {
       setServiceTypeData(data2.recommendService);
     }
   }, [data, data2]);
-  console.log(serviceTypeData);
+  
   return (
     <div className="product-wrapper">
       <NavBar />
       <Title />
+      
       <ReservationForm serviceTypeDetail={serviceTypeData} hoursDetail={getHours} />
       <Footer />
       <style jsx>{styles}</style>

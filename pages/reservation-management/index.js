@@ -60,7 +60,7 @@ const ReservationManagementPage = () => {
     uri: "http://localhost:3000/graphql",
     cache: new InMemoryCache(),
   });
-  console.log(userSlice.token);
+  
   const { error, data } = useQuery(RESERVATION_LIST, {
     context: {
       headers: {
@@ -80,7 +80,7 @@ const ReservationManagementPage = () => {
   if (!reservationList) {
     return <h1>Loading ...</h1>
   }
-  console.log("resList", reservationList);
+  
   return <ReservationManagement reservationType={ORDER_TYPE.LIST} reservationList={reservationList} />
 }
 

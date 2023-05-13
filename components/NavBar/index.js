@@ -141,6 +141,13 @@ const NavBar = () => {
                     </div>
                   </a>
                 </Link>
+                <Link href="/account">
+                  <a>
+                    <div className={classNames('title', { isChosen: router.asPath === '/account' })}>
+                      Account Settings
+                    </div>
+                  </a>
+                </Link>
                 <div className="sign-out" onClick={handleSignOut}>
                   Sign out
                 </div>
