@@ -23,12 +23,9 @@ query RecommendProduct {
 const HomePage = ({ trendingProducts }) => {
   const userSlice = useSelector((state) => state.user);
   const [recommendProducts, setRecommendProducts] = useState([]);
-  const client = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
-    cache: new InMemoryCache(),
-  });
 
   const { error, data } = useQuery(RECOMMEND_PRODUCTS, {
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     skip: !userSlice.token,
     context: {
       headers: {

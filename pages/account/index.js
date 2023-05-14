@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Service from 'components/Service'
+
 import NavBar from 'components/NavBar'
-import HeaderServiceBanner from 'components/Service/HeaderServiceBanner'
+
 import MessengerChatBox from 'components/Home/MessengerChatBox'
 import Footer from 'components/Utils/Footer'
 import styles from './styles'
@@ -27,7 +26,7 @@ query GetAccount {
 const Account = () => {
    const [accountData, setAccountData] = useState("");
    const userSlice = useSelector((state) => state.user);
-   const { loading, error, data } = useQuery(GET_ACCOUNT, {
+   const { data } = useQuery(GET_ACCOUNT, {
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       context: {
          headers: {
@@ -41,7 +40,7 @@ const Account = () => {
       }
    }, [data]);
 
-   console.log(error, accountData);
+
 
    if (!accountData) {
       return <h1>Loading ...</h1>;
