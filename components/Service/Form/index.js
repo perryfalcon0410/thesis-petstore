@@ -192,7 +192,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                reservationHour: hoursDetail[i]
             });
 
-         };
+         }
       }
    }
    const renderReservationServiceTypes = () => {
@@ -310,7 +310,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       else {
          // if any required field is empty, show an error message
          alert("Please fill in all required fields");
-      };
+      }
 
    }
    const handleConfirmationClose = async (confirmed) => {

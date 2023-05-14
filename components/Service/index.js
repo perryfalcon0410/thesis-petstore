@@ -57,7 +57,7 @@ const Service = () => {
   const userSlice = useSelector((state) => state.user)
   const [serviceTypeData, setServiceTypeData] = useState("");
   const [getHours, setGetHours] = useState("");
-  const { ata } = useQuery(GET_SERVICE_TYPE, {});
+  const { data } = useQuery(GET_SERVICE_TYPE, {});
   const { data: data2 } = useQuery(GET_RECOMMEND_SERVICES, {
     uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     skip: !userSlice.token,

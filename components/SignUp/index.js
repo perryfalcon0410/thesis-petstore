@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 import { setUser } from 'store/reducers/userSlice'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
 import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 const SIGNUP_MUTATION = gql`
@@ -30,7 +29,7 @@ mutation Mutation($input: AuthInput!) {
 const SignUp = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const [signUpMutation, { loading: mutationLoading, error: mutationError }] = useMutation(SIGNUP_MUTATION, {
+  const [signUpMutation] = useMutation(SIGNUP_MUTATION, {
     client: new ApolloClient({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
