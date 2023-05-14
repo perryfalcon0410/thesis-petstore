@@ -6,7 +6,6 @@ import Image from 'next/image'
 import styles from './styles'
 import Link from 'next/link'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import { MdEmail, MdLock, MdPerson } from 'react-icons/md'
 import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 
@@ -45,7 +44,7 @@ mutation Mutation($input: AuthInput!) {
 
 export const SignInForm = ({ setSignUp, callback }) => {
   const dispatch = useDispatch()
-  const [loginMutation, { loading: mutationLoading, error: mutationError }] = useMutation(LOGIN_MUTATION, {
+  const [loginMutation] = useMutation(LOGIN_MUTATION, {
     client: new ApolloClient({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
@@ -189,7 +188,7 @@ export const SignInForm = ({ setSignUp, callback }) => {
 
 export const SignUpForm = ({ setSignIn, callback }) => {
   const dispatch = useDispatch()
-  const [signUpMutation, { loading: mutationLoading, error: mutationError }] = useMutation(SIGNUP_MUTATION, {
+  const [signUpMutation] = useMutation(SIGNUP_MUTATION, {
     client: ({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),

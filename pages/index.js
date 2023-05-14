@@ -1,7 +1,7 @@
 import Home from '../components/Home';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 
 const RECOMMEND_PRODUCTS = gql`

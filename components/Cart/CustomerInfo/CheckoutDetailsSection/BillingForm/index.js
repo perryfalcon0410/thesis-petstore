@@ -21,6 +21,15 @@ mutation CreateOrder($input: CreateOrderInput!) {
   }
 }
 `
+function convertCartToArray(cart) {
+  return Object.values(cart).map((cartItem) => ({
+    id: cartItem.id,
+    name: cartItem.name,
+    images: cartItem.images,
+    price: cartItem.price,
+    quantity: cartItem.quantity,
+  }));
+}
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const GHN_ShopId = '3410708'
   const GHN_Token = '5e301d1a-5c48-11ed-8636-7617f3863de9'
@@ -31,7 +40,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const [listRegion, setListRegion] = useState([])
   const [listDistrict, setListDistrict] = useState([])
   const [listWard, setListWard] = useState([])
-  const [createOrderMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_ORDER, {
+  const [createOrderMutation] = useMutation(CREATE_ORDER, {
     context: {
       headers: {
         Authorization: `Bearer ${userSlice.token}`,
@@ -196,7 +205,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             const district = listDistrict.filter((district) => district.DistrictID === values.districtId)[0]
               .DistrictName
             const ward = listWard.filter((ward) => ward.WardCode === values.wardId)[0].WardName
-            const { districtId, regionId, wardId, ...newValues } = values;
+            // const { districtId, regionId, wardId, ...newValues } = values;
             // ** Get GHN delivery info
             const shipInfo = await getShipInfo(from_district_id, from_ward_id, values.districtId, values.wardId)
 
@@ -204,16 +213,9 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
 
             const plainBill = { ...newValues, district, region, ward }
-            function convertCartToArray(cart) {
-              return Object.values(cart).map((cartItem) => ({
-                id: cartItem.id,
-                name: cartItem.name,
-                images: cartItem.images,
-                price: cartItem.price,
-                quantity: cartItem.quantity,
-              }));
-            }
-            const plainCartList = convertCartToArray(cartList);
+            
+            
+            // const plainCartList = convertCartToArray(cartList);
             const checkoutData = {
               cart: cartList,
               bill: plainBill,
@@ -221,18 +223,18 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               shippingFee: shipInfo.shippingFee,
               totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
-            
-            const config = {
-              headers: {
-                Authorization: `Bearer ${userSlice.token}`,
-              },
-            }
+
+            // const config = {
+            //   headers: {
+            //     Authorization: `Bearer ${userSlice.token}`,
+            //   },
+            // }
 
             const { data } = await createOrderMutation({
               variables: { input: checkoutData },
 
             })
-            ;
+              ;
 
 
 
