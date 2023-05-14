@@ -37,7 +37,7 @@ const AccountDetails = ({ isEdited, setIsEdited, accountDetail }) => {
   const [passwordError, setPasswordError] = useState(false);
   const [images, setImages] = useState(null);
 
-  const link = createUploadLink({ uri: "http://localhost:3000/graphql" })
+  const link = createUploadLink({ uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL })
   const [updateStaff] = useMutation(UPDATE_STAFF, {
     client: new ApolloClient({
       link,

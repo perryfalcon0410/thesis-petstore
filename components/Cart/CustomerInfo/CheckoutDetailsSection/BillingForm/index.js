@@ -47,7 +47,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
       },
     },
     client: new ApolloClient({
-      uri: "http://localhost:3000/graphql",
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
     })
   })
