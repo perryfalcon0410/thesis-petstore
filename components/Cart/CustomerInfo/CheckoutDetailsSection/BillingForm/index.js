@@ -21,15 +21,15 @@ mutation CreateOrder($input: CreateOrderInput!) {
   }
 }
 `
-function convertCartToArray(cart) {
-  return Object.values(cart).map((cartItem) => ({
-    id: cartItem.id,
-    name: cartItem.name,
-    images: cartItem.images,
-    price: cartItem.price,
-    quantity: cartItem.quantity,
-  }));
-}
+// function convertCartToArray(cart) {
+//   return Object.values(cart).map((cartItem) => ({
+//     id: cartItem.id,
+//     name: cartItem.name,
+//     images: cartItem.images,
+//     price: cartItem.price,
+//     quantity: cartItem.quantity,
+//   }));
+// }
 const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const GHN_ShopId = '3410708'
   const GHN_Token = '5e301d1a-5c48-11ed-8636-7617f3863de9'
@@ -212,7 +212,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             // ** Create order through API
             // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
 
-            const plainBill = { ...newValues, district, region, ward }
+            const plainBill = { ...values, district, region, ward }
             
             
             // const plainCartList = convertCartToArray(cartList);

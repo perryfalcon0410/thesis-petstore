@@ -41,6 +41,7 @@ const ServiceCard = () => {
                   <div className="product-img">
                     <Image
                       src={service.img ? service.img : '/images/no-image.png'}
+                      alt=''
                       width={400}
                       height={400}
                       objectFit="cover"
@@ -54,9 +55,9 @@ const ServiceCard = () => {
                       <div className="card-hover-content">
                         <p style={{ "textAlign": "justify", "fontWeight": "normal", "marginBottom":"15px"}}>{service.desc}</p>
                         
-                        <a href="/services/form">
+                        <Link href="/services/form">
                           <button className="book-now-button">Book Now</button>
-                        </a>
+                        </Link>
 
                       </div>
                     )}

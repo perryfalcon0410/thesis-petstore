@@ -1,6 +1,6 @@
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
+
 import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 const CREATE_PAYMENT = gql`
 mutation CreatePayment($input: CreatePaymentInput!) {
@@ -35,7 +35,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
     currency: 'USD',
     'disable-funding': 'card',
   }
-  const [createPaymentMutation, { loading: mutationLoading1, error: mutationError1 }] = useMutation(CREATE_PAYMENT, {
+  const [createPaymentMutation] = useMutation(CREATE_PAYMENT, {
     context: {
       headers: {
         Authorization: `Bearer ${userSlice.token}`,
@@ -46,7 +46,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
       cache: new InMemoryCache(),
     })
   })
-  const [updateOrderMutation, { loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_ORDER, {
+  const [updateOrderMutation] = useMutation(UPDATE_ORDER, {
     context: {
       headers: {
         Authorization: `Bearer ${userSlice.token}`,
@@ -68,11 +68,11 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
         totalAmount: details.purchase_units[0].amount.value,
         type: 'paypal',
       }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userSlice.token}`,
-        },
-      }
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${userSlice.token}`,
+      //   },
+      // }
       
       // const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
       const { data } = await createPaymentMutation({

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import ReservationManagement from 'components/ReservationManagement'
 import { ORDER_TYPE } from 'utils/constant'
 import { useSelector } from 'react-redux'
-import axios from 'axios'
 import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client'
 
 const RESERVATION_LIST = gql`
@@ -55,13 +54,10 @@ query Query {
 const ReservationManagementPage = () => {
   const [reservationList, setReservationList] = useState([])
   const userSlice = useSelector((state) => state.user)
-  const [loading, setLoading] = useState(true);
-  const client = new ApolloClient({
-    uri: "http://localhost:3000/graphql",
-    cache: new InMemoryCache(),
-  });
+  // const [loading, setLoading] = useState(true);
   
   const { error, data } = useQuery(RESERVATION_LIST, {
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     context: {
       headers: {
         Authorization: `Bearer ${userSlice.token}`,

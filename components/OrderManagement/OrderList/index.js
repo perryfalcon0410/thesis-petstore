@@ -40,7 +40,7 @@ const OrderList = ({ orderList }) => {
   return (
     <div className="wrapper">
       <div className="nav-container">
-        {Object.entries(ORDER_STATUS).map(([key, value]) => {
+        {Object.entries(ORDER_STATUS).map(([key]) => {
           return (
             <div className={`status-container ${ORDER_STATUS[key] === currentStatus ? 'active' : ''}`} key={key} onClick={() => setCurrentStatus(ORDER_STATUS[key])}>
               <p className="status">{key}</p>

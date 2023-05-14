@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import ReservationManagement from 'components/ReservationManagement'
-import { useSelector } from 'react-redux'
+
 import { ORDER_TYPE } from 'utils/constant'
-import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 const GET_RESERVATION_DETAIL = gql`
 query Reservation($reservationId: ID!) {
@@ -45,7 +45,7 @@ query Reservation($reservationId: ID!) {
 export default function ReservationDetailPage({ reservationId }) {
   const [reservationDetail, setReservationDetail] = useState('')
   // const userSlice = useSelector((state) => state.user)
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   
   // const client = new ApolloClient({
   //   uri: "http://localhost:3000/graphql",
