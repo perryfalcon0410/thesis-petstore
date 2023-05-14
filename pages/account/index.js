@@ -4,7 +4,7 @@ import NavBar from 'components/NavBar'
 
 import MessengerChatBox from 'components/Home/MessengerChatBox'
 import Footer from 'components/Utils/Footer'
-import styles from './styles'
+import styles from '../../styles/account/styles'
 import { gql, useQuery } from "@apollo/client";
 import AccountDetails from "../../components/account/account-details";
 import { useSelector } from 'react-redux'

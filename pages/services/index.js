@@ -2,7 +2,7 @@ import NavBar from 'components/NavBar'
 import HeaderServiceBanner from 'components/Service/HeaderServiceBanner'
 import MessengerChatBox from 'components/Home/MessengerChatBox'
 import Footer from 'components/Utils/Footer'
-import styles from './styles'
+import styles from '../../styles/services/styles'
 import ServiceCard from 'components/Home/ServiceCard'
 const ServicePage = () => {
    return (
