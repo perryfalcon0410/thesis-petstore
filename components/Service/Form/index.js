@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import styles from "./styles";
 import {
    Backdrop,
    Box,
    Button,
    Card,
-   CardContent,
+
    CardHeader,
    Dialog,
    DialogActions,
@@ -68,14 +68,11 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [listRegion, setListRegion] = useState([])
    const [listDistrict, setListDistrict] = useState([])
    const [listWard, setListWard] = useState([])
-   const [regionId, setRegionId] = useState("")
-   const [districtId, setDistrictId] = useState("")
-   const [wardId, setWardId] = useState("")
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
 
-   
+
    const now = new Date();
    const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
    useEffect(() => {
@@ -89,7 +86,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
          const regions = await axios.get(url, config).then((res) => res.data)
          const filteredRegions = regions.data.filter((region) => {
             return region.ProvinceName === 'Hồ Chí Minh';
-          });
+         });
          setListRegion(filteredRegions)
 
       }
@@ -126,7 +123,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
 
    }
 
-   const [createReservationMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CREATE_RESERVATION, {
+   const [createReservationMutation] = useMutation(CREATE_RESERVATION, {
       context: {
          headers: {
             Authorization: `Bearer ${userSlice.token}`,
@@ -176,17 +173,15 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       return 0;
    }
    const handleChangeServiceType = (event) => {
-
       for (const i in serviceTypeDetail) {
          if (serviceTypeDetail[i]._id == event.target.value) {
             setValues({
                ...values,
                serviceType: serviceTypeDetail[i]
             });
-
-         };
+         }
       }
-   }
+   };
 
    const handleChangeHour = (event) => {
 
@@ -201,9 +196,9 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       }
    }
    const renderReservationServiceTypes = () => {
-      const service_name = [];
-      const service_id = [];
-      const serviceTypeTitle = {};
+      const service_name = []
+      const service_id = []
+      const serviceTypeTitle = {}
 
       for (const serviceType in serviceTypeDetail) {
          service_name.push(serviceTypeDetail[serviceType].name);
@@ -321,7 +316,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const handleConfirmationClose = async (confirmed) => {
       // This function is called when the confirmation box is closed
       // It handles the user's choice
-      setShowConfirmation(false);
+      setShowConfirmation(false)
       if (confirmed) {
          // The user confirmed, so submit the form
          // TODO: Submit the form data
@@ -350,9 +345,16 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             const { data } = await createReservationMutation({
                variables: { reservation: input },
             })
-            alert("The reservation is booked successfully");
+            if (data){
+               alert("The reservation is booked successfully");
 
             Router.push("/");
+            }
+            else{
+               alert("Unexpected fail");
+            }
+            
+
          }
          catch (error) {
             console.log(error);
@@ -576,7 +578,7 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                            required
                         />
                      </Grid>
-                     
+
                      {values.species && (<Grid item md={12} xs={12}>
                         <FormControl sx={{ width: "100%" }}>
                            <InputLabel id="select-autowidth-label">Service Type *</InputLabel>

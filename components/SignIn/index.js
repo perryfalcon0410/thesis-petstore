@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import { setUser } from 'store/reducers/userSlice'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import { MdEmail, MdLock } from 'react-icons/md'
 import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 const LOGIN_MUTATION = gql`
@@ -29,7 +28,7 @@ mutation Mutation($input: AuthInput!) {
 function SignInForm({ formStyle }) {
   const dispatch = useDispatch()
   const router = useRouter()
-  const [loginMutation, { loading: mutationLoading, error: mutationError }] = useMutation(LOGIN_MUTATION, {
+  const [loginMutation] = useMutation(LOGIN_MUTATION, {
     client: new ApolloClient({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),

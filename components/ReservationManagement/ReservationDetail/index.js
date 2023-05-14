@@ -1,9 +1,7 @@
 import styles from './styles'
 import Link from 'next/link'
-import Image from 'next/image'
-import { IMAGE_QUALITY } from 'utils/constant'
+
 import { format } from 'date-fns'
-import { productDetail } from 'components/mocks/productDetail'
 import { useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
@@ -31,7 +29,7 @@ const ReservationDetail = ({ reservationDetail }) => {
     setCancelId(id);
     setShowConfirmation(true);
   }
-  const [cancelReservationMutation, { loading: mutationLoading, error: mutationError }] = useMutation(CANCEL_RESERVATION, {
+  const [cancelReservationMutation] = useMutation(CANCEL_RESERVATION, {
     client: new ApolloClient({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
@@ -53,9 +51,14 @@ const ReservationDetail = ({ reservationDetail }) => {
             }
           },
         })
-        alert("The reservation is CANCELLED");
+        if (data) {
+          alert("The reservation is CANCELLED");
+          window.location.href = "/reservation-management";
+        }
+        else alert("Something wrong");
 
-        window.location.href = "/reservation-management";
+
+
       }
       catch (error) {
         console.log(error);
@@ -64,14 +67,17 @@ const ReservationDetail = ({ reservationDetail }) => {
     }
   }
   const getPrice = (reservation) => {
-
     const price = reservation.serviceType.price.find((i) => {
       return Number(reservation.weight) >= i.minWeight && Number(reservation.weight) < i.maxWeight;
     });
-    if (price) return price.priceNumber;
-    else return 0;
-    return 0;
-  }
+
+    if (price) {
+      return price.priceNumber;
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <div className="wrapper">
       <div className="row">

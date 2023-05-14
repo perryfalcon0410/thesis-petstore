@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ReservationManagement from 'components/ReservationManagement'
 import { ORDER_TYPE } from 'utils/constant'
 import { useSelector } from 'react-redux'
-import { ApolloClient, InMemoryCache, gql, useQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
 const RESERVATION_LIST = gql`
 query Query {
@@ -56,7 +56,7 @@ const ReservationManagementPage = () => {
   const userSlice = useSelector((state) => state.user)
   // const [loading, setLoading] = useState(true);
   
-  const { error, data } = useQuery(RESERVATION_LIST, {
+  const { data } = useQuery(RESERVATION_LIST, {
     uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
     context: {
       headers: {
@@ -68,7 +68,6 @@ const ReservationManagementPage = () => {
   useEffect(() => {
     if (data && data.userReservations) {
       setReservationList(data.userReservations);
-      setLoading(false);
     }
   }, [data]);
 

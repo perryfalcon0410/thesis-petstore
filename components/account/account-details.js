@@ -26,19 +26,19 @@ const AccountDetails = ({ isEdited, setIsEdited, accountDetail }) => {
     firstName: accountDetail.firstName,
     lastName: accountDetail.lastName,
     email: accountDetail.email,
-    phone: accountDetail.phone? accountDetail.phone:"",
+    phone: accountDetail.phone ? accountDetail.phone : "",
     avatar: accountDetail.avatar,
     password: "",
     confirmPassword: ""
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const showPassword = false;
   const [changePassword, setChangePassword] = useState(true);
   const [passwordError, setPasswordError] = useState(false);
   const [images, setImages] = useState(null);
 
   const link = createUploadLink({ uri: "http://localhost:3000/graphql" })
-  const [updateStaff, { loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_STAFF, {
+  const [updateStaff] = useMutation(UPDATE_STAFF, {
     client: new ApolloClient({
       link,
       cache: new InMemoryCache(),
@@ -61,7 +61,7 @@ const AccountDetails = ({ isEdited, setIsEdited, accountDetail }) => {
   };
 
   const handleSaveChanges = async () => {
-    const body = {
+    let body = {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
@@ -78,10 +78,12 @@ const AccountDetails = ({ isEdited, setIsEdited, accountDetail }) => {
         },
       })
 
-
-
-
-      window.location.href = "/";
+      if (data) {
+        alert("successful");
+        window.location.href = "/";
+      }
+      alert("Not successful")
+      handleSwapMode();
     } catch (error) {
       console.error('Error update staff:', error.message);
     }

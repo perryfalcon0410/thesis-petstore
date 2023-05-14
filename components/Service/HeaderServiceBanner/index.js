@@ -1,6 +1,7 @@
 import Slider from 'react-slick'
 import styles from './styles'
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
+import Link from 'next/link'
 
 const CustomNextArrow = (props) => {
   const { onClick } = props
@@ -47,12 +48,12 @@ const HeaderServiceBanner = () => {
         {banners.map((banner) => {
           return (
             <div key={banner.id}>
-              <a href="/services/form">
+              <Link href="/services/form">
                 <div
                   style={{ backgroundImage: `url(${banner.src})`, backgroundSize: 'cover' }}
                   className="background"
                 ></div>
-              </a>
+              </Link>
             </div>
           )
         })}

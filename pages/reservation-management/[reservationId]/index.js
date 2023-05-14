@@ -61,7 +61,6 @@ export default function ReservationDetailPage({ reservationId }) {
   useEffect(() => {
     if (data && data.reservation) {
       setReservationDetail(data.reservation);
-      setLoading(false);
     }
   }, [data]);
 

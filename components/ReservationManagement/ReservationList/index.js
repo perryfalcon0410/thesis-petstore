@@ -1,8 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { LIMIT_PRODUCT_ORDER_LIST, RESERVATION_STATUS } from 'utils/constant'
+import { RESERVATION_STATUS } from 'utils/constant'
 import styles from './styles'
-import { DeliveryIcon } from 'components/Utils/Icon'
 import { useState } from 'react'
 
 const ReservationList = ({ reservationList }) => {
@@ -48,7 +46,7 @@ const ReservationList = ({ reservationList }) => {
   return (
     <div className="wrapper">
       <div className="nav-container">
-        {Object.entries(RESERVATION_STATUS).map(([key, value]) => {
+        {Object.entries(RESERVATION_STATUS).map(([key]) => {
           return (
             <div className={`status-container ${RESERVATION_STATUS[key] === currentStatus ? 'active' : ''}`} key={key} onClick={() => setCurrentStatus(RESERVATION_STATUS[key])}>
               <p className="status">{key}</p>
