@@ -53,7 +53,7 @@ const OrderList = ({ orderList }) => {
         })}
       </div>
       <div className="order-container">
-        {filteredReservationList.length > 0 ? (
+        {filteredOrderList.length > 0 ? (
           filteredOrderList.map((order) => {
             return (
               <div className="card" key={order.id}>
