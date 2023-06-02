@@ -5,6 +5,7 @@ import { ApolloClient, InMemoryCache, gql, useMutation } from '@apollo/client'
 const CREATE_PAYMENT = gql`
 mutation CreatePayment($input: CreatePaymentInput!) {
   createPayment(input: $input) {
+    id
     externalId
     payerFistName
     payerLastName
@@ -22,7 +23,7 @@ mutation UpdateOrder($updateOrderId: ID!, $input: UpdateOrderInput!) {
     success
     msg
     data {
-      _id
+      id
     }
   }
 }
@@ -42,6 +43,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
       },
     },
     client: new ApolloClient({
+
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
     })
@@ -53,6 +55,7 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
       },
     },
     client: new ApolloClient({
+
       uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
     })
@@ -68,23 +71,20 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
         totalAmount: details.purchase_units[0].amount.value,
         type: 'paypal',
       }
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${userSlice.token}`,
-      //   },
-      // }
-      
+      console.log("Info", paymentInfo)
       // const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
       const { data } = await createPaymentMutation({
         variables: { input: paymentInfo }
       })
       const createPayment = data.createPayment;
-      
+      console.log("createPayment", createPayment);
       if (createPayment) {
+
         // const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
         const orderUpdate = {
-          payment: createPayment._id,
+          payment: createPayment.id,
         }
+
         await updateOrderMutation({
           variables: { input: orderUpdate, updateOrderId: orderId }
         })

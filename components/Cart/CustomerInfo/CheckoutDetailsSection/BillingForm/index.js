@@ -226,7 +226,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
               shippingFee: shipInfo.shippingFee,
               totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
-            console.log(checkoutData);
+
             // const config = {
             //   headers: {
             //     Authorization: `Bearer ${userSlice.token}`,
@@ -246,7 +246,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             // const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
             // ** Update order state to local storage
             setCompleteOrder({
-              orderId: createOrderData._id,
+              orderId: createOrderData.id,
               cart: cartList,
               bill: values,
               shipping: shipInfo,
