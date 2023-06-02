@@ -215,7 +215,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
 
             const plainBill = { ...values, district, region, ward }
-            const { regionId, wardId, districtId, ...plainBillWithoutIds } = plainBill;
+            const { _regionId, _wardId, _districtId, ...plainBillWithoutIds } = plainBill;
 
             // const plainCartList = convertCartToArray(cartList);
             const checkoutData = {
