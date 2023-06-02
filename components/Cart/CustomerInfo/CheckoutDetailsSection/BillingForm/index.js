@@ -40,7 +40,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const [listRegion, setListRegion] = useState([])
   const [listDistrict, setListDistrict] = useState([])
   const [listWard, setListWard] = useState([])
-  console.log(userSlice.token);
+
   const [createOrderMutation] = useMutation(CREATE_ORDER, {
     context: {
       headers: {

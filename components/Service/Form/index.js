@@ -73,7 +73,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [showConfirmation, setShowConfirmation] = useState(false);
    const now = new Date();
    const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
-   console.log(serviceTypeDetail);
    useEffect(() => {
       const fetchRegion = async () => {
          const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province'

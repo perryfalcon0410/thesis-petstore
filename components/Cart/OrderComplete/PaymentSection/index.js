@@ -71,13 +71,12 @@ const PaymentSection = ({ totalCost, orderId, setIsPaid }) => {
         totalAmount: details.purchase_units[0].amount.value,
         type: 'paypal',
       }
-      console.log("Info", paymentInfo)
+      
       // const createPayment = await axios.post(paymentUrl, paymentInfo, config).then((res) => res.data)
       const { data } = await createPaymentMutation({
         variables: { input: paymentInfo }
       })
       const createPayment = data.createPayment;
-      console.log("createPayment", createPayment);
       if (createPayment) {
 
         // const orderUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order/${orderId}`
