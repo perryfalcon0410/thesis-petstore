@@ -216,7 +216,8 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
 
             const plainBill = { ...values, district, region, ward }
             const { regionId, wardId, districtId, ...plainBillWithoutIds } = plainBill;
-
+            // eslint-disable-next-line no-unused-vars
+            const _ = { regionId, wardId, districtId };
             // const plainCartList = convertCartToArray(cartList);
             const checkoutData = {
               cart: cartList,
