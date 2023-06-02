@@ -82,7 +82,7 @@ const ReservationList = ({ reservationList }) => {
                       {`Time: ${reservation.reservationHour.name}`}
                     </p>
                     <p style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                      {`Service Type: ${reservation.serviceType.name} (${reservation.serviceType.timeServe})`}
+                      {`Service Type: ${reservation.serviceType.name}`}
                     </p>
                   </div>
 

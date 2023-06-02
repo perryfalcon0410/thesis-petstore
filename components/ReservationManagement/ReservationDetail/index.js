@@ -114,7 +114,7 @@ const ReservationDetail = ({ reservationDetail }) => {
               </div>
             </a>
           </Link>
-          {reservationDetail.status === 'BOOKED' && reservationDate <= now && (
+          {reservationDetail.status === 'BOOKED' && reservationDate >= now && (
             <a className="product-path" onClick={() => handleCancel(reservationDetail._id)}>
               <div className="go-back">
 
