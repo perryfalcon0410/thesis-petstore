@@ -4,7 +4,7 @@ import styles from './styles'
 import { useState } from 'react'
 
 const ReservationList = ({ reservationList }) => {
-  
+
   const [currentStatus, setCurrentStatus] = useState(RESERVATION_STATUS.ALL);
   const statusColor = {
     BOOKED: '#FFB020',
@@ -35,12 +35,14 @@ const ReservationList = ({ reservationList }) => {
       .indexOf(currentStatus)]);
   if (reservationList.length === 0)
     return (
-      <div>
-        <p>You do not have any reservations.</p>
-        <Link href="/services">
-          <a>Click here to make reservation</a>
-        </Link>
-      </div>
+      <>
+        <div style={{ textAlign: "center" }}>
+          <p>You do not have any reservations.</p>
+          <Link href="/services">
+            <a>Click here to make reservation</a>
+          </Link>
+        </div>
+      </>
     )
 
   return (
@@ -55,54 +57,60 @@ const ReservationList = ({ reservationList }) => {
         })}
       </div>
       <div className="order-container">
-        {filteredReservationList.map((reservation) => {
-          return (
-            <div className="card" key={reservation._id}>
-              <div className="top">
-                <div className="status">
-                  <p style={{ fontWeight: "bold", color: "black" }}>Status: </p>
-                  <p style={{ fontWeight: "bold", color: statusColor[reservation.status] }}>{statusTitle[reservation.status]}</p>
-                </div>
-                <div className="divider"></div>
-                <div className="product-container">
-                  <div className='info-container'>
-                    <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
-                      {`Pet: ${capiStr(reservation.species)}`}
-                    </p>
-                    <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
-                      {`Breed: ${capiStr(reservation.breed)}`}
-                    </p>
-                    <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
-                      {`Weight: ${reservation.weight}kg`}
-                    </p>
-                    <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
-                      {`Date: ${reservation.reservationDate.slice(0, 10)}`}
-                    </p>
-                    <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
-                      {`Time: ${reservation.reservationHour.name}`}
-                    </p>
-                    <p style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
-                      {`Service Type: ${reservation.serviceType.name}`}
-                    </p>
+        {filteredReservationList.length > 0 ? (
+          filteredReservationList.map((reservation) => {
+            return (
+              <div className="card" key={reservation._id}>
+                <div className="top">
+                  <div className="status">
+                    <p style={{ fontWeight: "bold", color: "black" }}>Status: </p>
+                    <p style={{ fontWeight: "bold", color: statusColor[reservation.status] }}>{statusTitle[reservation.status]}</p>
                   </div>
+                  <div className="divider"></div>
+                  <div className="product-container">
+                    <div className='info-container'>
+                      <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
+                        {`Pet: ${capiStr(reservation.species)}`}
+                      </p>
+                      <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
+                        {`Breed: ${capiStr(reservation.breed)}`}
+                      </p>
+                      <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
+                        {`Weight: ${reservation.weight}kg`}
+                      </p>
+                      <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
+                        {`Date: ${reservation.reservationDate.slice(0, 10)}`}
+                      </p>
+                      <p style={{ fontWeight: 'normal', fontSize: '1.2rem', marginBottom: 10 }}>
+                        {`Time: ${reservation.reservationHour.name}`}
+                      </p>
+                      <p style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>
+                        {`Service Type: ${reservation.serviceType.name}`}
+                      </p>
+                    </div>
 
-                </div>
-                <div className="divider"></div>
-                <div className="bottom">
-                  <div className='total-cost'>
-                    <p style={{ fontWeight: 700, fontSize: 20 }}>
-                      Total: <span style={{ color: '#dd583b' }}>${getPrice(reservation)}</span>
-                    </p>
                   </div>
-                  <Link href={`/reservation-management/${reservation._id}`}>
-                    <a>View detail</a>
-                  </Link>
+                  <div className="divider"></div>
+                  <div className="bottom">
+                    <div className='total-cost'>
+                      <p style={{ fontWeight: 700, fontSize: 20 }}>
+                        Total: <span style={{ color: '#dd583b' }}>${getPrice(reservation)}</span>
+                      </p>
+                    </div>
+                    <Link href={`/reservation-management/${reservation._id}`}>
+                      <a>View detail</a>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          )
-        })}
+            )
+          })
+        ) : (
+          <p style={{ textAlign: "center" }}>There are no reservations in this category.</p>
+
+        )}
+
       </div>
       <style jsx>{styles}</style>
     </div >
