@@ -14,7 +14,7 @@ const CREATE_ORDER = gql`
 mutation CreateOrder($input: CreateOrderInput!) {
   createOrder(input: $input) {
     data {
-      _id
+      id
     }
     success
     msg
@@ -40,6 +40,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
   const [listRegion, setListRegion] = useState([])
   const [listDistrict, setListDistrict] = useState([])
   const [listWard, setListWard] = useState([])
+  console.log(userSlice.token);
   const [createOrderMutation] = useMutation(CREATE_ORDER, {
     context: {
       headers: {
@@ -47,7 +48,8 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
       },
     },
     client: new ApolloClient({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
+      uri: "http://localhost:3000/graphql",
+      // uri: process.env.NEXT_PUBLIC_GRAPHQL_BACKEND_URL,
       cache: new InMemoryCache(),
     })
   })
@@ -213,17 +215,17 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
             // const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/order`
 
             const plainBill = { ...values, district, region, ward }
-            
-            
+            const { regionId, wardId, districtId, ...plainBillWithoutIds } = plainBill;
+
             // const plainCartList = convertCartToArray(cartList);
             const checkoutData = {
               cart: cartList,
-              bill: plainBill,
+              bill: plainBillWithoutIds,
               shippingTime: new Date(shipInfo.shippingTime).toISOString(),
               shippingFee: shipInfo.shippingFee,
               totalPrice: Number((totalCost + shipInfo.shippingFee).toFixed(2)),
             }
-
+            console.log(checkoutData);
             // const config = {
             //   headers: {
             //     Authorization: `Bearer ${userSlice.token}`,
@@ -239,6 +241,7 @@ const BillingForm = ({ cartList, totalCost, customerBillingDetail }) => {
 
 
             const createOrderData = data.createOrder.data;
+
             // const createOrderData = await axios.post(url, checkoutData, config).then((res) => res.data)
             // ** Update order state to local storage
             setCompleteOrder({

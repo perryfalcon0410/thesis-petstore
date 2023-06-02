@@ -46,9 +46,9 @@ export default function ReservationDetailPage({ reservationId }) {
   const [reservationDetail, setReservationDetail] = useState('')
   // const userSlice = useSelector((state) => state.user)
   // const [loading, setLoading] = useState(true);
-  
+
   // const client = new ApolloClient({
-  //   uri: "http://localhost:3000/graphql",
+  //   uri: "https://thesis-backend-production-99f6.up.railway.app/graphql",
   //   cache: new InMemoryCache(),
   // });
   const { data } = useQuery(GET_RESERVATION_DETAIL, {
@@ -67,7 +67,7 @@ export default function ReservationDetailPage({ reservationId }) {
   if (!reservationDetail) {
     return <h1>Loading ...</h1>
   }
-  
+
   return <ReservationManagement reservationType={ORDER_TYPE.SINGLE} reservationDetail={reservationDetail} />
 }
 
