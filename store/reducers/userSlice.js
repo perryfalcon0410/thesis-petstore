@@ -4,7 +4,7 @@ export const initialState = {
   id: '',
   firstName: '',
   lastName: '',
-  username: '',
+  role: '',
   token: '',
   expiredIn: '',
 }
@@ -14,20 +14,22 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     setUser(state, action) {
-      const { id, firstName, lastName, username, token = '', expiredIn = '' } = action.payload
+      const { id, firstName, lastName, username, role, token = '', expiredIn = '' } = action.payload
       state.id = id
       state.firstName = firstName
       state.lastName = lastName
-      state.username = username
+      // state.username = username
+      state.role = role
       state.token = token
       state.expiredIn = expiredIn
     },
     resetUser(state, action) {
-      const { id, firstName, lastName, username, token, expiredIn } = initialState
+      const { id, firstName, lastName, username, role, token, expiredIn } = initialState
       state.id = id
       state.firstName = firstName
       state.lastName = lastName
-      state.username = username
+      // state.username = username
+      state.role = role
       state.token = token
       state.expiredIn = expiredIn
     },

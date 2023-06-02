@@ -71,10 +71,10 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
-
-
+   const [serviceTypeTitle, setServiceTypeTitle] = useState({});
    const now = new Date();
    const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+   console.log(serviceTypeDetail);
    useEffect(() => {
       const fetchRegion = async () => {
          const url = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province'
@@ -199,7 +199,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       const service_name = []
       const service_id = []
       const serviceTypeTitle = {}
-
       for (const serviceType in serviceTypeDetail) {
          service_name.push(serviceTypeDetail[serviceType].name);
          service_id.push(serviceTypeDetail[serviceType]._id);
@@ -209,7 +208,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             serviceTypeTitle[service_id[i]] = service_name[i];
          }
       }
-
       const menuItem = Object.keys(serviceTypeTitle).map((status, idx) => (
          <MenuItem value={status} key={idx}>
             {serviceTypeTitle[status]}
@@ -218,12 +216,13 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
       if (userSlice.token) {
          menuItem[0] = (
             <MenuItem value={Object.keys(serviceTypeTitle)[0]} key={0}>
-               {serviceTypeTitle[Object.keys(serviceTypeTitle)[0]]} (Recommend)
+               {serviceTypeTitle[Object.keys(serviceTypeTitle)[0]]} (Recommend for you)
             </MenuItem >
          );
       }
       return menuItem;
    };
+
    const renderReservationHour = () => {
       const hour_name = [];
       const hour_id = [];
@@ -345,15 +344,15 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
             const { data } = await createReservationMutation({
                variables: { reservation: input },
             })
-            if (data){
+            if (data) {
                alert("The reservation is booked successfully");
 
-            Router.push("/");
+               Router.push("/");
             }
-            else{
+            else {
                alert("Unexpected fail");
             }
-            
+
 
          }
          catch (error) {
@@ -592,11 +591,29 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                               {renderReservationServiceTypes()}
                            </Select>
                         </FormControl>
-                        {values.serviceType.description && (
+
+                        {/* {values.serviceType.description && (
                            <Typography variant="subtitle1" sx={{ mt: 2, ml: 2 }}>
                               Description: {values.serviceType.description}
                            </Typography>
+                        )} */}
+                        {values.serviceType.description && (
+                           <>
+                              <Typography variant="subtitle1" sx={{ mt: 2, ml: 2, fontWeight: (values.serviceType._id === serviceTypeDetail[0]._id) && (userSlice.token) ? 'bold' : 'inherit' }}>
+                                 {(values.serviceType._id === serviceTypeDetail[0]._id) && (userSlice.token)
+                                    ? "Recommended for you"
+                                    : ""}
+                              </Typography>
+                              <Typography variant="subtitle1" sx={{ textAlign: "justify", padding: "0 16px" }}>
+                                 Description: {values.serviceType.description}
+                              </Typography>
+
+
+
+                           </>
                         )}
+
+
                      </Grid>)}
 
 
