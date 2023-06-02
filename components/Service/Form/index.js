@@ -71,7 +71,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
    const [timeValue, setTimeValue] = useState("")
    const userSlice = useSelector((state) => state.user)
    const [showConfirmation, setShowConfirmation] = useState(false);
-   const [serviceTypeTitle, setServiceTypeTitle] = useState({});
    const now = new Date();
    const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
    console.log(serviceTypeDetail);
@@ -592,11 +591,6 @@ const ReservationForm = ({ serviceTypeDetail, hoursDetail }) => {
                            </Select>
                         </FormControl>
 
-                        {/* {values.serviceType.description && (
-                           <Typography variant="subtitle1" sx={{ mt: 2, ml: 2 }}>
-                              Description: {values.serviceType.description}
-                           </Typography>
-                        )} */}
                         {values.serviceType.description && (
                            <>
                               <Typography variant="subtitle1" sx={{ mt: 2, ml: 2, fontWeight: (values.serviceType._id === serviceTypeDetail[0]._id) && (userSlice.token) ? 'bold' : 'inherit' }}>
